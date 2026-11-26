@@ -1,6 +1,6 @@
 ---
 name: ppc-business-profiler
-description: Extract structured business context from a website URL or pasted content. Triggers when user shares a website URL, asks to profile a business, needs business context for PPC campaigns, or wants to understand what a company does before building ads. Outputs brand identity, offerings, target customers, market positioning, and operational scope.
+description: "Build a reusable single-business positioning and audience profile from one website URL. Not for multi-competitor messaging matrices (use competitor-messaging-analysis) or agency sales pitch prep (use sales-intelligence)."
 ---
 
 # PPC Business Profiler

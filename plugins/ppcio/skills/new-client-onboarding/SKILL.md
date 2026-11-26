@@ -1,6 +1,6 @@
 ---
 name: new-client-onboarding
-description: Structured 90-day onboarding plan for new Google Ads client accounts. Triggers when user is taking over a new account, onboarding a client, starting PPC management, or asks "what should I do with this new account?" Guides through 4 phases,Stabilization, Optimization, Growth, Graduation,with phase-appropriate actions, data confidence requirements, and weekly milestone tracking. Works with any account data,paste current metrics and targets to get a phase assessment and action plan.
+description: Structured 90-day onboarding plan for new Google Ads client accounts. Triggers when user is taking over a new account, onboarding a client, starting PPC management, or asks "what should I do with this new account?" Guides through 4 phases, Stabilization, Optimization, Growth, Graduation, with phase-appropriate actions, data confidence requirements, and weekly milestone tracking. Works with any account data, paste current metrics and targets to get a phase assessment and action plan.
 ---
 
 # New Client Onboarding
@@ -583,17 +583,6 @@ ACCOUNT HEALTH: GREEN / AMBER / RED
 ---
 
 ## Limitations
-
-**What I Cannot Do Without API Access:**
-
-1. **Persistent state**: No memory between sessions. You must re-provide context each time.
-2. **Daily monitoring**: No automated daily checks for budget, tracking, CPC anomalies.
-3. **Auto-detect phase**: You tell me the week number; I determine the phase.
-4. **Closed-loop tracking**: You must manually report which recommendations were executed.
-5. **Phase transition automation**: I recommend transitions; you must track the timeline.
-6. **Graduation handoff**: Manual process; no automated transfer to weekly audit.
-7. **Accumulated intelligence**: You must carry forward key learnings between sessions.
-8. **Client-ready PDF**: Markdown output only.
 
 ---
 

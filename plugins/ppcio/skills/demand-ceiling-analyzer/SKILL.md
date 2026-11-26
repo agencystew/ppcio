@@ -240,16 +240,6 @@ Example: "This account is capturing about 75% of the available non-brand search 
 
 ## Limitations
 
-**What I Cannot Do Without API Access:**
-
-1. **Automated ceiling tracking**, You must run this manually
-2. **Portfolio-wide analysis**, One account at a time
-3. **Historical marginal CPA tracking**, You provide before/after data
-4. **Proactive ceiling alerts**, No automated "you're approaching the ceiling" notifications
-5. **Cross-account patterns**, No visibility into which accounts are ceiling-bound
-6. **Channel expansion handoff**, Diagnosis only, no routing to expansion planning
-7. **Seasonal benchmarking**, Only if you provide year-over-year data
-
 ---
 
 ## Quality Assurance

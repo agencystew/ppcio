@@ -1,6 +1,6 @@
 ---
 name: rsa-headline-generator
-description: "Generate complete Responsive Search Ad (RSA) headline and description sets for Google Ads. Triggers when user needs ad copy, RSA headlines, Google Ads text, or wants to create search ads. Produces 15 headlines and 4 descriptions following Google's best practices and proven allocation strategies. Works with any industry, just provide the target keyword and basic product/service info."
+description: "Quickly brainstorm 15 RSA headlines across 6 angles and 4 descriptions (30/90-char limits) when you have no existing ad CSV or verified facts sheet yet. Not for linting real ad exports or checking claims against verified business facts — use rsa-asset-writer instead."
 ---
 
 # RSA Headline Generator
@@ -122,7 +122,7 @@ Include target keyword naturally:
 - `Best [Keyword] in [Location]`
 
 **Examples:**
-- "Enterprise CRM Software" (22 chars)
+- "Enterprise CRM Software" (23 chars)
 - "CRM Built for Scale" (19 chars)
 - "Cloud CRM Platform" (18 chars)
 
@@ -218,15 +218,15 @@ Address concerns + reduce risk.
 
 ### Description Examples
 
-**D1:** "Close more deals with AI-powered CRM. Setup in 15 mins. Start your free 30-day trial today." (90 chars)
+**D1:** "Close more deals with fast CRM setup in 15 mins. Start your free 30-day trial today." (84 chars)
 
-**D2:** "Automate follow-ups, track pipeline, sync email. Trusted by 10,000+ teams. Try it free now." (89 chars)
+**D2:** "Automate follow-ups, track pipeline and sync email. Trusted by 10,000+ teams. Try free." (87 chars)
 
 **D3:** "Unlike complex platforms, we're built for growing teams. All features included. See why teams switch." (97 chars - TOO LONG, revise)
 
-**D3 Revised:** "Built for growing teams, not enterprises. All features included. See why 10k+ teams switched." (90 chars)
+**D3 Revised:** "Built for growing teams. All features included. See why 10,000+ teams made the switch." (86 chars)
 
-**D4:** "No IT needed. No training required. 99.9% uptime guaranteed. Cancel anytime, start risk-free." (89 chars)
+**D4:** "No IT needed. Zero training required. 99.9% uptime. Cancel anytime and start risk-free." (87 chars)
 
 ### Front-Loading for Descriptions
 

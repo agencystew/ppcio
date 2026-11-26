@@ -1,6 +1,5 @@
 ---
 name: ppc-experiment-finder
-title: "PPC Experiment Finder"
 description: Surface actionable A/B test opportunities from Google Ads performance data. Triggers when user shares Google Ads data and asks for test ideas, experiment recommendations, optimization opportunities, or "what should I test". Every experiment must cite specific metrics from the input data and be explained in plain English.
 ---
 

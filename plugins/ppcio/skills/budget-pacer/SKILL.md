@@ -560,17 +560,6 @@ Net: $0 change | Expected: [Outcome]
 
 ## Limitations
 
-**What I Cannot Do Without API Access:**
-
-1. **Automated daily monitoring**, You must run this manually
-2. **Portfolio-wide analysis**, One account at a time
-3. **Cross-account pattern detection**, No visibility across clients
-4. **Budget auto-adjustment**, Recommendations only, no one-click apply
-5. **Campaign change history**, You must tell me about recent changes
-6. **Real-time impression share**, Only if you include it in your data
-7. **Client email delivery**, I draft the email; you send it
-8. **Historical trend analysis**, Only if you provide prior period data
-
 ---
 
 ## Quality Assurance

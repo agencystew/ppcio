@@ -11,6 +11,7 @@ metadata:
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 
 Most "why did it drop" answers are guesses: someone remembers one change
@@ -47,7 +48,7 @@ where numbers moved, not why, and ask for it before guessing.
 
 ## Workflow
 1. Run:
-   `python scripts/change_detective.py --daily <daily.csv> --changes <changes.csv> --lag <lag.csv> --target-cpa <CPA> [--campaign-target "Implants=90"]`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/change_detective.py" --daily <daily.csv> --changes <changes.csv> --lag <lag.csv> --target-cpa <CPA> [--campaign-target "Implants=90"]`
    Add `--campaign "<text>"` to focus on one campaign. Changes made at
    the same minute by the same person or tool are grouped (for example
    "3 changes: Keyword added ...").

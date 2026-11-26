@@ -1,6 +1,6 @@
 ---
 name: weekly-pulse
-description: Weekly strategic performance review for Google Ads accounts. Triggers when user wants a weekly check-in, performance pulse, WoW comparison, weekly audit, or asks "how did my account do this week?" Compares this week vs last week vs 4-week baseline, flags anomalies over 20% threshold, identifies top 3 actions for the coming week, and tracks closed-loop execution of prior recommendations. Works with any performance data format, paste campaign metrics, budgets, and targets.
+description: "Internal PPC manager weekly diagnostic comparing this week vs last week vs the 4-week rolling baseline, flagging >20% swings and tracking open actions. Not for client-facing Monday emails (use weekly-client-report) or monthly/quarterly executive summaries (use ppc-report-narrator)."
 ---
 
 # Weekly Pulse
@@ -488,17 +488,6 @@ ACCOUNT HEALTH: GREEN / AMBER / RED
 ---
 
 ## Limitations
-
-**What I Cannot Do Without API Access:**
-
-1. **Auto-fetch comparison data**, You must provide both weeks manually
-2. **Track historical actions**, No memory of prior weekly reviews
-3. **Detect PMAX cannibalization**, Need search category reports and brand baseline
-4. **Automated scheduling**, No Monday morning auto-delivery
-5. **Impression share detail**, Only if you include it in your export
-6. **Search term analysis**, Requires separate search terms export
-7. **Quality score trends**, Only if you include QS data
-8. **Client-ready PDF output**, Markdown format only
 
 ---
 

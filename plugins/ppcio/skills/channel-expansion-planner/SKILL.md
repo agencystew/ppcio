@@ -484,16 +484,6 @@ CONFIDENCE: HIGH / MODERATE / LOW
 
 ## Limitations
 
-**What I Cannot Do Without API Access:**
-
-1. **Auto-scan competitor ads**: You must manually check Meta/TikTok/LinkedIn ad libraries
-2. **Pull Google Ads demographics**: You must export device/age/time reports
-3. **Assess creative readiness from pages**: You must describe your available assets
-4. **Check platform policy compliance**: You must verify restricted industry policies
-5. **Automated handoffs**: Cannot auto-trigger LP audit or competitor deep-dive
-6. **Cross-platform attribution**: Cannot set up unified measurement
-7. **Historical benchmarking**: Cannot compare against industry-specific conversion data
-
 ---
 
 ## Quality Assurance

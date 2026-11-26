@@ -43,9 +43,14 @@ const EXT = { 'font/woff2': '.woff2', 'font/woff': '.woff', 'application/font-wo
   if (tags) page = page.includes(MARK) ? page.replace(MARK, () => tags) : page.replace(/<\/head>/i, () => tags + '\n</head>');
   fs.writeFileSync(path.join(live, 'index.html'), page);
   const zip = path.join(work, `${path.basename(work)}-page.zip`); fs.rmSync(zip, { force: true });
-  const z = require('child_process').spawnSync('zip', ['-qr', zip, '.'], { cwd: live });
+  const cp = require('child_process');
+  let z = cp.spawnSync('zip', ['-qr', zip, '.'], { cwd: live });
+  if (z.status !== 0) {
+    // Fallback for minimal Linux installs without `zip` binary: Python 3 stdlib zipfile.
+    z = cp.spawnSync('python3', ['-c', 'import os,sys,zipfile\nzf=zipfile.ZipFile(sys.argv[1],"w",zipfile.ZIP_DEFLATED)\nfor r,_,fs in os.walk("."):\n for f in fs:\n  p=os.path.join(r,f)\n  zf.write(p,os.path.relpath(p,"."))\nzf.close()', zip], { cwd: live });
+  }
   const n = (tags.match(/<script\b/gi) || []).length + (tags.match(/<noscript\b/gi) || []).length;
-  console.log(`Live copy: ${live} (index.html and assets)${z.status === 0 ? `, zipped as ${zip}` : ' (no zip tool here: zip the live folder by hand)'}.`);
+  console.log(`Live copy: ${live} (index.html and assets)${z.status === 0 ? `, zipped as ${zip}` : ' (no zip tool here: hand over the live/ folder)'}.`);
   console.log(tags ? `Their tracking tags (${n} tags from inputs/tracking-tags.html) are in live/index.html only.` : 'Their live page had no tracking tags to carry over.');
   console.log('To put it live, upload the live folder, or send the zip to whoever runs their site.');
 })();

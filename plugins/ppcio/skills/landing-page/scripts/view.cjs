@@ -226,7 +226,13 @@ function siteJson(name) {
     },
     // The new page in the screens' frame: its pictures load from the work folder,
     // while in-page #anchor links still scroll inside the srcdoc frame instead of navigating away.
-    page: pageHtml ? { html: pageHtml.replace(/<head([^>]*)>/i, `<head$1><base href="./data/files/"><script>document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(!id)return;var el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}});</script>`), at: new Date(mtime(pageFile)).toISOString() } : null,
+    page: pageHtml ? {
+      html: (() => {
+        const inject = `<base href="./data/files/"><script>document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(!id)return;var el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}});</script>`;
+        return /<head\b[^>]*>/i.test(pageHtml) ? pageHtml.replace(/<head([^>]*)>/i, `<head$1>${inject}`) : `${inject}${pageHtml}`;
+      })(),
+      at: new Date(mtime(pageFile)).toISOString(),
+    } : null,
     asks: {
       build: `Build me a better page for ${host}`,
       designs: `Show me 3 new looks for ${host}`,
@@ -280,7 +286,7 @@ const server = http.createServer((req, res) => {
   }
   if (p === '/' || p === '/index.html') {
     const s = sites();
-    if (!s.length) return send(res, 200, '<p style="font:18px system-ui;padding:40px">No audits yet. Ask Claude in your chat: “audit my page”.</p>', TYPES['.html']);
+    if (!s.length) return send(res, 200, '<p style="font:18px system-ui;padding:40px">No audits yet. Ask in your chat: “audit my page”.</p>', TYPES['.html']);
     res.writeHead(302, { location: `/s/${encodeURIComponent(s[0])}/` }); return res.end();
   }
   // The screens' mascots, avatars and font, at the paths the app uses.

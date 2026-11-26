@@ -14,7 +14,7 @@ The person just installed PPC.io, or wants to know what it does. Your job: get t
 
 Run `bash KIT/scripts/kit.sh licence`.
 
-- When they pasted a key in their message, run `bash KIT/scripts/kit.sh unlock <key>` first and say in one line what it unlocked. It also downloads the full style library (about 40 MB) in the background. Then say once, in one line, how to get new versions: in Claude Code, "Type /plugin, open Marketplaces, pick ppcio and turn on auto-update." In other apps (Codex, Cursor, Gemini CLI, Antigravity), say: "Re-run the PPC.io install command any time to pull updates."
+- When they pasted a key in their message, run `bash KIT/scripts/kit.sh unlock <key>` first and say in one line what it unlocked (this also downloads the full 322-page style library, about 40 MB). Then say once, in one line, how to get new versions: in Claude Code, "Type /plugin, open Marketplaces, pick ppcio and turn on auto-update." In other apps (Codex, Cursor, Windsurf, Gemini CLI, Antigravity), say: "Re-run the PPC.io install command any time to pull updates."
 - When it prints `FREE`, carry on. Mention the licence once, at the end, and only when they ask for something it unlocks.
 
 Also run `bash KIT/scripts/kit.sh setup` in the background now. The first run installs a browser for the page checks (about 1 minute). When it finishes, write nothing in chat: the owner never hears about setup. If it prints `NEEDS_NODE`, tell them one download is needed (nodejs.org, the LTS button) and wait.
@@ -25,8 +25,8 @@ They asked what PPC.io does. Answer that first, for any business, with this text
 
 "PPC.io puts a Google Ads team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) It does 3 jobs:
 
-1. **Your landing pages.** It checks your page like a buyer and a conversion team would, then designs and builds a better one in your brand.
-2. **Your Google Ads account.** It finds wasted spend in your search terms, checks the account's health, writes your ads and writes your reports. 25 skills, all on your own data.
+1. **Your landing pages.** It checks your page like a buyer and a conversion team would, answers quick CRO questions from a decade of paid-search playbooks, and designs and builds a better page in your brand.
+2. **Your Google Ads account.** 32 Google Ads skills, 21 ready-to-run Google Ads scripts, and 24 deep PPC playbooks — finding wasted spend, checking account health, fixing Quality Score and tracking, writing ads, and writing client reports on your own data.
 3. **Your clients, if you're an agency.** All of that, across every client.
 
 Give me your website and I'll show you what it finds on your own page in about 2 minutes. And do you run Google Ads, for yourself or for clients?"
@@ -44,7 +44,7 @@ As soon as they answer:
 
    Then capture 2 competitors (search for what their buyers search, see `KIT/steps/1-audit.md` part 2) while you wait. When they send the page, carry on from it.
 3. Open `inputs/live-phone-today.png` and `inputs/live-page-today.png` and read `inputs/site-page-text.md`.
-4. Find the **3 things a buyer would notice first** on their page, worst first. Write each as a numbered item: a bold label of 3 to 7 words, then at most 2 short sentences that quote their own words or name what is on the screen and say what it costs them, then a line that starts `Fix:`. Never invent a number, a review or a result. Write them to `landing-pages/<site-name>/first-look.md`, so the full audit can start from them.
+4. Start `first-look.md` with one line `Big picture: ` and one or two sentences, said like a senior strategist: who clicks their ads, what that buyer needs to decide, and what this page does instead (for example "Your ads bring homeowners pricing a $15,000 roof, and your homepage sells roofs and basements at once with no way to ask for an estimate on it."). Then find the **3 things a buyer would notice first** on their page, worst first. Write each as a numbered item: a bold label of 3 to 7 words, then at most 2 short sentences that quote their own words or name what is on the screen and say what it costs them, then a line that starts `Fix:`. Never invent a number, a review or a result. Write them to `landing-pages/<site-name>/first-look.md`, so the full audit can start from them.
 5. Run `bash KIT/scripts/kit.sh view <site-name>`. It prints the studio address.
 6. **Send the first look now, as visible chat text.** `kit.sh view` printed it between two `----` lines: send that text as your message, word for word. They see nothing in your thinking or in the file. This message is the first real result they get, and the most important one of the run. Never replace it with a status line.
 

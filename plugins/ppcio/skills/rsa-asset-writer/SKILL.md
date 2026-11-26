@@ -11,6 +11,7 @@ metadata:
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 
 AI-written ads fail in three boring ways: lines that are too long, claims
@@ -42,7 +43,7 @@ this; regulated sectors usually do.
 1. Write `facts.md` and `banned.txt` from the profile.
 2. Refresh only: run the lint on the current ad first and list what is
    wrong:
-   `python scripts/rsa_lint.py <current.csv> --facts facts.md --banned banned.txt --keyword "<theme>"`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/rsa_lint.py" <current.csv> --facts facts.md --banned banned.txt --keyword "<theme>"`
 3. Read [references/field-notes.md](references/field-notes.md). Plan 15 headlines across angles, at most 3 per angle: keyword theme
    with location, offer, proof, process or speed, objection handling,
    call to action. Plan 4 descriptions: offer plus proof, objection plus

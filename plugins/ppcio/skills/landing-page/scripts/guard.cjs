@@ -273,7 +273,32 @@ const META_LINES = [
         return new RegExp(`font-family\\s*:[^;{}]*\\b${escFm}\\b`, 'i').test(styleOutsideFaces) ? blk : '';
       });
       const marks = slop.slopMarks(rawHtml, slop.brandHexes(brandText, read('kit.css')));
-      return slop.marksToReport(marks, Array.isArray(live) ? live : [], slop.styleWorksOf(read('references/style.md')), brandText);
+      // Resolve the chosen style's works/notes from directions/choice.md + library/index.json
+      // (falling back to references/style.md) so style-sanctioned choices are never false-flagged.
+      let styleNotes = read('references/style.md');
+      if (!styleNotes) {
+        const choice = read('directions/choice.md');
+        const dom = ((choice.split('\n')[0] || '').match(/style\s*\d+\s*,\s*([^\s,]+)/i) || [])[1];
+        if (dom) {
+          const cleanDom = dom.replace(/\.+$/, '').replace(/^www\./, '').toLowerCase();
+          const os = require('os');
+          const libFiles = [
+            path.join(process.env.PPCIO_HOME || path.join(os.homedir(), '.ppcio'), 'library', 'index.json'),
+            path.join(__dirname, '..', 'library', 'index.json'),
+          ];
+          for (const lf of libFiles) {
+            try {
+              const idx = JSON.parse(fs.readFileSync(lf, 'utf8'));
+              const hit = (Array.isArray(idx) ? idx : idx.pages || []).find(p => String(p.domain || p.url || '').toLowerCase().includes(cleanDom));
+              if (hit) {
+                const works = Array.isArray(hit.works) ? hit.works.join('\n') : String(hit.works || hit.notes || '');
+                if (works) { styleNotes = works; break; }
+              }
+            } catch (e) {}
+          }
+        }
+      }
+      return slop.marksToReport(marks, Array.isArray(live) ? live : [], slop.styleWorksOf(styleNotes), brandText);
     } catch (e) { return { error: String((e && e.message) || e).slice(0, 120) }; }
   })();
   console.log(JSON.stringify({ measured: facts, faults: faults.length }, null, 0)); faults.forEach(f => console.log('- ' + f));

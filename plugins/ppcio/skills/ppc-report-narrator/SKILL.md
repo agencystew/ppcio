@@ -1,6 +1,6 @@
 ---
 name: ppc-report-narrator
-description: Transform Google Ads performance data into strategic client-facing report narratives. Triggers when user pastes campaign metrics and asks for a client report, monthly summary, performance narrative, or "write up these results". Every insight connects metrics to business outcomes and includes confidence scoring.
+description: "Turn monthly, quarterly, or QBR campaign performance tables into a plain-English strategic narrative explaining why results moved. Not for lag-adjusted weekly client emails (use weekly-client-report) or internal weekly triage (use weekly-pulse)."
 ---
 
 # PPC Report Narrator

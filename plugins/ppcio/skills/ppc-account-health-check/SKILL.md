@@ -1,6 +1,6 @@
 ---
 name: ppc-account-health-check
-description: Quick strategic assessment of Google Ads account performance. Triggers when user wants an account audit, health check, performance review, or asks "how is my account doing?" Analyzes campaign data to identify critical issues, top opportunities, and what's working well. Works with any performance data format, just paste or upload. Provides traffic-light scoring and prioritized action items.
+description: "Fast 5-minute 30-day campaign-table triage that grades a Google Ads account A to D and ranks quick fixes by impact and effort. Not for a deep 90-day multi-tab alignment and profitability audit across keywords, ads, and landing pages — use ppc-strategic-audit instead."
 ---
 
 # PPC Account Health Check
@@ -364,16 +364,6 @@ And note: "Without target CPA/ROAS, I'm comparing campaigns against each other. 
 ---
 
 ## Limitations
-
-**⚠️ What I Cannot Do Without API Access:**
-
-1. **Search term analysis** - Need separate export for waste detection
-2. **Competitive context** - Can't see auction insights or market position
-3. **Risk concentration** - Limited visibility into dependency patterns
-4. **Landing page assessment** - Can't automatically check LP alignment
-5. **Historical trending** - No memory of previous performance
-6. **Device/geo breakdown** - Only if you include in your export
-7. **Client-ready reports** - Markdown output, not PDF
 
 ---
 

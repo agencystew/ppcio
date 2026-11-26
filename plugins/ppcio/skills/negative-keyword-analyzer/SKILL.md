@@ -1,6 +1,6 @@
 ---
 name: negative-keyword-analyzer
-description: Analyze Google Ads search terms and recommend negative keywords to reduce wasted spend. Triggers when user uploads search terms data, wants to find negative keywords, clean up search queries, reduce wasted ad spend, or improve campaign efficiency. Accepts CSV/Excel exports or pasted data. Groups recommendations by theme with match type suggestions and confidence levels. Includes guardrails to protect brand terms and legitimate traffic.
+description: "Quickly categorize a small pasted search-terms table (<50 rows) into thematic negative keyword lists when no full 90-day CSV or target CPA is available. Not for full Google Ads CSV exports or impact simulation before adding negatives — use search-term-miner instead."
 ---
 
 # Negative Keyword Analyzer
@@ -388,14 +388,6 @@ Google Ads format for bulk upload:
 ---
 
 ## Limitations
-
-**⚠️ What I Cannot Do Without API Access:**
-
-1. **Check existing negatives** - I may recommend terms you've already added
-2. **Suggest ad group placement** - I don't know your campaign structure
-3. **Track historical actions** - No memory of previous analyses
-4. **Auto-deduplicate** - May recommend terms that match existing keywords
-5. **One-click apply** - You'll need to manually implement in Google Ads
 
 ---
 

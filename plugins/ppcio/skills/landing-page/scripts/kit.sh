@@ -11,12 +11,15 @@
 #   batch <landing-pages>       draw batch.html, the agency report: one card per client
 #   cost [session.jsonl]      tokens and dollars of a run (main chat and agents)
 #   brief <site>              one file with every text the audit agents read
+#   firstlook <site> [link]   print the first-look message (marks first look sent without requiring view)
+#   agents-dir                print the resolved path to the kit's lp-*.md expert files
 #   look <site>               print the look-ready message to send
 #   review <folder>            draw review.html: blind scores, before and after, the faults fixed
 #   report <folder>            draw audit.html from the audit files
 #   open <file>                open a page in their browser (Mac, Linux, Windows)
 #   pack <folder>              copy every photo the page loads into assets/, so it stands alone
 #   view [site]                start the studio (the real postclick screens on this computer) and print its link
+#   studio [port]              run the studio in the foreground (for hosts with native daemon support)
 #   wait                       wait for a press in the studio, then print what the owner asked for
 #   licence                    PRO, TEAM or FREE
 #   unlock <key>               save a PPC.io licence key (licence.cjs)
@@ -55,6 +58,33 @@ if [ ! -f "$D/node_modules/playwright/package.json" ]; then
   cd - > /dev/null
 fi
 export NODE_PATH="$D/node_modules"
+# Normalize <site>, landing-pages/<site>, or /abs/path/to/landing-pages/<site> consistently.
+resolve_site_dir() {
+  local a="${1%/}"
+  if [ -z "$a" ]; then echo "."; return; fi
+  if [ -d "$a" ]; then (cd "$a" && pwd); return; fi
+  if [ -d "landing-pages/$a" ]; then (cd "landing-pages/$a" && pwd); return; fi
+  echo "$a"
+}
+resolve_site_name() {
+  local a="${1%/}"
+  [ -z "$a" ] && return
+  basename "$a"
+}
+find_studio_url() {
+  local root="$(pwd)"
+  while [ ! -d "$root/landing-pages" ] && [ "$root" != / ] && [ "$root" != "$HOME" ]; do root="$(dirname "$root")"; done
+  local saved="$(cat "$root/landing-pages/.studio-port" 2>/dev/null || true)"
+  if [ -n "$saved" ] && [ "$(curl -fs "http://127.0.0.1:$saved/root" --max-time 1 2>/dev/null)" = "$root" ]; then
+    echo "http://localhost:$saved"; return 0
+  fi
+  for P in $(seq 4870 4899); do
+    [ "$P" = "$saved" ] && continue
+    if [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$root" ]; then
+      echo "http://localhost:$P"; return 0
+    fi
+  done
+}
 cmd="${1:-setup}"; shift
 case "$cmd" in
   setup) V="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$K/../../../.claude-plugin/plugin.json")"
@@ -88,24 +118,25 @@ case "$cmd" in
     case "$1" in update) node "$K/licence.cjs" library; exit $? ;; board|find|sections) node "$K/licence.cjs" need library || exit 4
       [ -f "${PPCIO_HOME:-$HOME/.ppcio}/library/index.json" ] || node "$K/licence.cjs" library ;; esac
     node "$K/library.cjs" "$@" ;;
-  checkfacts) node "$K/checkfacts.cjs" "$@" ;;
-  check-site) node "$K/licence.cjs" need site "$(basename "${1:-}")" ;;
-  report) node "$K/licence.cjs" need site "$(basename "$(cd "${1:-.}" && pwd)")" || exit 4
-    # The studio serving this folder, so the message carries its link.
-    for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
-    node "$K/report.cjs" "$@" ;;
-  pack) node "$K/licence.cjs" need pack || exit 4; node "$K/pack.cjs" "$@" ;;
-  progress) node "$K/progress.cjs" "$@" ;;
-  brief) node "$K/brief.cjs" "$@" ;;
+  checkfacts) DIR="$(resolve_site_dir "${1:-}")"; shift 2>/dev/null || true; node "$K/checkfacts.cjs" "$DIR" "$@" ;;
+  check-site) node "$K/licence.cjs" need site "$(resolve_site_name "${1:-}")" ;;
+  report) DIR="$(resolve_site_dir "${1:-.}")"; node "$K/licence.cjs" need site "$(basename "$DIR")" || exit 4
+    SURL="$(find_studio_url)"; [ -n "$SURL" ] && export PPCIO_STUDIO="$SURL"
+    node "$K/report.cjs" "$DIR" ;;
+  pack) node "$K/licence.cjs" need pack || exit 4; DIR="$(resolve_site_dir "${1:-.}")"; shift 2>/dev/null || true; node "$K/pack.cjs" "$DIR" "$@" ;;
+  progress) DIR="$(resolve_site_dir "${1:-.}")"; shift 2>/dev/null || true; node "$K/progress.cjs" "$DIR" "$@" ;;
+  brief) node "$K/brief.cjs" "$(resolve_site_dir "${1:-}")" ;;
+  firstlook) DIR="$(resolve_site_dir "${1:-}")"; LINK="${2:-}"; [ -z "$LINK" ] && { SURL="$(find_studio_url)"; [ -n "$SURL" ] && LINK="$SURL/s/$(basename "$DIR")/"; }; node "$K/firstlook.cjs" "$DIR" ${LINK:+"$LINK"} ;;
+  agents-dir) (cd "$K/../../../agents" && pwd -P) ;;
   cost) node "$K/cost.cjs" "$@" ;;
   await) node "$K/await.cjs" "$@" ;;
   look) # The look-ready message, ready to send.
-    for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
-    node "$K/lookready.cjs" "$@" ;;
+    SURL="$(find_studio_url)"; [ -n "$SURL" ] && export PPCIO_STUDIO="$SURL"
+    node "$K/lookready.cjs" "$(resolve_site_name "${1:-}")" ;;
   review) node "$K/licence.cjs" need review || exit 4
-    R="${1:-}"; R="${R%/}"; R="landing-pages/$(basename "$R")"; [ -f "$R/$(basename "$R")-page.zip" ] || [ ! -f "$R/page.html" ] || node "$K/pack.cjs" "$R" > /dev/null
-    for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
-    node "$K/review.cjs" "$@" ;;
+    DIR="$(resolve_site_dir "${1:-.}")"; [ -f "$DIR/$(basename "$DIR")-page.zip" ] || [ ! -f "$DIR/page.html" ] || node "$K/pack.cjs" "$DIR" > /dev/null
+    SURL="$(find_studio_url)"; [ -n "$SURL" ] && export PPCIO_STUDIO="$SURL"
+    node "$K/review.cjs" "$DIR" ;;
   batch) node "$K/licence.cjs" need agency || exit 4; node "$K/batch.cjs" "$@" ;;
   view) # The studio: one local server for every site in ./landing-pages, on port 4870 (or the next free one).
     # Run from a subfolder (landing-pages/<site>/inputs): serve the project folder above it, never the subfolder (blind tests, 26 Nov).
@@ -125,10 +156,13 @@ case "$cmd" in
       for i in 1 2 3 4 5 6 7 8 9 10; do curl -fs -o /dev/null "http://127.0.0.1:$P/" --max-time 1 && break; sleep 0.3; done
     fi
     # The Claude desktop app opens it in its pane from .claude/launch.json (preview_start, name "PPC.io studio").
-    mkdir -p "$ROOT/.claude"
-    node -e 'const f=process.argv[1],p=+process.argv[2];let j={version:"0.0.1",configurations:[]};try{j=JSON.parse(require("fs").readFileSync(f,"utf8"))}catch{}j.configurations=(j.configurations||[]).filter(c=>c.name!=="PPC.io studio");j.configurations.push({name:"PPC.io studio",url:"http://localhost:"+p,port:p});require("fs").writeFileSync(f,JSON.stringify(j,null,2)+"\n")' "$ROOT/.claude/launch.json" "$P"
+    # Only touch .claude/ when running in Claude Code or a workspace that already uses .claude/.
+    if [ -n "${CLAUDECODE:-}" ] || [ -n "${CLAUDE_PROJECT_DIR:-}" ] || [ -d "$ROOT/.claude" ]; then
+      mkdir -p "$ROOT/.claude"
+      node -e 'const f=process.argv[1],p=+process.argv[2];let j={version:"0.0.1",configurations:[]};try{j=JSON.parse(require("fs").readFileSync(f,"utf8"))}catch{}j.configurations=(j.configurations||[]).filter(c=>c.name!=="PPC.io studio");j.configurations.push({name:"PPC.io studio",url:"http://localhost:"+p,port:p});require("fs").writeFileSync(f,JSON.stringify(j,null,2)+"\n")' "$ROOT/.claude/launch.json" "$P"
+    fi
     mkdir -p "$ROOT/landing-pages"; echo "$P" > "$ROOT/landing-pages/.studio-port"
-    S="${1:-}"; echo "STUDIO http://localhost:$P/${S:+s/$S/}"; [ -n "$S" ] && [ ! -f "landing-pages/$S/audit.md" ] && node "$K/firstlook.cjs" "$S" "http://localhost:$P/s/$S/" ;;
+    S="$(resolve_site_name "${1:-}")"; echo "STUDIO http://localhost:$P/${S:+s/$S/}"; [ -n "$S" ] && [ ! -f "landing-pages/$S/audit.md" ] && node "$K/firstlook.cjs" "$ROOT/landing-pages/$S" "http://localhost:$P/s/$S/" ;;
   studio) # Run the studio in the foreground (for non-Claude hosts with native daemon support).
     while [ ! -d landing-pages ] && [ "$(pwd)" != / ] && [ "$(pwd)" != "$HOME" ]; do cd ..; done
     [ -d landing-pages ] || { echo "No landing-pages folder here or above. Run this from the project folder."; exit 1; }

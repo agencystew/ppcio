@@ -11,6 +11,7 @@ metadata:
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 
 A bad negative keyword is worse than wasted spend: it blocks good
@@ -50,7 +51,7 @@ If something is missing:
      modifier instead ("course", not "implant").
    - `locations.txt`: one line per campaign, `campaign text: town, town`.
 2. Find candidates:
-   `python scripts/st_miner.py <csv> --target-cpa <CPA> [--campaign-target "Implants=90"] --protect protect.txt --services services.txt --locations locations.txt --exclude-campaign "<brand pattern>" --low-spend <half the target>`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/st_miner.py" <csv> --target-cpa <CPA> [--campaign-target "Implants=90"] --protect protect.txt --services services.txt --locations locations.txt --exclude-campaign "<brand pattern>" --low-spend <half the target>`
    For ecommerce use `--target-roas 4` instead; it works out the implied
    target CPA and lists converting n-grams under half the target ROAS.
    Each theme is listed once with its queries; fragments covered by a
@@ -65,7 +66,7 @@ If something is missing:
    `list=<name> |` in front. Choose match type and level with
    [references/negatives-rules.md](references/negatives-rules.md).
 5. Prove it:
-   `python scripts/simulate_negatives.py <csv> negatives.txt --protect protect.txt --exclude-campaign "<brand pattern>" --keywords <keywords.csv>`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/simulate_negatives.py" <csv> negatives.txt --protect protect.txt --exclude-campaign "<brand pattern>" --keywords <keywords.csv>`
    Ask for the keywords export (Keywords > Search keywords > download)
    if the user has not given it. With it, a negative that blocks one of
    their own enabled keywords is a STOP. Without it, say this was not

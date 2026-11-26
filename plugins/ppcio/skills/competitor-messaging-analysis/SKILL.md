@@ -1,6 +1,6 @@
 ---
 name: competitor-messaging-analysis
-description: "Analyze competitor websites to understand their positioning, messaging, and differentiation strategy. Triggers when user wants competitor research, competitive analysis, positioning audit, or asks 'what are my competitors saying?' Uses web search to research competitor sites and extract messaging insights. Identifies gaps you can exploit and angles you might be missing. Provide your URL and optionally competitor URLs."
+description: "Compare how multiple competitors position themselves, what proof and offers they lead with, and where messaging gaps exist. Not for profiling a single business (use ppc-business-profiler) or a full agency sales pitch brief (use sales-intelligence)."
 ---
 
 # Competitor Messaging Analysis

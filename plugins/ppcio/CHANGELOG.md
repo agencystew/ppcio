@@ -1,11 +1,12 @@
 # Changelog
 
 ## 0.8.0 (26 Nov 2026)
-- The same clear chat every time: 5 messages, each with its link. The first look, the finished audit, your new look and your new page each arrive as one short message, and nothing in between.
-- Your new page arrives with everything in one message: the link, what it does differently, the file to hand to your web person, and how it goes live on your platform.
-- Faster audits: each specialist reads your page in one go and writes once, so the audit costs less of your Claude plan.
-- One line installs PPC.io for Codex, Cursor and Gemini CLI too.
-- Node.js and the page checker install themselves on first use. Nothing to set up.
+- **Built-in paid-search CRO knowledge base & Quick CRO mode:** 6 battle-tested reference playbooks inside the Landing Page Studio (CRO doctrine, above-the-fold & message match, anti-AI-slop voice & design, offer & risk reversal, forms/mobile/tracking, and 6 vertical playbooks) so your agent gives sharp paid-search CRO answers immediately on quick questions as well as full page builds.
+- **4 standalone Quick-CRO skills:** `lp-copy-rewrite`, `lp-message-match`, `lp-buyer-objections`, and `lp-experiment-brief` work directly on pasted copy/screenshots or local `landing-pages/` audits with zero external account needed.
+- **Expanded Google Ads bonus suite:** 32 Google Ads skills (including 7 new interactive workshops: Ads Not Showing, Quality Score Repair, Conversion Tracking Planner, Bidding Strategy Decision Tree, Ecommerce Shopping Builder, Keyword Universe Builder, and Lead-Gen Quality), 21 ready-to-paste production Google Ads Scripts (`google-ads-script-creator/scripts-library/`), and 24 first-principles PPC Knowledge Playbooks (`ppc-playbooks`).
+- **One-line multi-tool installer:** Installs cleanly for Codex, Cursor, Windsurf, Antigravity, and Gemini CLI (in addition to Claude Code's 2-line plugin install), with automatic Node.js and browser setup on macOS and Linux.
+- **Same clear chat & exact Studio v2 score parity:** 5 clean stage messages, exact score parity between `audit.html`, `batch.html`, chat, and Studio, clean raw GTM tracking capture, zero permission spam on Pro library reads and PPC URLs with `&` query params, and reliable non-Claude agent/studio paths.
+- Faster audits: each specialist reads your page in one go and writes once, so the audit uses fewer tokens.
 - You always see your new look before the whole page is built, so you can switch styles early.
 
 ## 0.7.0 (26 Nov 2026)

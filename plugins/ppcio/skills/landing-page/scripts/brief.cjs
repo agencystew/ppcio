@@ -2,12 +2,15 @@
 // The audit agents read it with the 2 screenshots in their first turn, instead of 10 to 20 reads in 20 to 30
 // turns, each with its own thinking (blind-8, 26 Nov: 60,000 to 95,000 output tokens per agent, most of it thinking).
 const fs = require('fs'); const path = require('path');
-const site = process.argv[2];
-const dir = path.resolve('landing-pages', site || '');
-if (!site || !fs.existsSync(dir)) { console.log('Usage: kit.sh brief <site>'); process.exit(1); }
+const arg = process.argv[2];
+const dir = arg && fs.existsSync(path.resolve(arg)) && (fs.existsSync(path.join(path.resolve(arg), 'inputs')) || fs.existsSync(path.join(path.resolve(arg), 'context.md')))
+  ? path.resolve(arg)
+  : path.resolve('landing-pages', arg ? path.basename(arg) : '');
+const site = path.basename(dir);
+if (!arg || !fs.existsSync(dir)) { console.log('Usage: kit.sh brief <site>'); process.exit(1); }
 // Run 10 went into the audit with no first look sent. The first look comes first, always.
 if (!fs.existsSync(path.join(dir, '.first-look-sent')) && !fs.existsSync(path.join(dir, '..', 'batch.md'))) {
-  console.log(`STOP: the owner has not had the first look. Write landing-pages/${site}/first-look.md (3 numbered items), run kit.sh view ${site} and send the message it prints. Then run kit.sh brief ${site} again.`); process.exit(5);
+  console.log(`STOP: the owner has not had the first look. Write landing-pages/${site}/first-look.md (3 numbered items), run kit.sh view ${site} (or kit.sh firstlook ${site} if running without the local studio) and send the message it prints. Then run kit.sh brief ${site} again.`); process.exit(5);
 }
 const read = f => { try { return fs.readFileSync(path.join(dir, f), 'utf8').trim(); } catch (e) { return ''; } };
 const cap = (s, n) => s.length > n ? s.slice(0, n) + `\n[... ${s.length - n} more characters in the file]` : s;
@@ -16,7 +19,7 @@ const add = (f, n = 40000, note = '') => { const s = read(f); if (s) parts.push(
 add('context.md'); add('ads.md'); add('first-look.md', 4000, 'the first look already sent to the owner');
 add('inputs/site-page-text.md'); add('inputs/site-page-text-phone.md');
 add('inputs/site-facts.json'); add('live-parts.json'); add('craft.md'); add('inputs/photos.md');
-add('audit/buyers.json'); add('audit/competitive.json');
+add('audit/buyers.json'); add('audit/competitive.json'); add('audit/leaks.json');
 let pages = []; try { pages = fs.readdirSync(path.join(dir, 'inputs/pages')).filter(f => f.endsWith('.md')); } catch (e) {}
 for (const p of pages) add(`inputs/pages/${p}`, 3000, 'another of their pages');
 let comps = []; try { comps = fs.readdirSync(path.join(dir, 'competitors')).filter(c => fs.statSync(path.join(dir, 'competitors', c)).isDirectory()); } catch (e) {}

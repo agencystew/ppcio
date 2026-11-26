@@ -160,7 +160,7 @@ assumed.
 
 ## The mobile reading is not optional
 
-`action_inventory_mobile` is the same page at 375px, where about three quarters
+`action_inventory_mobile` is the same page at 390px, where about three quarters
 of paid clicks land. Compare the two. A CTA above the fold on desktop can be
 three scrolls down on a phone, and a nav that collapses hides the phone number
 that was in the header. When the two readings differ on something that matters,

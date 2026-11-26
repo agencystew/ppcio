@@ -49,11 +49,13 @@ console.log(`Wrote ${path.join(work, 'review.html')}${sc ? '' : ' (no r1/scores.
 const site = path.basename(work);
 const ready = read('ready.md');
 const zip = path.join(work, `${site}-page.zip`);
+const liveDir = path.join(work, 'live');
+const handover = fs.existsSync(zip) ? zip : (fs.existsSync(path.join(liveDir, 'index.html')) ? liveDir : null);
 if (!ready.trim()) {
-  console.log(`\nNEXT: write ${path.join(work, 'ready.md')} (an optional "Today:" line for what they must check today, 3 numbered sentences on what the new page does differently and why a buyer acts, in their words, never scores, and an optional "Ask:" line for one missing fact). ${fs.existsSync(zip) ? '' : 'Run kit.sh pack first. '}Then run kit.sh review again: it prints the message to send.`);
+  console.log(`\nNEXT: write ${path.join(work, 'ready.md')} (an optional "Today:" line for what they must check today, 3 numbered sentences on what the new page does differently and why a buyer acts, in their words, never scores, and an optional "Ask:" line for one missing fact). ${handover ? '' : 'Run kit.sh pack first. '}Then run kit.sh review again: it prints the message to send.`);
   process.exit(0);
 }
-if (!fs.existsSync(zip)) { console.log(`\nNEXT: run kit.sh pack landing-pages/${site} first, so the message carries the file to hand over. Then run kit.sh review again.`); process.exit(0); }
+if (!handover) { console.log(`\nNEXT: run kit.sh pack landing-pages/${site} first, so the message carries the file to hand over. Then run kit.sh review again.`); process.exit(0); }
 const line = re => (ready.match(re) || [])[1];
 const today = line(/^\s*\**today:?\**:?\s*(.+)$/im);
 const ask = line(/^\s*\**ask:?\**:?\s*(.+)$/im);
@@ -74,7 +76,7 @@ const msg = [
   `**Your new page is ready:** ${link}`,
   process.env.PPCIO_STUDIO ? '(Your page today and the new one side by side, on a laptop and a phone.)\n' : '',
   says.length > 1 ? says.map((s, i) => `${i + 1}. ${s}`).join('\n') : says.join(' '), '',
-  `${go}`, `The file to hand over: ${zip}`, '',
+  `${go}`, `The file to hand over: ${handover}`, '',
   ask ? `${ask}\n` : '',
   'Tell me any change and I\'ll fold it in.',
 ].filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n').replace(/\n{3,}/g, '\n\n').trim();

@@ -11,6 +11,7 @@ metadata:
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 
 Google dates a conversion by the day of the click, not the day it
@@ -58,7 +59,7 @@ If something is missing:
 ## Workflow
 1. Run the script (it handles header rows, "Total" rows, currency signs,
    "< 10%" values and paused campaigns):
-   `python scripts/lag_check.py --daily <daily.csv> --lag <lag.csv> --target-cpa <CPA> --brand "<brand campaign pattern>" [--campaign-target "Implants=90"]`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/lag_check.py" --daily <daily.csv> --lag <lag.csv> --target-cpa <CPA> --brand "<brand campaign pattern>" [--campaign-target "Implants=90"]`
    Always pass `--brand` when the account has brand campaigns. Why: cheap
    brand conversions hide non-brand problems (in testing, brand made a
    £74 non-brand CPA look like £29 for the account).

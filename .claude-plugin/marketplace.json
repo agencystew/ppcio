@@ -8,8 +8,8 @@
     {
       "name": "ppcio",
       "source": "./plugins/ppcio",
-      "description": "Everything PPC.io in your own Claude: landing page audit and build, 25 Google Ads skills and the style library."
+      "description": "Everything PPC.io inside your AI agent: the Landing Page Studio, 6 CRO playbooks, 4 quick-CRO skills, 32 Google Ads skills, 21 production Google Ads scripts, 24 PPC playbooks, and the 322-page style library."
     }
   ],
-  "description": "PPC.io for your own Claude."
+  "description": "PPC.io for Claude Code, Cursor, Codex, Antigravity, Windsurf and Gemini CLI."
 }

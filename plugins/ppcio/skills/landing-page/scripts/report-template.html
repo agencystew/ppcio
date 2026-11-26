@@ -15,6 +15,9 @@ html, body { margin: 0; background: #fff; }
 .v26 .app { grid-template-columns: minmax(0, 1fr); }
 .v26 .au-hero { background: #fff; border-bottom: 1px solid var(--g100); padding: 28px 0 32px; }
 .v26 .hv-site .lg { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: var(--p50); color: var(--p700); font-weight: 800; font-size: 15px; }
+.v26 .kit-dx-p { margin: 12px 0 0; max-width: 64ch; font-size: 18px; line-height: 1.55; color: var(--g700); }
+.v26 .kit-dx-h3 { margin: 28px 0 4px; font-size: 18px; font-weight: 700; }
+.v26 .kit-dx .br-rows a { cursor: default; }
 .v26 .kit-verdict { margin: 18px 0 0; max-width: 46ch; font-size: 20px; line-height: 1.4; font-weight: 600; color: var(--g700); }
 .v26 .tabbar .tabs a { cursor: pointer; }
 .v26 .view[hidden] { display: none !important; }
@@ -159,6 +162,8 @@ if (tech.length || devList.length) cards.push({ area: 'technical', to: 'technica
 const band = h2 => `<section class="br-band" aria-labelledby="br-band-h"><img alt="" src="${art('lead-face')}"><h2 id="br-band-h">${esc(h2)}</h2><div class="br-cta"><span class="rp-band-go au-share-go"><button type="button" class="btn" data-copy="Design a new version of this page from the audit."><span>Build a new version</span><span class="go" aria-hidden="true">${ic('go')}</span></button><span class="au-build-quiet">Or tell Claude: “design a new version”</span></span></div></section>`;
 
 const overview = `<section class="view ovv ovv2" data-view="overview">
+  ${D.diagnosis && (D.plan || []).length ? `<section class="br-peach kit-dx" aria-labelledby="kit-dx-h"><h2 id="kit-dx-h" class="br-big">What is going on</h2><p class="kit-dx-p">${esc(D.diagnosis)}</p>
+    <h3 class="kit-dx-h3">What your new page does about it</h3><ol class="br-rows">${D.plan.map((x, i) => `<li><a><span class="br-n">${i + 1}</span><span class="br-t">${esc(x)}</span></a></li>`).join('')}</ol></section>` : ''}
   ${biz.length ? `<section class="pp biz" aria-labelledby="pp-h"><div class="pp-head"><h2 class="crs-h" id="pp-h">What we know about your business</h2></div>
     <ul class="pp-list">${biz.map(([k, v]) => `<li class="pp-r tc" data-key="${({ 'What you sell': 'sells', 'Who you sell to': 'audience', 'Your offer': 'offer', 'Where you sell': 'where', 'What a win is': 'win', 'Where visitors come from': 'traffic', 'Your competitors': 'competitors' })[k]}"><div class="pp-t"><p class="fct-h"><b>${esc(k)}</b></p><p class="pp-v">${esc(v)}</p></div></li>`).join('')}</ul></section>` : ''}
   ${top3.length ? `<section class="br-peach" aria-labelledby="br-peach-h"><h2 id="br-peach-h" class="br-big">Top fixes we found</h2>

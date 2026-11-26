@@ -1,6 +1,6 @@
 ---
 name: ppc-change-analyzer
-description: Analyze the before/after impact of Google Ads changes with verdict and confidence scoring. Triggers when user describes a change they made (bid strategy, budget, paused campaigns, new keywords) and wants to know if it worked, or asks "did this change help", "what happened after", or "should I revert this".
+description: "Evaluate one known Google Ads change (before vs after) and give a keep, revert, or wait verdict with a confidence score. Not for investigating an unknown performance drop across change history — use change-detective instead."
 ---
 
 # PPC Change Analyzer

@@ -163,7 +163,7 @@ A field with no file is null. Never invent its content. When `inputs/site-page-t
 ## Notes
 
 - Performance fields stay null unless `perf_signals` came in with real numbers.
-- `mobile_specific_issues` and `a11y_issues` cite specific elements ("CTA below fold at 375w", "hero image lacks alt text"). No boilerplate.
+- `mobile_specific_issues` and `a11y_issues` cite specific elements ("CTA below fold at 390px", "hero image lacks alt text"). No boilerplate.
 - 🚨 **Mobile honesty.** You get the phone first screen (`inputs/live-phone-today.png`) and the phone text (`inputs/site-page-text-phone.md`). Open the screenshot before you write a phone finding, and write only what it shows or what the phone text proves. Below the first screen you have no picture: say where a thing sits in phone screens ("about 10 screens down"), never in pixels, and never claim how it looks. When the screenshot and the text disagree (the text has a logo or a call bar the screenshot lacks), trust the text and say nothing about the look.
 
 ## Where your answer goes

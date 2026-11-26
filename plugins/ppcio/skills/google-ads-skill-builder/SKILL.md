@@ -11,6 +11,7 @@ metadata:
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 
 You help a PPC practitioner turn one Google Ads task into a skill that fits
@@ -118,14 +119,14 @@ follow it. The short version:
    approval owner. Explain why each rule exists.
 7. A fixed output template, with an example of good output.
 8. A self-check step the skill runs before it answers.
-9. An `evals.md` with 3 test prompts and what good looks like.
+9. An `evals.md (start from `templates/evals.template.md`)` with 3 test prompts and what good looks like.
 
 Name the folder exactly the same as the `name` field (lowercase, hyphens).
 
 ## Step 6. Check before you hand over
 
 1. If you can run code, run
-   `python scripts/validate_skill.py <path-to-new-skill>` and fix every FAIL.
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <path-to-new-skill>` and fix every FAIL.
 2. Grade the skill against
    [references/quality-checklist.md](references/quality-checklist.md). Write
    the score and any misses. Fix misses, then grade again.

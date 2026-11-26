@@ -10,14 +10,14 @@ metadata:
 
 ## Start here
 
-- If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 
 You move one custom GPT into Claude as a skill. The goal is a skill that
 works better than the GPT did, not a copy of it. GPT instructions are often
 one long prompt with shouted rules. A good skill is a short workflow, with
 knowledge in separate files and exact checks in scripts.
 
-Why this matters: OpenAI is retiring custom GPTs. Instructions and files can
+Why this matters: Moving a custom GPT into an open Agent Skill. Instructions and files can
 be moved, but actions and the chosen model do not carry over (OpenAI's
 migration FAQ). People will lose GPTs they rely on unless someone moves them
 properly.
@@ -40,7 +40,7 @@ missing and carry on.
 
 Save the instructions to a file and run:
 
-`python scripts/gpt_audit.py instructions.txt [--starters starters.txt]`
+`python3 "${CLAUDE_SKILL_DIR}/scripts/gpt_audit.py" instructions.txt [--starters starters.txt]`
 
 It prints: word count, shouted rules (ALL CAPS, NEVER, ALWAYS, MUST), exact
 limits it found (character counts, word counts, lists of N), links, file
@@ -92,13 +92,13 @@ Rules for the rewrite (from Anthropic's skill best practices):
 
 ## Step 6. Check and package
 
-1. Run `python scripts/validate_skill.py <folder>`. Fix every FAIL. Fix a
+1. Run `python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <folder>`. Fix every FAIL. Fix a
    WARN unless you can say why it does not apply.
 2. Run the 3 eval prompts against the new skill in your head, step by step,
    and fix any step that would go wrong.
-3. Run `python scripts/package_skill.py <folder>`. It writes `<name>.zip`.
+3. Run `python3 "${CLAUDE_SKILL_DIR}/scripts/package_skill.py" <folder>`. It writes `<name>.zip`.
 4. Tell the person how to install it: Claude, Customize, Skills, Upload a
-   skill. Code execution must be on (Settings, Capabilities).
+   skill. Run this locally in Claude Code, Cursor, Codex, Antigravity, or Gemini CLI (or in Claude.ai with Code Execution enabled) (Settings, Capabilities).
 
 ## Guardrails
 

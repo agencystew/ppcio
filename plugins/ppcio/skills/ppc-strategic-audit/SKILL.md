@@ -1,7 +1,6 @@
 ---
 name: ppc-strategic-audit
-title: "PPC Strategic Audit"
-description: "Perform comprehensive Google Ads strategic audits from manually pasted data. Triggers when user shares Google Ads data and wants an audit, account analysis, performance review, or optimization recommendations. Analyzes account structure, budget allocation, performance patterns, and alignment to provide prioritized, actionable recommendations focused on profitability and scale."
+description: "Deep 90-day multi-tab Google Ads audit checking strategic alignment across campaigns, keywords, ads, and landing pages, separating profitable spend from waste. Not for a quick 5-minute campaign-table health grade — use ppc-account-health-check instead."
 ---
 
 # PPC Strategic Audit

@@ -82,9 +82,9 @@ store's own buyers see.
 
 ## Mobile is the majority
 
-~75% of paid-ad clicks are mobile. `visible_page_text_mobile` is the text of the 375px render. Compare it against desktop and flag mobile-specific leaks: a CTA or price present on desktop but missing/buried on mobile, the hero promise pushed below a wall of nav, key copy truncated. A page that converts on desktop but breaks on mobile is leaking the majority of the spend, so treat mobile breakage as high-severity. If `visible_page_text_mobile` is empty, note that mobile couldn't be verified (a coverage gap, not a page absence) and audit desktop only.
+~75% of paid-ad clicks are mobile. `visible_page_text_mobile` is the text of the 390px render. Compare it against desktop and flag mobile-specific leaks: a CTA or price present on desktop but missing/buried on mobile, the hero promise pushed below a wall of nav, key copy truncated. A page that converts on desktop but breaks on mobile is leaking the majority of the spend, so treat mobile breakage as high-severity. If `visible_page_text_mobile` is empty, note that mobile couldn't be verified (a coverage gap, not a page absence) and audit desktop only.
 
-`action_inventory_mobile` is the MEASURED 375px reading of the same page: every button with its region and whether it sits above the fold at 375, every form field with its autofill attribute, every tel: link, the buy button and whether it is gated. Where `visible_page_text_mobile` tells you what a phone visitor reads, this tells you what happens when they tap. A mobile finding drawn from it is a measurement, not an inference, so say the measured thing plainly. If it is empty, mobile was not captured: say so and audit desktop only.
+`action_inventory_mobile` is the MEASURED 390px reading of the same page: every button with its region and whether it sits above the fold at 375, every form field with its autofill attribute, every tel: link, the buy button and whether it is gated. Where `visible_page_text_mobile` tells you what a phone visitor reads, this tells you what happens when they tap. A mobile finding drawn from it is a measurement, not an inference, so say the measured thing plainly. If it is empty, mobile was not captured: say so and audit desktop only.
 
 **Three measured faults are always a finding when the inventory shows them.** These are not judgement calls, and a page that has one is losing clicks whatever else is good about it:
 
@@ -94,13 +94,13 @@ store's own buyers see.
 
 Severity by consequence, as usual: the main action being dead is S1; a secondary one is S2. Quote the measured element as your evidence, not a sentence of page copy.
 
-**Tag `viewport` on EVERY finding.** The report pins each leak on its viewport's screenshot, so a mis-tagged viewport puts the pin on the wrong render and the finding reads as false. `"mobile"` = true only on the 375px view. Verify against `visible_page_text_mobile` and quote IT, not the desktop text. `"desktop"` = only on the wide view. `"both"` = true on both (most copy leaks). The classic trap: "phone number buried in footer" is TRUE on mobile (nav collapses) but FALSE on desktop (it's in the header), so tag it `"mobile"` or it lands on the desktop screenshot looking like a lie.
+**Tag `viewport` on EVERY finding.** The report pins each leak on its viewport's screenshot, so a mis-tagged viewport puts the pin on the wrong render and the finding reads as false. `"mobile"` = true only on the 390px view. Verify against `visible_page_text_mobile` and quote IT, not the desktop text. `"desktop"` = only on the wide view. `"both"` = true on both (most copy leaks). The classic trap: "phone number buried in footer" is TRUE on mobile (nav collapses) but FALSE on desktop (it's in the header), so tag it `"mobile"` or it lands on the desktop screenshot looking like a lie.
 
 ## No fabrication
 
 Every number, named entity, statistic, or claim MUST trace to an exact line in the provided inputs. No industry benchmarks from training data, no invented percentages, no embellished claims ("more productive" on the page never becomes "40% more productive" in your output). Your findings go to the customer verbatim. They wrote this page and they will notice. If you can't source it, don't write it.
 
-**Where a line sits is a claim too.** You get the page's text in reading order, not its layout, so you cannot measure scroll depth. Never count scrolls or screens ("three scrolls down", "two screens in"). Before you say a line is buried, low on the page, late or missing from the top, read the first lines of `visible_page_text` and `visible_page_text_mobile` for the same idea in other words. If the top of the page already says it, even worded differently, the leak is not where it sits: critique how it is said instead. Put a line in quotes only when it is copied exactly from the page.
+**Where a line sits is a claim too.** Open `inputs/live-page-today.png` and `inputs/live-phone-today.png` to verify what sits on the first screen; below the first screen, judge order from the text rather than inventing scroll counts. Never count scrolls or screens ("three scrolls down", "two screens in"). Before you say a line is buried, low on the page, late or missing from the top, read the first lines of `visible_page_text` and `visible_page_text_mobile` for the same idea in other words. If the top of the page already says it, even worded differently, the leak is not where it sits: critique how it is said instead. Put a line in quotes only when it is copied exactly from the page.
 
 ## NEVER claim absent what is present
 

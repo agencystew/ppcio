@@ -1,6 +1,6 @@
 ---
 name: sales-intelligence
-description: Generate competitive sales intelligence from a prospect's URL. Analyze their website, discover competitors, audit landing pages side-by-side, identify messaging gaps, and produce strategic campaign recommendations. Everything an agency needs to walk into a pitch meeting prepared. No Google Ads account access needed. Triggers on "sales pitch", "prospect analysis", "competitive pitch", "new business intelligence", "pitch prep", or "analyze this prospect".
+description: "Prepare an agency new-business sales call from one prospect URL: profiles the prospect, benchmarks 3 competitors, and writes 3 sharp call openers. Not for an existing client account audit (use ppc-account-health-check or ppc-strategic-audit)."
 ---
 
 # Sales Intelligence Report

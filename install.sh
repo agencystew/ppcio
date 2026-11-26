@@ -36,6 +36,7 @@ link() { # link <skills folder> <tool name>
 FOUND=0
 if command -v codex > /dev/null 2>&1 || [ -d "$HOME/.codex" ]; then link "$HOME/.agents/skills" "Codex"; FOUND=1; fi
 if command -v cursor > /dev/null 2>&1 || [ -d "$HOME/.cursor" ]; then link "$HOME/.cursor/skills" "Cursor"; FOUND=1; fi
+if [ -d "$HOME/.codeium/windsurf" ]; then link "$HOME/.codeium/windsurf/skills" "Windsurf"; FOUND=1; fi
 if [ -d "$HOME/.gemini/antigravity" ]; then link "$HOME/.gemini/antigravity/skills" "Antigravity"; FOUND=1; fi
 if command -v gemini > /dev/null 2>&1 || [ -d "$HOME/.gemini" ]; then link "$HOME/.gemini/skills" "Gemini CLI"; FOUND=1; fi
 if [ "$FOUND" = 0 ]; then link "$HOME/.agents/skills" "any tool that reads ~/.agents/skills"; fi

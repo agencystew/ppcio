@@ -3,7 +3,7 @@
 Every flagship skill reads this first. Skills are only as good as what
 they know about your account: the same search term can be waste for one
 client and a best seller for another. Fill it once per account, keep it in
-the Claude Project for that client (or attach it), and update it when
+the client project folder (or Claude Project) for that client (or attach it), and update it when
 targets change.
 
 ## How a skill uses it

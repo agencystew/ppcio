@@ -90,6 +90,10 @@ const brand = read('brand.json');
 if (brand && brand.logo) brand.logo = dataUri(brand.logo);
 const pageUrl = String(facts.final_url || facts.url || '').replace(/#.*$/, '');
 const score = computeAuditScore(A, pageUrl);
+const md = text('audit.md');
+const sec = h => (md.split(new RegExp(`^## ${h}\\s*$`, 'mi'))[1] || '').split(/^## /m)[0].trim();
+const diagnosis = sec('The diagnosis').replace(/\s+/g, ' ').trim();
+const plan = sec('The plan for your new page').split(/^\d+\.\s+/m).slice(1).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 3);
 const data = {
   name, site, url: pageUrl, date: new Date().toISOString().slice(0, 10),
   composite_score: score,
@@ -103,7 +107,7 @@ const data = {
   biz: { sell: pick(/what they sell|what they do|^business$|^sells?$/), who: pick(/who buys|buyers?$|customers?$|sell to/), where: pick(/^where( they (work|sell))?$|area|location/), win: (() => { const w = pick(/win/); const plain = { purchase: 'A sale', quote_request: 'A quote request', lead_form: 'A form enquiry', call: 'A phone call', appointment_booking: 'A booking', demo_request: 'A demo request', trial_signup: 'A trial sign-up', signup: 'A sign-up', application: 'An application', download: 'A download', donation: 'A donation' };
       const m = w.match(/^([A-Za-z_]+)\b\s*(.*)$/); if (!m || !plain[m[1].toLowerCase()]) return w; return m[2] ? m[2].replace(/^./, c => c.toUpperCase()) : plain[m[1].toLowerCase()]; })(),
     from: pick(/visitors|come from|traffic/) },
-  blocked, brand, ...A,
+  blocked, brand, ...A, diagnosis, plan,
 };
 // A thumbnail for each competitor: its own laptop screenshot, embedded so audit.html stands alone when shared.
 if (data.competitive && Array.isArray(data.competitive.competitors)) for (const c of data.competitive.competitors) {
@@ -127,18 +131,26 @@ fs.writeFileSync(path.join(work, 'audit.html'), out);
 const got = Object.keys(A).filter(k => k !== 'journeys' && A[k]).concat(A.journeys.length ? [`${A.journeys.length} journeys`] : []);
 console.log(`Wrote ${path.join(work, 'audit.html')}\nFrom: ${got.join(', ')}`);
 // The audit-done message, ready to send, so every app sends the same one (26 Nov: models skipped it when it was only a rule).
-const md = text('audit.md');
 const verdict = (md.match(/\*\*Verdict:\*\*\s*(.+)/) || [])[1] || '';
 const fixSec = (md.split(/^## (?:What to )?fix first\s*$/mi)[1] || '').split(/^## /m)[0];
 const top = fixSec.split(/^\d+\.\s+/m).slice(1).map(item => item.match(/\*\*Now:?\*\*:?\s*([\s\S]+?)\s*\*\*Change to:?\*\*:?\s*([\s\S]+?)\s*(?:\*\*Why|$)/)).filter(Boolean).map(m => [m[0], m[1].replace(/\s+/g, ' '), m[2].replace(/\s+/g, ' ')]).slice(0, 3);
 const studio = process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/` : path.join(work, 'audit.html');
-if (verdict && top.length) {
-  const lines = [`**Your audit is ready${score != null ? `: ${name} scores ${score} out of 100` : ''}.**`, '', verdict, '', '**The 3 fixes that win you the most enquiries:**'];
-  top.forEach((m, i) => lines.push(`${i + 1}. **Now:** ${m[1].trim()}\n   **Change to:** ${m[2].trim()}`));
-  lines.push('', `The full audit, with your buyers, your competitors and every fix: ${studio}`);
+// Stewart, 26 Nov: the message read like 3 micro fixes, never a strategist. It leads with the diagnosis and the plan.
+const nFix = (fixSec.match(/^\d+\.\s+/gm) || []).length;
+if (verdict && (top.length || plan.length)) {
+  const lines = [`**Your audit is ready${score != null ? `: ${name} scores ${score} out of 100` : ''}.**`, ''];
+  if (diagnosis && plan.length) {
+    lines.push(`**What is going on.** ${diagnosis}`, '', '**What your new page does about it:**');
+    plan.forEach((x, i) => lines.push(`${i + 1}. ${x}`));
+    lines.push('', `The full audit has your buyers, your competitors${nFix ? ` and ${nFix} fixes you can make to today's page this week` : ' and every fix'}: ${studio}`);
+  } else {
+    lines.push(verdict, '', '**The 3 fixes that win you the most enquiries:**');
+    top.forEach((m, i) => lines.push(`${i + 1}. **Now:** ${m[1].trim()}\n   **Change to:** ${m[2].trim()}`));
+    lines.push('', `The full audit, with your buyers, your competitors and every fix: ${studio}`);
+  }
   let free = false; try { free = /FREE/.test(require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'licence.cjs'), 'status'], { encoding: 'utf8' })); } catch (e) {}
   lines.push('', free ? 'The new page comes with the PPC.io licence. Paste your key here any time and I\'ll build it.' : 'Next I\'m drawing your new page in the style that fits your buyers best. You\'ll see its first screen in about 10 minutes, then the whole page.');
-  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Add nothing to it: no offer, no question, no extra advice. Do not end your turn after it: in this same turn, open KIT/steps/2-directions.md and run its first command. The owner does not need to reply.\n----\n${lines.join('\n')}\n----`);
+  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Add nothing to it: no offer, no question, no extra advice. Do not end your turn after it: in this same turn, open KIT/steps/2-directions.md and run its first command. The owner does not need to reply.\n----\n${lines.join('\n')}\n----`);
 } else {
   console.log('NEXT: audit.md has no verdict or no "What to fix first" list in the Now / Change to form. Fix audit.md, then run report again.');
 }

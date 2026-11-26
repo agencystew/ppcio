@@ -11,6 +11,7 @@ metadata:
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 
 Clients read the first two lines and the number they care about. Most AI
@@ -39,7 +40,7 @@ and do not call a drop.
 
 ## Workflow
 1. Run:
-   `python scripts/weekly_numbers.py --daily <daily.csv> --lag <lag.csv> --changes <changes.csv> --budget <monthly> --brand "<brand pattern>" --target-cpa <CPA> [--campaign-target "Implants=90"]`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/weekly_numbers.py" --daily <daily.csv> --lag <lag.csv> --changes <changes.csv> --budget <monthly> --brand "<brand pattern>" --target-cpa <CPA> [--campaign-target "Implants=90"]`
 2. Pick the one headline number the reader cares about (from the
    profile: bookings, leads, sales or revenue) and say how it moved, on
    the final estimate, not the as-reported count. Compare final estimate
@@ -56,7 +57,7 @@ and do not call a drop.
    writing).
 5. Write with the template to `draft.md`. Save the step 1 output to
    `numbers.txt`, then run:
-   `python scripts/report_check.py draft.md --numbers numbers.txt --term <what the client calls a conversion>`
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/report_check.py" draft.md --numbers numbers.txt --term <what the client calls a conversion>`
    Fix every FAIL and run it again until it passes. Why: one number that is
    not in the script output, or one "CPA", and the client stops trusting
    the rest.

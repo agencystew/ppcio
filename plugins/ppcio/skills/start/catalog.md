@@ -1,50 +1,72 @@
 # Everything PPC.io can do, by job
 
-## Landing pages
+## Landing Page Studio (Audit, Design & Build)
 
-- **Audit my landing page**: A team of specialists checks the page like a buyer and a conversion team, and compares it with the pages that win in your market.
-- **Build a better page**: Pick a look from 322 top pages (the best of 1,112 we graded), then get the whole page built in your brand, reviewed and ready to put live.
-- **Many clients at once**: agency mode runs a list of client pages side by side.
+- **Audit my landing page**: 14 conversion specialists check your page like real buyers and a CRO team, benchmark your competitors, and produce an interactive studio audit with exact fixes.
+- **Build a better page**: Pick a direction from 322 top-graded landing pages (the best of 1,112 graded across 144 niches), then get the full page built in your brand, checked on laptop and phone, and zipped ready to go live.
+- **Quick CRO consulting**: Ask any fast paid-search CRO question (critique a headline, review a form, sharpen an offer, remove AI slop, plan a vertical page structure) backed by 6 built-in paid-search CRO playbooks.
+- **Many clients at once**: Agency mode audits and builds a list of client landing pages side by side with one summary board.
 
-## Search terms and negative keywords
+## Quick-CRO Tools (Standalone or On Your Audits)
 
-- **Search Term Miner**: Tests a negative against 90 days of search terms before you add it. On the demo account, "dental" would have blocked 44 conversions.
-- **Negative Keyword Analyzer**: Reads your search terms report and groups the waste by theme. Each negative gets a match type, a level and a confidence score.
+- **Rewrite Landing Page Copy**: Exact **Now → Change to** founder-voice rewrites for weak headlines, hero blocks, proof lines, and buttons — zero invented claims.
+- **Ad-to-Page Message Match**: Compares your Google Ads or Meta ad promise against the landing page's first screen, quotes every mismatch, and rewrites the opening so ad and page agree.
+- **Buyer Objections & Hesitation Fix**: Pinpoints the exact unanswered buyer question (price, risk, suitability, effort, credibility, next step) and places the smallest real proof fix right beside the button.
+- **Landing Page Experiment Brief**: Turns an audit finding into a tight, single-variable designer/developer handoff brief (`Change, Why, Keep, Check`) with honest traffic sizing.
 
-## RSA ads and competitors
+## First-Principles PPC Knowledge (24 Deep Playbooks)
 
-- **RSA Asset Writer**: Checks every headline for length and every claim against your facts file, with a script. 7 of 11 demo headlines failed.
-- **RSA Headline Generator**: Writes 15 headlines across 6 angles and 4 descriptions, all inside Google's character limits.
-- **Competitor Messaging Analysis**: Shows how each competitor positions itself, what proof it leads with, and the gaps no one covers.
-- **Channel Expansion Planner**: Checks Meta, Microsoft, LinkedIn and TikTok against your Google Ads results and says which is worth a test.
+- **PPC Playbooks**: On-demand access to 24 deep paid-search foundations — Unit Economics (LTV/CAC, break-even ROAS), Measurement & Attribution, Shopping & Merchant Center Feeds, Bidding Strategy, Broad Match Governance, Quality Score, Account Structure, Alignment Chain, Audience Strategy, PMax, Scaling, Business-Model PPC, and the 8-layer Paid Media Performance System.
 
-## Google Ads audits
+## Search Terms & Negative Keywords
 
-- **PPC Account Health Check**: Grades the account A to D, flags the critical issues and ranks the fixes by impact and effort.
-- **PPC Strategic Audit**: Checks that keywords, ads and landing pages line up, and splits what's working from what's wasted.
-- **PMax Health Check**: Checks Performance Max for brand searches first, then judges the results without them. Ends with keep, fix or kill.
-- **Demand Ceiling Analyzer**: Uses impression share and returns on extra spend to tell you if search has room to grow before you raise the budget.
-- **Google Ads Audit Sales Presentation**: Turns an audit into a 12 to 15 slide presentation in one HTML file, led by the money problem.
+- **Search Term Miner** *(recommended for CSV exports)*: Mines 90-day search term CSVs with n-grams and simulates every negative before you add it so you never block converting queries.
+- **Negative Keyword Analyzer** *(quick small-table triage)*: Categorizes small pasted search-term tables (<50 rows) by waste theme with match types and confidence scores.
+- **Keyword Universe Builder**: Interactive workshop that builds an intent-tiered Google Ads keyword architecture from scratch (seed terms, modifiers, match types, ad group themes, starter negatives).
 
-## Google Ads reports and budgets
+## RSA Ads & Competitors
 
-- **Weekly Client Report**: Writes the Monday client email with the bad news first, then checks every number in it against your data.
-- **Change Detective**: Reads your change history and finds which change moved the numbers, including Google's auto-applied recommendations.
-- **Conversion Lag Check**: Tells a real drop from conversions that haven't been counted yet. On the demo account, a 32% drop was really 15%.
-- **Budget Pacer**: Projects month-end spend and tells you where to move budget when you're over or under.
-- **Weekly Pulse**: Compares this week with last week and the 4-week average, flags changes over 20%, and gives 3 to 5 actions.
-- **PPC Report Narrator**: Turns campaign metrics into a client report in plain words, with the cause behind each change.
-- **PPC Change Analyzer**: Compares before and after for one change and says keep, revert or wait, with a confidence score.
-- **PPC Experiment Finder**: Finds A/B tests in patterns in your data and ranks them by priority and likely impact.
+- **RSA Asset Writer** *(recommended for real accounts)*: Writes and script-lints RSA headlines and descriptions against strict 30/90-character limits and your verified facts sheet.
+- **RSA Headline Generator** *(quick brainstorm)*: Rapidly generates 15 headlines across 6 angles and 4 descriptions when you have no existing ad CSV or facts file yet.
+- **Competitor Messaging Analysis**: Compares how competitors position themselves, what proof and offers they lead with, and where messaging gaps sit.
+- **Channel Expansion Planner**: Benchmarks Meta, Microsoft, LinkedIn, and TikTok against your Google Ads economics and recommends which channel to test next.
 
-## Google Ads Scripts and new clients
+## Google Ads Audits & Troubleshooting
 
-- **Google Ads Script Creator**: Writes Google Ads Scripts with a settings block, GAQL queries and MCC support that run on the first try.
-- **New Client Onboarding**: Works out which of 4 phases a new account is in and gives you 3 to 5 actions for this week.
-- **PPC Business Profiler**: Builds a business profile from a website: what it sells, who it sells to and how it's positioned.
-- **Sales Intelligence**: Takes one prospect URL, finds 3 competitors, compares their landing pages and gives you 3 ways to open the call.
+- **Ads Not Showing Troubleshooter**: Fast 5-minute interactive diagnostic to find why campaigns have zero impressions (billing, policy, targeting, schedule, budget, Ad Rank, negative conflicts).
+- **PPC Account Health Check** *(5-minute triage)*: Grades a 30-day campaign export A to D, flags critical leaks, and ranks quick wins by impact and effort.
+- **PPC Strategic Audit** *(deep 90-day audit)*: Multi-tab audit checking alignment across campaigns, keywords, ads, and landing pages to separate profitable spend from waste.
+- **PMax Health Check**: Strips brand searches out of Performance Max first, judges real non-brand performance, and ends with keep, fix, or kill.
+- **Quality Score Repair**: Component-by-component Quality Score teardown (Expected CTR, Ad Relevance, Landing Page Experience) with CPC savings math.
+- **Demand Ceiling Analyzer**: Uses impression share and marginal return to tell you whether search still has room to scale before raising budgets.
+- **Google Ads Audit Sales Presentation**: Turns an audit into a 12–15 slide, white-label agency HTML sales deck led by the money problem.
 
-## Build your own Google Ads skill
+## Tracking, Bidding, Shopping & Lead Quality Workshops
 
-- **Skill Builder**: Asks you one question at a time, then builds and tests a Google Ads skill for the way you work.
-- **GPT to Skill**: Moves a custom GPT into a Claude skill and rewrites its rules in capitals as calm rules with a reason.
+- **Conversion Tracking Planner**: Maps primary vs. secondary conversion actions, GTM/gtag setup, enhanced conversions, call tracking, and offline conversion imports.
+- **Bidding Strategy Decision Tree**: Picks the right bid strategy by conversion maturity (Manual CPC through tCPA/tROAS) with safe transition rules and rollback thresholds.
+- **Ecommerce Shopping & PMax Builder**: Structures Shopping and PMax around SKU margins, product tiers, ROAS targets, and Google Merchant Center feed optimization.
+- **Lead-Gen Quality Fixer**: Stops junk/spam leads by fixing Search/PMax targeting leaks, form qualification friction, and offline conversion import (OCI) feedback loops.
+
+## Google Ads Reports, Changes & Budgets
+
+- **Weekly Client Report** *(Monday client email)*: Lag-adjusted weekly email with bad news first, verified against your CSV numbers by script.
+- **Weekly Pulse** *(internal PPC manager triage)*: Compares this week vs. last week vs. 4-week rolling baseline, flagging >20% swings and tracking open actions.
+- **PPC Report Narrator** *(monthly / QBR summaries)*: Turns monthly or quarterly campaign tables into a plain-English executive narrative.
+- **Change Detective** *(unknown performance drop)*: Reads change history (including Google auto-applied recommendations) to find which change moved the numbers.
+- **PPC Change Analyzer** *(one known change)*: Evaluates before vs. after for a specific change and gives a keep, revert, or wait verdict.
+- **Conversion Lag Check**: Separates a real conversion drop from delayed attribution so you stop pausing winning campaigns prematurely.
+- **Budget Pacer**: Projects month-end spend and recommends exact budget shifts when campaigns are over- or under-pacing.
+- **PPC Experiment Finder**: Spots high-value Google Ads account experiments in your campaign data and ranks them by expected impact.
+
+## 21 Production Google Ads Scripts & New Clients
+
+- **Google Ads Script Creator + 21-Script Library**: Includes 21 ready-to-paste production Google Ads Scripts (PMax Insight Engine, Make Exact Match Exact, Wasted Spend Forensics, Ad-to-LP Mismatch Detector, Conversion Action Health Check, Quality Score Tracker, MCC Daily Monitor, AI-ready exports, and more) plus custom GAQL-first white-label script generation.
+- **New Client Onboarding**: Identifies which of 4 onboarding phases a new account is in and delivers 3–5 concrete actions for week one.
+- **PPC Business Profiler**: Builds a reusable business and buyer profile from any website URL.
+- **Sales Intelligence**: Takes one prospect URL, benchmarks 3 competitors, compares their landing pages, and writes 3 sharp sales-call openers.
+
+## Build Your Own AI Skills
+
+- **Skill Builder**: Interviews you one question at a time, then builds, validates, and packages a custom Google Ads skill for your workflow.
+- **GPT to Skill**: Converts an existing Custom GPT into a clean, portable Agent Skill with verified scripts and calm, reason-backed rules.

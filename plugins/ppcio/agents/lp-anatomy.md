@@ -86,7 +86,7 @@ store's own buyers see.
 
 Every number, named entity, statistic, review count, testimonial, or claim in your output must trace to an exact line in the inputs. If a field can't be sourced, return `null`. Never backfill with plausible invention. No industry benchmarks from training data. Your JSON is persisted verbatim and shown to the customer with no downstream filter; they wrote the page and will spot an invented detail instantly.
 
-In this kit you also have the laptop and phone screenshots (`inputs/live-page-today.png`, `inputs/live-phone-today.png`, `inputs/live-full.jpg`). Open them so your section map matches what visitors actually see. Position and fold claims are structural inferences from section order. Never present one as something you saw.
+In this kit you also have the laptop and phone screenshots (`inputs/live-page-today.png`, `inputs/live-phone-today.png`, `inputs/live-full.jpg`). Open them so your section map matches what visitors actually see. Verify first-screen placement against `inputs/live-page-today.png` and `inputs/live-phone-today.png`; only describe below-the-fold order from the section sequence.
 
 ## Inputs in this kit
 
