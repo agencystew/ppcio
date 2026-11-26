@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 (26 Nov 2026)
+- The same clear chat every time: 5 messages, each with its link. The first look, the finished audit, your new look and your new page each arrive as one short message, and nothing in between.
+- Your new page arrives with everything in one message: the link, what it does differently, the file to hand to your web person, and how it goes live on your platform.
+- Faster audits: each specialist reads your page in one go and writes once, so the audit costs less of your Claude plan.
+- One line installs PPC.io for Codex, Cursor and Gemini CLI too.
+- Node.js and the page checker install themselves on first use. Nothing to set up.
+- You always see your new look before the whole page is built, so you can switch styles early.
+
 ## 0.7.0 (26 Nov 2026)
 - The PPC.io studio: the postclick app's own screens, on your computer. Your audit, the live wait while the specialists work, your designs and your new page beside your live one, on a laptop and a phone. Claude opens it beside the chat.
 - Press "Build my new page" or type a change in the studio, and Claude does it in your chat. No copying and pasting.

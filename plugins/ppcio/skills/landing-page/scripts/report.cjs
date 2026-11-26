@@ -52,7 +52,7 @@ for (const f of ['leaks', 'copy', 'offer', 'actions', 'competitive', 'ad-match',
     else if (Array.isArray(v)) v.forEach(x => walk(x, k)); else if (v && typeof v === 'object') Object.entries(v).forEach(([k2, x]) => walk(x, k2)); };
   walk(read(`audit/${f}.json`)); if (found.size) blanks.push(`audit/${f}.json names a file or how we worked, which the owner would see (${[...found].slice(0, 3).join('; ')}). Say what is on their page in plain words instead`);
 }
-if (blanks.length) { console.log(`NOT DRAWN: these audit files hold lines the owner must not see. Fix each line (a blank: use a fact from facts.md or site-page-text.md, or rewrite the line without it), then run report again:\n- ${blanks.join('\n- ')}`); process.exit(3); }
+if (blanks.length) { console.log(`NOT DRAWN (fix this silently: write nothing in chat): these audit files hold lines the owner must not see. Fix each line (a blank: use a fact from facts.md or site-page-text.md, or rewrite the line without it), then run report again:\n- ${blanks.join('\n- ')}`); process.exit(3); }
 const A = {};
 for (const k of ['leaks', 'actions', 'offer', 'ad-match', 'competitive', 'forensics', 'copy', 'buyers', 'trust', 'anatomy', 'psych', 'design']) {
   const d = read(`audit/${k}.json`);
@@ -78,16 +78,20 @@ const pick = re => { const k = Object.keys(ctx).find(k => re.test(k)); return k 
 const facts = read('inputs/site-facts.json') || {};
 const parts = (facts.title || '').split(/\s[|\-–—:·]\s/).map(s => s.trim()).filter(Boolean);
 const flatName = s => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
-const name = parts.find(p => flatName(p).includes(flatName(site)) || (flatName(p).length > 3 && flatName(site).startsWith(flatName(p))))
+const finalHost = (() => { try { return new URL(facts.final_url || facts.url || '').hostname.replace(/^www\./, '').split('.')[0]; } catch { return ''; } })();
+const keys = [site, finalHost].filter(Boolean).map(flatName);
+const name = parts.find(p => keys.some(k => flatName(p).includes(k) || (flatName(p).length > 3 && k.startsWith(flatName(p)))))
+  || (parts.length > 1 && parts[parts.length - 1].length <= 32 ? parts[parts.length - 1] : null)
   || site.charAt(0).toUpperCase() + site.slice(1);
 const CD = path.join(work, 'competitors');
 const blocked = (fs.existsSync(CD) ? fs.readdirSync(CD) : []).filter(d => fs.existsSync(path.join(CD, d, 'NOT-CAPTURED.txt')));
 const has = f => fs.existsSync(path.join(work, f));
 const brand = read('brand.json');
 if (brand && brand.logo) brand.logo = dataUri(brand.logo);
-const score = computeAuditScore(A);
+const pageUrl = String(facts.final_url || facts.url || '').replace(/#.*$/, '');
+const score = computeAuditScore(A, pageUrl);
 const data = {
-  name, site, url: String(facts.final_url || facts.url || '').replace(/#.*$/, ''), date: new Date().toISOString().slice(0, 10),
+  name, site, url: pageUrl, date: new Date().toISOString().slice(0, 10),
   composite_score: score,
   h1: (facts.headings || []).find(h => h.tag === 'h1')?.text || '', button: (() => { const bs = (facts.buttons || []).filter(b => b.top > 100 && b.top < 900);
     return (bs.find(b => /^tel:/.test(b.href)) || bs.find(b => /call|book|quote|schedule|estimate|appointment|get started|free|contact|order|buy|start/i.test(b.text)) || bs.find(b => !/^#|^https?:\/\/[^/]+\/?$/.test(b.href)))?.text || ''; })(),
@@ -132,7 +136,9 @@ if (verdict && top.length) {
   const lines = [`**Your audit is ready${score != null ? `: ${name} scores ${score} out of 100` : ''}.**`, '', verdict, '', '**The 3 fixes that win you the most enquiries:**'];
   top.forEach((m, i) => lines.push(`${i + 1}. **Now:** ${m[1].trim()}\n   **Change to:** ${m[2].trim()}`));
   lines.push('', `The full audit, with your buyers, your competitors and every fix: ${studio}`);
-  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Add one line at the end that says what you do next, from the stage you are in (the look for their new page, about 10 minutes). Then start that stage in this same turn, with no other message before it.\n----\n${lines.join('\n')}\n----`);
+  let free = false; try { free = /FREE/.test(require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'licence.cjs'), 'status'], { encoding: 'utf8' })); } catch (e) {}
+  lines.push('', free ? 'The new page comes with the PPC.io licence. Paste your key here any time and I\'ll build it.' : 'Next I\'m drawing your new page in the style that fits your buyers best. You\'ll see its first screen in about 10 minutes, then the whole page.');
+  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Add nothing to it: no offer, no question, no extra advice. Do not end your turn after it: in this same turn, open KIT/steps/2-directions.md and run its first command. The owner does not need to reply.\n----\n${lines.join('\n')}\n----`);
 } else {
   console.log('NEXT: audit.md has no verdict or no "What to fix first" list in the Now / Change to form. Fix audit.md, then run report again.');
 }

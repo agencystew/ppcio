@@ -14,7 +14,7 @@ const lines = choice.split('\n').map(l => l.trim()).filter(Boolean);
 const domain = ((lines[0].match(/style\s*\d+\s*,\s*([^\s.]+(?:\.[^\s.]+)+)/i) || [])[1] || '').replace(/^www\./, '');
 const rest = lines.slice(1);
 const sentence = rest.find(l => !/^[-*]\s/.test(l) && !/^their words/i.test(l)) || '';
-const points = rest.filter(l => /^[-*]\s/.test(l)).slice(0, 3).map(l => `- ${l.replace(/^[-*]\s+/, '')}`);
+const points = rest.filter(l => /^[-*]\s+\S/.test(l)).slice(0, 3).map(l => `- ${l.replace(/^[-*]\s+/, '')}`);
 const base = process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/data/files/directions/` : dir + path.sep;
 const msg = [
   `**Your page in its new look:** ${base}a.html`,
@@ -23,4 +23,5 @@ const msg = [
   fs.existsSync(path.join(dir, 'styles.html')) ? `The other styles are here: ${base}styles.html. Tell me the one you like better and I'll switch.` : '',
   'I\'m building the whole page in this look now. About 10 minutes.',
 ].filter(Boolean).join('\n\n');
-console.log(`MESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Then start the build in this same turn.\n----\n${msg}\n----`);
+fs.writeFileSync(path.join(dir, '.look-sent'), new Date().toISOString());
+console.log(`MESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Then start the build in this same turn.\n----\n${msg}\n----`);

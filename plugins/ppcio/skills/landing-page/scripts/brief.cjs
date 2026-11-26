@@ -5,6 +5,10 @@ const fs = require('fs'); const path = require('path');
 const site = process.argv[2];
 const dir = path.resolve('landing-pages', site || '');
 if (!site || !fs.existsSync(dir)) { console.log('Usage: kit.sh brief <site>'); process.exit(1); }
+// Run 10 went into the audit with no first look sent. The first look comes first, always.
+if (!fs.existsSync(path.join(dir, '.first-look-sent')) && !fs.existsSync(path.join(dir, '..', 'batch.md'))) {
+  console.log(`STOP: the owner has not had the first look. Write landing-pages/${site}/first-look.md (3 numbered items), run kit.sh view ${site} and send the message it prints. Then run kit.sh brief ${site} again.`); process.exit(5);
+}
 const read = f => { try { return fs.readFileSync(path.join(dir, f), 'utf8').trim(); } catch (e) { return ''; } };
 const cap = (s, n) => s.length > n ? s.slice(0, n) + `\n[... ${s.length - n} more characters in the file]` : s;
 const parts = [];
@@ -26,4 +30,4 @@ for (const f of fs.readdirSync(path.join(dir, 'audit')).filter(f => /^brief(-\d)
 const names = chunks.map((c, i) => path.join(dir, 'audit', i ? `brief-${i + 1}.md` : 'brief.md'));
 const partsNote = names.length > 1 ? `\nThis brief has ${names.length} parts. Read all of them: ${names.join(', ')}.` : '';
 chunks.forEach((c, i) => fs.writeFileSync(names[i], (i ? '' : head + partsNote + '\n\n') + c.join('\n') + '\n'));
-console.log(`Wrote ${names.join(' and ')}: ${parts.length} files, ${Math.round(lines.join('\n').length / 1000)} KB.`);
+console.log(`Wrote ${names.join(' and ')}: ${parts.length} files, ${Math.round(lines.join('\n').length / 1000)} KB. Now start this step's agents and, in the same message, run kit.sh await (in apps without subagents, do the experts yourself and skip kit.sh await). Write nothing in chat: the owner already has the studio link, which shows the progress. If the app asks you for an update, send only this line: Still working on it. The studio link above shows the progress live.`);

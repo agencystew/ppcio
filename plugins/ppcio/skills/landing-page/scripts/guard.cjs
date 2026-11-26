@@ -262,7 +262,17 @@ const META_LINES = [
       const read = f => { try { return fs.readFileSync(path.join(SITE, f), 'utf8'); } catch (e) { return ''; } };
       let live = []; try { live = JSON.parse(read('.live-marks.json') || '[]'); } catch (e) {}
       const brandText = read('brand.md') + '\n' + read('inputs/brand-pack.json');
-      const marks = slop.slopMarks(fs.readFileSync(src, 'utf8'), slop.brandHexes(brandText, read('kit.css')));
+      let rawHtml = fs.readFileSync(src, 'utf8');
+      // Strip unused @font-face blocks (e.g. a site's own Mono font in pasted inputs/fonts.css that no element uses)
+      // so slopMarks never false-positives on a declared-but-unrendered font face.
+      const styleOutsideFaces = rawHtml.replace(/@font-face\s*\{[^}]*\}/gi, '');
+      rawHtml = rawHtml.replace(/@font-face\s*\{[^}]*\}/gi, (blk) => {
+        const fm = (blk.match(/font-family\s*:\s*["']?([^;"'}]+)/i) || [])[1];
+        if (!fm) return blk;
+        const escFm = fm.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return new RegExp(`font-family\\s*:[^;{}]*\\b${escFm}\\b`, 'i').test(styleOutsideFaces) ? blk : '';
+      });
+      const marks = slop.slopMarks(rawHtml, slop.brandHexes(brandText, read('kit.css')));
       return slop.marksToReport(marks, Array.isArray(live) ? live : [], slop.styleWorksOf(read('references/style.md')), brandText);
     } catch (e) { return { error: String((e && e.message) || e).slice(0, 120) }; }
   })();

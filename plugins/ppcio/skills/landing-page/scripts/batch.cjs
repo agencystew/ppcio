@@ -13,6 +13,8 @@ const dirs = fs.readdirSync(root).filter(d => fs.statSync(path.join(root, d)).is
 const cards = dirs.map(d => {
   const w = path.join(root, d); const has = f => fs.existsSync(path.join(w, f));
   const leaks = J(path.join(w, 'audit/leaks.json')) || {};
+  const facts = J(path.join(w, 'inputs/site-facts.json')) || {};
+  const pageUrl = facts.final_url || facts.url || '';
   const score = computeAuditScore({
     leaks,
     actions: J(path.join(w, 'audit/actions.json')),
@@ -22,10 +24,11 @@ const cards = dirs.map(d => {
     anatomy: J(path.join(w, 'audit/anatomy.json')),
     psych: J(path.join(w, 'audit/psych.json')),
     design: J(path.join(w, 'audit/design.json')),
-  });
-  const facts = J(path.join(w, 'inputs/site-facts.json')) || {};
+  }, pageUrl);
   const flat = x => x.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const name = (facts.title || '').split(/\s[|\-–—:·]\s/).map(x => x.trim()).find(x => flat(x).includes(flat(d)) || (flat(d).includes(flat(x)) && flat(x).length > 4)) || d;
+  const hostSlug = (() => { try { return flat(new URL(pageUrl).hostname.replace(/^www\./, '').replace(/\.[a-z]{2,}(\.[a-z]{2})?$/, '')); } catch (e) { return ''; } })();
+  const slugs = [flat(d), hostSlug].filter(Boolean);
+  const name = (facts.title || '').split(/\s[|\-–—:·]\s/).map(x => x.trim()).find(x => slugs.some(s => flat(x).includes(s) || (s.includes(flat(x)) && flat(x).length > 3))) || d;
   const rounds = fs.readdirSync(w).filter(x => /^r\d+$/.test(x) && has(`${x}/first.png`)).sort((a, b) => +b.slice(1) - +a.slice(1));
   const shot = rounds[0] ? `${d}/${rounds[0]}/first.png` : has('inputs/live-page-today.png') ? `${d}/inputs/live-page-today.png` : '';
   const fixes = ['killers', 'friction', 'copy'].flatMap(b => leaks[b] || []).map(f => f.title).filter(Boolean).slice(0, 3);

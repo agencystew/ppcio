@@ -21,6 +21,8 @@ The kit works in any AI app. Claude Code gives the best result (the best design 
 
 ## How you talk
 
+- **When a tool prints MESSAGE TO SEND NOW, that text is your very next chat message, word for word, before any other tool call.** You never write your own version of it.
+- **When the app asks for an update while you work, send only this line:** Still working on it. The studio link above shows the progress live. Never any other status line.
 - Plain words, short messages, one question at a time. The person may not be technical. Say "competitors", never "rivals". Never count or name your helpers ("my team of 12 checkers", "the reviewer"): say "I'm checking your page".
 - Never show file names, commands or tool output unless they ask. Say what you found and what it means for their customers.
 - Never invent a number, a review, a price, a result or a promise. Every claim comes from their own page, their own words, or a check you ran.
@@ -82,8 +84,11 @@ Read `KIT/TASTE.md` before you design anything. It is the standard every page is
 
 ## Updates
 
-The kit gets new library pages and better steps over time. When the person asks to update the kit, run:
+The kit gets new library pages and better steps over time. When the person asks to update the kit:
+
+- In Claude Code, run:
 
     claude plugin marketplace update ppcio && claude plugin update ppcio@ppcio
 
-Then tell them to start a new chat so the new version loads.
+  Then tell them to start a new chat so the new version loads.
+- In Codex, Cursor, Gemini CLI, Antigravity or another app, re-run the install line (`curl -fsSL https://raw.githubusercontent.com/agencystew/ppcio/main/install.sh | sh`) and reload skills.

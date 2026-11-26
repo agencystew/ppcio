@@ -73,9 +73,9 @@ const msg = [
   today ? `**Check this today:** ${today}\n` : '',
   `**Your new page is ready:** ${link}`,
   process.env.PPCIO_STUDIO ? '(Your page today and the new one side by side, on a laptop and a phone.)\n' : '',
-  says.join(' '), '',
+  says.length > 1 ? says.map((s, i) => `${i + 1}. ${s}`).join('\n') : says.join(' '), '',
   `${go}`, `The file to hand over: ${zip}`, '',
   ask ? `${ask}\n` : '',
   'Tell me any change and I\'ll fold it in.',
 ].filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n').replace(/\n{3,}/g, '\n\n').trim();
-console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Attach page.html too, or show it in your app's preview, so they can share it.\n----\n${msg}\n----`);
+console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Attach page.html too, or show it in your app's preview, so they can share it.\n----\n${msg}\n----`);

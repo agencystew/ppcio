@@ -210,19 +210,33 @@ async function clearPopups(p) {
   const nodes = { desk: QUICK ? [] : await textNodes(p, 9000), phone: [] };
 
   const html = await p.content();
-  // The tracking snippets as the site serves them (not what they inject later), so the new page can keep them.
-  try { const raw = await resp.text(); const keep = [...raw.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>|<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi)].map(m => m[0])
-      .filter(t => TAGS.some(([, re]) => new RegExp(re).test(t)) && t.length < 6000)
-      // Cloudflare Rocket Loader serves scripts as type="<hash>-text/javascript" and runs them itself. Pasted
-      // as is, GTM and GA4 never fire on the new page (26 Nov, Reliant). Give them back a plain type.
-      .map(t => t.replace(/\stype=(["'])[0-9a-f]{16,}-text\/javascript\1/gi, '').replace(/\sdata-cf-[a-z-]+=(["'])[^"']*\1/gi, '')
-        // Speed plugins delay tags with a made-up type (Perfmatters "pmdelayedscript", WP Rocket
-        // "rocketlazyloadscript", LiteSpeed "litespeed/javascript") and run them later themselves. On the new
-        // page nothing runs them, so GA4 and GTM never fire (Johnny Rooter, 26 Nov). Give back a plain script.
-        .replace(/<script\b([^>]*?)\stype=(["'])(?!text\/javascript|application\/javascript|module|application\/ld\+json)[^"']*\2/gi, '<script$1')
-        .replace(/\sdata-(rocket-src|litespeed-src|pmdelayedscript-src)=/gi, ' src=').replace(/\sdata-(no-optimize|no-defer|no-minify|rocket-[a-z-]+|litespeed-[a-z-]+|pm[a-z-]*)=(["'])[^"']*\2/gi, ''));
-    if (keep.length) fs.writeFileSync(path.join(IN, 'tracking-tags.html'), '<!-- Their live page\'s tracking tags, copied as served. Paste into the new page\'s <head> unchanged. -->\n' + keep.join('\n') + '\n'); } catch (e) {}
+  // The tracking <script> snippets as the site serves them in raw HTML (never post-execution runtime beacons
+  // or invalid <noscript><iframe> blocks in <head>). If a speed plugin hid the GTM loader and only a GTM-*
+  // container ID survived, synthesize the canonical GTM <head> snippet for it.
+  try {
+    const raw = await resp.text();
+    const cleanScript = (t) => t
+      // Cloudflare Rocket Loader serves scripts as type="<hash>-text/javascript" and runs them itself.
+      .replace(/\stype=(["'])[0-9a-f]{16,}-text\/javascript\1/gi, '')
+      .replace(/\sdata-cf-[a-z-]+=(["'])[^"']*\1/gi, '')
+      // Speed plugins delay tags with a made-up type (Perfmatters, WP Rocket, LiteSpeed). Give back a plain script.
+      .replace(/<script\b([^>]*?)\stype=(["'])(?!text\/javascript|application\/javascript|module|application\/ld\+json)[^"']*\2/gi, '<script$1')
+      .replace(/\sdata-(rocket-src|litespeed-src|pmdelayedscript-src)=/gi, ' src=')
+      .replace(/\sdata-(no-optimize|no-defer|no-minify|rocket-[a-z-]+|litespeed-[a-z-]+|pm[a-z-]*)=(["'])[^"']*\2/gi, '');
+    const keep = [...raw.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>/gi)]
+      .map(m => m[0])
+      .filter(t => TAGS.some(([, re]) => new RegExp(re).test(t)) && t.length < 12000)
+      .map(cleanScript);
+    const gtmIds = [...new Set([...(raw + '\n' + html).matchAll(/\b(GTM-[A-Z0-9]{4,12})\b/g)].map(m => m[1]))];
+    for (const id of gtmIds) {
+      if (!keep.some(s => s.includes(id))) {
+        keep.unshift(`<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${id}');</script>`);
+      }
+    }
+    if (keep.length) fs.writeFileSync(path.join(IN, 'tracking-tags.html'), '<!-- Their live page\'s tracking tags, copied as served. Paste into the new page\'s <head> unchanged. -->\n' + keep.join('\n') + '\n');
+  } catch (e) {}
   const tags = TAGS.filter(([, re]) => new RegExp(re).test(html)).map(([t]) => t);
+  if (!QUICK) process.stderr.write(`[capture] desktop done (${(loadMs / 1000).toFixed(1)}s), capturing phone, photos & craft...\n`);
 
   const facts = await p.evaluate(FACTS);
   // A form that opens only when a button is pressed (a pop-up or a slide-in): press the first quote or booking

@@ -29,10 +29,11 @@ for (const name of files) {
   let text = fs.readFileSync(f, 'utf8');
   // A built page: check the words a visitor reads, not the code.
   if (/\.html?$/i.test(f)) text = text.replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ').replace(/<(br|p|div|li|h[1-6]|blockquote|figcaption|section)\b[^>]*>/gi, '\n').replace(/<[^>]+>/g, ' ').replace(/&ldquo;|&#8220;/g, '“').replace(/&rdquo;|&#8221;/g, '”').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;|&#8217;/g, "'");
-  // A quote is text in straight or curly double quotes, 4 words or longer.
-  // A line that says the owner said it (in the chat) is the owner's words, not their site's: skipped.
+  // Match ALL double-quoted spans first (short or long) so a short term like "since 1976" never shifts
+  // quote pairing onto the prose between two quotes, then filter to 4+ word quotes.
   const quotes = text.split('\n').filter(l => !/\bowner\b/i.test(l))
-    .flatMap(l => [...l.matchAll(/["“]([^"”]{12,600})["”]/g)].map(m => m[1])).filter(q => q.trim().split(/\s+/).length >= 4);
+    .flatMap(l => [...l.matchAll(/"([^"\n]{1,600})"|“([^”\n]{1,600})”/g)].map(m => m[1] ?? m[2]))
+    .filter(q => q && q.length >= 12 && q.trim().split(/\s+/).length >= 4);
   // 26 Nov (Opus kit test): unquoted claims passed ("We plan the install around your business
   // operations"). On a built page, list each sentence that says "we", "our", "every" or a number
   // and whose words are mostly not on their site. A list to check, not a fault: a good rewrite is new words too.
@@ -69,7 +70,17 @@ const yearNow = new Date().getFullYear(); const said = [];
 for (const f of sources) {
   const raw = fs.readFileSync(f, 'utf8'); const page = path.basename(f, '.md').replace(/^site-page-text.*$/, 'their page');
   for (const m of raw.matchAll(/\b(?:since|founded(?: in)?|established(?: in)?|est\.?|opened(?: in)?|started(?: in)?|serving [^.\n]{0,40}? since)\s+((?:19|20)\d\d)\b/gi)) said.push({ year: +m[1], text: m[0], page });
-  for (const m of raw.matchAll(/\b(?:over|more than|nearly|almost)?\s*(\d{1,3})\+?\s+years\b(?! old)/gi)) { const n = +m[1]; if (n >= 3 && n <= 150) said.push({ year: yearNow - n, text: m[0].trim(), page }); }
+  for (const m of raw.matchAll(/\b(?:over|more than|nearly|almost)?\s*(\d{1,3})\+?\s+years\b(?! old)/gi)) {
+    const n = +m[1];
+    if (n < 3 || n > 150) continue;
+    // Skip product lifespans, warranties, and financing terms ("average lifetime (20 years or less)") unless
+    // the surrounding clause explicitly refers to company history/experience.
+    const ctx = raw.slice(Math.max(0, m.index - 45), m.index + m[0].length + 45);
+    const isProductDuration = /\b(lifetime|lifespan|warranty|guarantee|asphalt|shingle|metal|roof|loan|financing|term|amortiz|average|every\s+\d+|or\s+less|lasts?\s+(?:up\s+to\s+)?\d+)\b/i.test(ctx);
+    const isBusinessAge = /\b(experience|in business|family[- ]owned|serving|established|history|trusted|remodeling|industry)\b/i.test(ctx);
+    if (isProductDuration && !isBusinessAge) continue;
+    said.push({ year: yearNow - n, text: m[0].trim(), page });
+  }
 }
 const yrs = said.map(x => x.year);
 if (yrs.length && Math.max(...yrs) - Math.min(...yrs) > 5) {

@@ -61,7 +61,7 @@ case "$cmd" in
     if [ -f "$D/version" ] && [ "$(cat "$D/version")" != "$V" ]; then
       echo "Updated to version $V. What is new:"; awk -v v="$V" '$0 ~ "^## "v {f=1; next} /^## / {f=0} f && NF' "$K/../../../CHANGELOG.md"
     fi
-    echo "$V" > "$D/version"; echo "Ready (version $V)." ;;
+    echo "$V" > "$D/version"; echo "Ready (version $V). Write nothing in chat about this." ;;
   capture) node "$K/capture.cjs" "$@" ;;
   captures) # captures [--quick] [<root>] <url | folder=url>...  every page at the same time
     Q=""; R="."; ITEMS=()
@@ -79,8 +79,11 @@ case "$cmd" in
       if [ "$(cat "$L/$j.code")" = 0 ]; then echo "CAPTURED $u -> $f"; grep -m1 "PHONE NUMBERS DIFFER" "$L/$j.log"
       else echo "NOT CAPTURED $u -> $f: $(grep -m1 -i 'not captured\|failed\|error\|blocked' "$L/$j.log" || tail -1 "$L/$j.log")"; fi; done
     rm -rf "$L" ;;
-  shot) F="$1"; SITE_DIR="$(cd "$(dirname "$F")" && pwd)" node "$K/shot.cjs" "$(basename "$F")" "${2:-1}" ${3:-} ;;
-  guard) F="$1"; SITE_DIR="$(cd "$(dirname "$F")" && pwd)" node "$K/guard.cjs" "$(basename "$F")" ;;
+  shot|guard) # The owner sees the look before the whole page is built (run 9 built page.html first and faked the look).
+    F="$1"; D="$(cd "$(dirname "$F")" 2>/dev/null && pwd)"
+    if [ "$(basename "$F")" = page.html ] && [ ! -f "$D/directions/.look-sent" ] && [ ! -f "$D/../batch.md" ]; then
+      echo "STOP: the owner has not seen the look yet. Open KIT/steps/2-directions.md: build directions/a.html in the style, write directions/choice.md, run kit.sh look $(basename "$D") and send its message. Then build page.html."; exit 5; fi
+    if [ "$cmd" = shot ]; then SITE_DIR="$D" node "$K/shot.cjs" "$(basename "$F")" "${2:-1}" ${3:-}; else SITE_DIR="$D" node "$K/guard.cjs" "$(basename "$F")"; fi ;;
   library) # The audit reads the best page of their niche for free. The board and the search need the licence.
     case "$1" in update) node "$K/licence.cjs" library; exit $? ;; board|find|sections) node "$K/licence.cjs" need library || exit 4
       [ -f "${PPCIO_HOME:-$HOME/.ppcio}/library/index.json" ] || node "$K/licence.cjs" library ;; esac
@@ -100,6 +103,7 @@ case "$cmd" in
     for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
     node "$K/lookready.cjs" "$@" ;;
   review) node "$K/licence.cjs" need review || exit 4
+    R="${1:-}"; R="${R%/}"; R="landing-pages/$(basename "$R")"; [ -f "$R/$(basename "$R")-page.zip" ] || [ ! -f "$R/page.html" ] || node "$K/pack.cjs" "$R" > /dev/null
     for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
     node "$K/review.cjs" "$@" ;;
   batch) node "$K/licence.cjs" need agency || exit 4; node "$K/batch.cjs" "$@" ;;
@@ -117,7 +121,7 @@ case "$cmd" in
     done
     if [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" != "$ROOT" ]; then
       mkdir -p "$ROOT/landing-pages"
-      nohup node "$K/view.cjs" "$ROOT" --port "$P" > "$ROOT/landing-pages/.studio.log" 2>&1 &
+      nohup node "$K/view.cjs" "$ROOT" --port "$P" < /dev/null > "$ROOT/landing-pages/.studio.log" 2>&1 &
       for i in 1 2 3 4 5 6 7 8 9 10; do curl -fs -o /dev/null "http://127.0.0.1:$P/" --max-time 1 && break; sleep 0.3; done
     fi
     # The Claude desktop app opens it in its pane from .claude/launch.json (preview_start, name "PPC.io studio").
@@ -125,6 +129,11 @@ case "$cmd" in
     node -e 'const f=process.argv[1],p=+process.argv[2];let j={version:"0.0.1",configurations:[]};try{j=JSON.parse(require("fs").readFileSync(f,"utf8"))}catch{}j.configurations=(j.configurations||[]).filter(c=>c.name!=="PPC.io studio");j.configurations.push({name:"PPC.io studio",url:"http://localhost:"+p,port:p});require("fs").writeFileSync(f,JSON.stringify(j,null,2)+"\n")' "$ROOT/.claude/launch.json" "$P"
     mkdir -p "$ROOT/landing-pages"; echo "$P" > "$ROOT/landing-pages/.studio-port"
     S="${1:-}"; echo "STUDIO http://localhost:$P/${S:+s/$S/}"; [ -n "$S" ] && [ ! -f "landing-pages/$S/audit.md" ] && node "$K/firstlook.cjs" "$S" "http://localhost:$P/s/$S/" ;;
+  studio) # Run the studio in the foreground (for non-Claude hosts with native daemon support).
+    while [ ! -d landing-pages ] && [ "$(pwd)" != / ] && [ "$(pwd)" != "$HOME" ]; do cd ..; done
+    [ -d landing-pages ] || { echo "No landing-pages folder here or above. Run this from the project folder."; exit 1; }
+    P="${1:-${PPCIO_PORT:-4870}}"; mkdir -p landing-pages; echo "$P" > landing-pages/.studio-port
+    exec node "$K/view.cjs" "$(pwd)" --port "$P" ;;
   wait) P=$(cat landing-pages/.studio-port 2>/dev/null || echo "${PPCIO_PORT:-4870}"); node "$K/wait.cjs" "$(pwd)" --port "$P" ;;
   licence) node "$K/licence.cjs" status ;;
   unlock) node "$K/licence.cjs" unlock "$@" ;;

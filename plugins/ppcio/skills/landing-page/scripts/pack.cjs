@@ -7,7 +7,7 @@ const work = path.resolve(process.argv[2] || '.');
 const file = path.join(work, process.argv[3] || 'page.html');
 let html = fs.readFileSync(file, 'utf8');
 const urls = new Set();
-for (const re of [/\s(?:src|poster|data-src)\s*=\s*["'](https?:\/\/[^"']+)["']/gi, /url\(\s*["']?(https?:\/\/[^"')]+)["']?\s*\)/gi, /\ssrcset\s*=\s*["']([^"']+)["']/gi]) {
+for (const re of [/\s(?:src|poster|data-src)\s*=\s*["'](https?:\/\/[^"']+)["']/gi, /url\(\s*["']?(https?:\/\/[^"')]+)["']?\s*\)/gi, /\ssrcset\s*=\s*["']([^"']+)["']/gi, /["'](https?:\/\/[^"'\s]+\.(?:png|jpe?g|webp|gif|svg|avif|mp4)(?:\?[^"'\s]*)?)["']/gi]) {
   let m; while ((m = re.exec(html))) {
     if (re.source.includes('srcset')) m[1].split(',').map(s => s.trim().split(/\s+/)[0]).filter(u => /^https?:/.test(u)).forEach(u => urls.add(u));
     else urls.add(m[1]);

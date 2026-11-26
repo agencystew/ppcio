@@ -55,20 +55,41 @@ function offerLine(dir) {
   return (t.match(/^[^.]*\./) || [t])[0].trim().slice(0, 200);
 }
 
+function cleanParens(s) {
+  let t = String(s || '').trim();
+  // Never leave an unclosed opening parenthesis after slicing at a comma or period.
+  const open = (t.match(/\(/g) || []).length;
+  const close = (t.match(/\)/g) || []).length;
+  if (open > close) t = t.replace(/\s*\([^)]*$/, '').trim();
+  return t;
+}
+
+function firstTopLevelClause(s, sep = ',') {
+  let depth = 0;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === '(') depth++;
+    else if (ch === ')') depth = Math.max(0, depth - 1);
+    else if (depth === 0 && ch === sep) return s.slice(0, i).trim();
+  }
+  return s.trim();
+}
+
 function auditContext(dir, comp) {
   const s = sections(read(path.join(dir, 'context.md')));
   const sell = s['what they sell'] || '';
-  const category = (sell.split(/[:.\n]/)[0] || '').replace(/\s+for\s+.*$/i, '').trim().slice(0, 60);
-  const where = (s['where they work'] || '').split(/[\n.]/)[0];
+  const category = cleanParens((sell.split(/[:.\n]/)[0] || '').replace(/\s+for\s+.*$/i, '').trim().slice(0, 60));
+  const where = cleanParens((s['where they work'] || '').split(/[\n.]/)[0]);
   const win = s['what a win is'] || '';
   const from = s['where visitors come from'] || '';
+  const posRaw = (sell.match(/^[^.]*\./) || [sell])[0].replace(/:\s.*$/, '.').trim();
   return {
     category: category || null,
     confidence: 'high',
     competitors: ((comp && comp.competitors) || []).map((c) => ({ name: c.name, url: c.url })),
-    positioning: (sell.match(/^[^.]*\./) || [sell])[0].replace(/:\s.*$/, '.').trim(),
+    positioning: cleanParens(posRaw),
     primary_kpi: (KPI.find(([re]) => re.test(win)) || [null, 'leads'])[1],
-    target_geos: where ? [where.split(',')[0].trim()] : [],
+    target_geos: where ? [cleanParens(firstTopLevelClause(where, ','))] : [],
     offer_baseline: offerLine(dir),
     traffic_source: /google ads|search ads|ppc/i.test(from) ? 'google_ads' : /meta|facebook|instagram/i.test(from) ? 'meta' : from ? 'organic' : null,
   };

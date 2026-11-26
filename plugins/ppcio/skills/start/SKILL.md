@@ -14,14 +14,14 @@ The person just installed PPC.io, or wants to know what it does. Your job: get t
 
 Run `bash KIT/scripts/kit.sh licence`.
 
-- When they pasted a key in their message, run `bash KIT/scripts/kit.sh unlock <key>` first and say in one line what it unlocked. It also downloads the full style library (about 40 MB) in the background. Then say once, in one line, how to get new versions: "Type /plugin, open Marketplaces, pick ppcio and turn on auto-update."
+- When they pasted a key in their message, run `bash KIT/scripts/kit.sh unlock <key>` first and say in one line what it unlocked. It also downloads the full style library (about 40 MB) in the background. Then say once, in one line, how to get new versions: in Claude Code, "Type /plugin, open Marketplaces, pick ppcio and turn on auto-update." In other apps (Codex, Cursor, Gemini CLI, Antigravity), say: "Re-run the PPC.io install command any time to pull updates."
 - When it prints `FREE`, carry on. Mention the licence once, at the end, and only when they ask for something it unlocks.
 
-Also run `bash KIT/scripts/kit.sh setup` in the background now. The first run installs a browser for the page checks (about 1 minute). If it prints `NEEDS_NODE`, tell them one download is needed (nodejs.org, the LTS button) and wait.
+Also run `bash KIT/scripts/kit.sh setup` in the background now. The first run installs a browser for the page checks (about 1 minute). When it finishes, write nothing in chat: the owner never hears about setup. If it prints `NEEDS_NODE`, tell them one download is needed (nodejs.org, the LTS button) and wait.
 
 ## 2. The first answer
 
-They asked what PPC.io does. Answer that first, for any business, in this shape and in your own words. Never start an audit or name one trade here.
+They asked what PPC.io does. Answer that first, for any business, with this text word for word. The name is always written PPC.io. Never start an audit or name one trade here.
 
 "PPC.io puts a Google Ads team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) It does 3 jobs:
 

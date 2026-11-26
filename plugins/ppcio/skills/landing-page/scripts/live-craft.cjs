@@ -78,7 +78,7 @@ const LIVE_PARTS_JS = `(() => {
     if (!rows.some(r => r.y === Math.round(top(el)))) rows.push({ y: Math.round(top(el)), count: imgs.length, alts: alts.slice(0, 10) });
   }
   const text = document.body.innerText || '';
-  const figs = [...new Set([...(text.match(/(?<!\\d{3}[-)] ?|\\d{3}\\.|\\d{3} |\\d,)\\b\\d[\\d,]*\\+?[ \\t]+(?:(?!our\\b|my\\b|the\\b|see\\b|read\\b|leave\\b|write\\b)[a-z-]+[ \\t]+){0,2}(?:reviews?|ratings?|testimonials?)\\b/gi) || []).concat(text.match(/\\b[1-5]\\.\\d\\s?(?:\\/\\s?5|stars?|out of 5)\\b/gi) || [])].map(x => x.replace(/\\s+/g, ' ')))].slice(0, 8);
+  const figs = [...new Set([...(text.match(/(?<!\\d{3}[-)] ?|\\d{3}\\.|\\d{3} |\\d,|\\d\\.)\\b\\d[\\d,]*(?:\\.\\d+)?\\+?[ \\t]+(?:(?!our\\b|my\\b|the\\b|see\\b|read\\b|leave\\b|write\\b)[a-z-]+[ \\t]+){0,2}(?:reviews?|ratings?|testimonials?)\\b/gi) || []).concat(text.match(/\\b[1-5]\\.\\d\\s?(?:\\/\\s?5|stars?|out of 5)\\b/gi) || [])].map(x => x.replace(/\\s+/g, ' ')))].slice(0, 8);
   const wid = [...document.querySelectorAll('[class*="trustindex" i],[class*="ti-widget" i],[class*="elfsight" i],[class*="eapps" i],[class*="trustpilot" i],[class*="reviews-io" i],[class*="google-review" i]')].filter(vis);
   const outer = wid.filter(w => !wid.some(o => o !== w && o.contains(w)));
   const widget_text = outer.map(w => (w.innerText || '').trim().replace(/\\n{2,}/g, '\\n')).filter(Boolean).join('\\n---\\n').slice(0, 4000);
@@ -97,7 +97,8 @@ const LIVE_PARTS_JS = `(() => {
   // Google reviews" in one run and not the next. Keep the file itself.
   const widgetFiles = [];
   p.on('response', async res => { if (/cdn\.trustindex\.io\/widgets\/.+\/content\.html|elfsight\.com\/.*(widget|p)\b.*json/i.test(res.url())) { try { widgetFiles.push(await res.text()); } catch (e) {} } });
-  await p.goto(url, { waitUntil: 'networkidle', timeout: 90000 }).catch(() => {});
+  await p.goto(url, { waitUntil: 'load', timeout: 30000 }).catch(() => {});
+  await p.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
   for (let y = 0; y < 20000; y += 700) { await p.evaluate(y => window.scrollTo(0, y), y); await p.waitForTimeout(120); }
   await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(1200);
   // 24 Nov: Honda's dealer site served a bot check ("Just a moment...",
@@ -120,7 +121,17 @@ const LIVE_PARTS_JS = `(() => {
     const faces = []; for (const s of document.styleSheets) { try { for (const rule of s.cssRules) if (rule.constructor.name === 'CSSFontFaceRule') { const src = (rule.style.getPropertyValue('src').match(/url\(["']?([^"')]+)/) || [])[1]; faces.push(`${rule.style.getPropertyValue('font-family').replace(/["']/g, '')} ${rule.style.getPropertyValue('font-weight') || ''}: ${src ? new URL(src, s.href || location.href).href : '?'}`); } } catch (e) { if (s.href) faces.push(`stylesheet (not readable here, link it as is): ${s.href}`); } }
     const faceList = []; for (const s of document.styleSheets) { try { for (const rule of s.cssRules) if (rule.constructor.name === 'CSSFontFaceRule') { const src = (rule.style.getPropertyValue('src').match(/url\(["']?([^"')]+)/) || [])[1]; if (src && !/^data:/.test(src)) faceList.push({ family: rule.style.getPropertyValue('font-family').replace(/["']/g, '').trim(), weight: rule.style.getPropertyValue('font-weight') || '400', style: rule.style.getPropertyValue('font-style') || 'normal', src: new URL(src, s.href || location.href).href }); } } catch (e) {} }
     const fontFiles = performance.getEntriesByType('resource').map(e => e.name).filter(n => /\.(woff2?|otf|ttf)(\?|$)/i.test(n) || /typekit|fonts\.googleapis/.test(n));
-    const btns = [...document.querySelectorAll('a,button')].filter(e => vis(e) && (e.tagName === 'BUTTON' || /btn|button|cta/i.test(e.className + '')) && (e.innerText || '').trim().length > 1).slice(0, 5).map(e => { const c = getComputedStyle(e); return `"${e.innerText.trim().slice(0, 30)}": ${fam(e)} ${c.fontWeight} ${c.fontSize}, bg ${c.backgroundColor}, text ${c.color}, radius ${c.borderRadius}, padding ${c.padding}, border ${c.borderTopWidth} ${c.borderTopColor}, shadow ${c.boxShadow === 'none' ? 'none' : c.boxShadow.slice(0, 60)}, hover transition ${c.transitionDuration}`; });
+    const isCookieBtn = (e) => {
+      const t = (e.innerText || '').trim();
+      if (/^(accept( all)?|reject( all| non-essential)?|save( preferences| settings)?|decline( all)?|allow all|manage cookies|cookie settings|customize|close|dismiss|got it)$/i.test(t)) return true;
+      return !!e.closest('[id*="cookie" i],[class*="cookie" i],[id*="consent" i],[class*="consent" i],[id*="onetrust" i],[class*="cky-" i],[class*="cmplz" i],[role="dialog"][aria-label*="cookie" i]');
+    };
+    const isStyledLink = (e) => {
+      if (e.tagName === 'BUTTON' || /btn|button|cta/i.test(e.className + '')) return true;
+      const c = getComputedStyle(e);
+      return c.backgroundColor && c.backgroundColor !== 'rgba(0, 0, 0, 0)' && c.backgroundColor !== 'transparent' && parseFloat(c.paddingTop) >= 6 && parseFloat(c.paddingLeft) >= 12;
+    };
+    const btns = [...document.querySelectorAll('a,button')].filter(e => vis(e) && !isCookieBtn(e) && isStyledLink(e) && (e.innerText || '').trim().length > 1).slice(0, 5).map(e => { const c = getComputedStyle(e); return `"${e.innerText.trim().slice(0, 30)}": ${fam(e)} ${c.fontWeight} ${c.fontSize}, bg ${c.backgroundColor}, text ${c.color}, radius ${c.borderRadius}, padding ${c.padding}, border ${c.borderTopWidth} ${c.borderTopColor}, shadow ${c.boxShadow === 'none' ? 'none' : c.boxShadow.slice(0, 60)}, hover transition ${c.transitionDuration}`; });
     const all = [...document.querySelectorAll('body *')].filter(vis);
     const anim = all.filter(e => getComputedStyle(e).animationName !== 'none');
     const names = [...new Set(anim.map(e => getComputedStyle(e).animationName))].slice(0, 10);
