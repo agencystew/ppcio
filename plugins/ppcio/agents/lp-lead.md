@@ -1,6 +1,6 @@
 ---
 name: lp-lead
-description: Landing page audit, agency mode: checks the audit team's findings for one client, writes facts.md and audit.md, and draws audit.html. No questions to the owner.
+description: "Landing page audit, agency mode: checks the audit team's findings for one client, writes facts.md and audit.md, and draws audit.html. No questions to the owner."
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

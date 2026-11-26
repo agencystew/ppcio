@@ -9,7 +9,7 @@
 ## 0.6.0 (26 Nov 2026)
 - One plugin for everything: install `ppcio@ppcio` and ask "what can PPC.io do for me?". Claude asks for your website and shows the first 3 things a buyer notices, in about 2 minutes.
 - 25 Google Ads skills are now inside: search terms, ads, account audits, client reports, budgets, scripts and more.
-- The PPC.io licence: paste your key (it starts with PPCIO-) and every website, the page build, the full style library and, on Team, agency mode open. The key is checked on your computer. No account.
+- The PPC.io licence: paste your key (it starts with PPCIO-) and every website, the page build, the full style library and agency mode open. The key is checked on your computer. No account.
 - The free version: the first look and the full audit on one website, and all 25 Google Ads skills.
 
 ## 0.5.0 (26 Nov 2026)

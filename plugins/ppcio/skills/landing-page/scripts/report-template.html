@@ -48,7 +48,7 @@ const sev = s => { s = String(s || '').toUpperCase(); return s === 'S1' || s ===
 
 // ---------- The data, in the shape the screen needs ----------
 const L = D.leaks || {}, AC = D.actions || {}, OF = D.offer || {}, CO = D.competitive || {}, FO = D.forensics || {}, CP = D.copy || {}, AM = D.ad_match || {}, BU = D.buyers || {};
-const score = L.overall_score ?? AC.action_score ?? null;
+const score = D.composite_score ?? L.overall_score ?? AC.action_score ?? null;
 
 const fixes = [
   ...['killers', 'copy', 'friction'].flatMap(k => (L[k] || []).map(f => ({ t: f.title, s: sev(f.severity), why: f.why_it_costs || f.mechanism, now: f.evidence, how: f.detail, neu: f.rewrite }))),
@@ -176,7 +176,7 @@ const fixesV = !FX.length ? '' : `<section class="view vsv tx" data-view="fixes"
   `<li class="vs-it${i === 0 ? ' on' : ''}" data-n="${i}"><i class="ar-dn">${i + 1}</i><div class="vs-b"><button type="button" class="vs-t">${esc(f.t)}</button>${f.s === 1 ? '<span class="vs-chips"><em class="ar-chip">High impact</em></span>' : ''}${f.why ? `<p class="vs-why">${esc(f.why)}</p>` : ''}${flow(f.now, f.how, f.neu && f.neu.length < 400 ? f.neu : null, !f.now || !f.neu)}</div></li>`).join('')}</ol></div></div>${nextLink('fixes')}</section>`;
 
 // ---------- Buyer journey ----------
-const buyersV = !P.length ? '' : `<section class="view tx" data-view="buyers"><header class="tx-hd"><h2 class="tx-h">${ready ? `${words[ready] || ready} of your ${P.length} buyers <span class="ac">${ready === 1 ? 'is' : 'are'} ready to act.</span>` : `None of your ${P.length} buyers <span class="ac">are ready to act yet.</span>`}</h2><p class="tx-l">We ran ${P.length} likely buyers through your page and wrote down what each one thought.</p></header>
+const buyersV = !P.length ? '' : `<section class="view tx" data-view="buyers"><header class="tx-hd"><h2 class="tx-h">${ready ? `${words[ready] || ready} of your ${tested || P.length} buyers <span class="ac">${ready === 1 ? 'is' : 'are'} ready to act.</span>` : `None of your ${tested || P.length} buyers <span class="ac">are ready to act yet.</span>`}</h2><p class="tx-l">We ran ${tested || P.length} likely buyers through your page and wrote down what each one thought.</p></header>
 <div class="bj-walk"><div class="bj-dock"><div class="bj-bar">${P.map((x, i) => `<button type="button" class="bj-p" data-b="${i}" aria-pressed="${i === 0}"><span class="bj-pn">${esc(x.label)}</span><i class="bj-dot ${x.ready ? 'ok' : 'lav'}"></i><span class="tx-sr">${x.ready ? 'Ready' : 'Unsure'}</span></button>`).join('')}</div></div>
 <div class="bj-cast n${Math.min(P.length, 3)} flat">${P.map((x, i) => `<button type="button" class="bj-c" data-b="${i}" aria-pressed="${i === 0}"><span class="bj-tx"><b>${esc(x.label)}</b></span></button>`).join('')}</div>
 ${P.map((x, i) => `<div class="bj-one-buyer" data-b="${i}"${i ? ' hidden' : ''}>

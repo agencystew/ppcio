@@ -27,7 +27,7 @@ const META_LINES = [
   const tagHits = [...new Set((html.match(/googletagmanager\.com\/(?:gtag\/js|gtm\.js)[^"'\s]*|\bgtag\(\s*['"]config['"]\s*,\s*['"][^'"]+|\bfbq\(\s*['"]init['"]\s*,\s*['"][^'"]+|clarity\.ms\/tag\/\w+|GTM-[A-Z0-9]{4,}/g) || []))];
   if (tagHits.length) faults.push(`tracking tags in page.html (${tagHits.slice(0, 3).join(' | ')}): take them out and leave <!-- ppcio:tracking-tags --> in the <head>. pack puts them into the live copy only.`);
   for (const [name, vp] of [['laptop', { width: 1440, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
-    const p = await b.newPage({ viewport: vp, ignoreHTTPSErrors: true }); await p.route(/googletagmanager\.com|google-analytics\.com|googleadservices\.com|doubleclick\.net|connect\.facebook\.net|facebook\.com\/tr|clarity\.ms|hotjar\.com|bat\.bing\.com|analytics\.tiktok\.com|snap\.licdn\.com/i, r => r.abort()).catch(() => {}); await p.goto('file://' + tmp, { waitUntil: 'load', timeout: 60000 }).catch(() => {}); await p.waitForTimeout(1200);
+    const p = await b.newPage({ viewport: vp, ignoreHTTPSErrors: true }); await p.route(/googletagmanager\.com|google-analytics\.com|googleadservices\.com|doubleclick\.net|connect\.facebook\.net|facebook\.com\/tr|clarity\.ms|hotjar\.com|bat\.bing\.com|analytics\.tiktok\.com|snap\.licdn\.com/i, r => r.abort()).catch(() => {}); await p.goto('file://' + tmp, { waitUntil: 'load', timeout: 60000 }).catch(() => {}); await p.waitForTimeout(1200); await p.evaluate(() => document.fonts.ready).catch(() => {});
     const r = await p.evaluate(() => {
       const out = { small: [], dash: [], buttons: [], fonts: [], strips: [], broken: [], dupes: [], overflow: 0 };
       const vis = el => { const s = getComputedStyle(el); const rc = el.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && +s.opacity > 0.05 && rc.width > 0 && rc.height > 0; };
@@ -36,7 +36,7 @@ const META_LINES = [
         if (fs < 14 && t.length > 1) out.small.push(`${fs}px "${t.slice(0, 40)}"`);
         if (/—/.test(t)) out.dash.push(t.slice(0, 60));
         const fam = s.fontFamily.split(',')[0].replace(/["']/g, '').trim();
-        if (/^(times|times new roman|serif)$/i.test(fam) || (fam && !document.fonts.check(`16px "${fam}"`) && !/^(system-ui|-apple-system|sans-serif|serif|arial|helvetica|georgia|inherit)$/i.test(fam))) out.fonts.push(`${fam} on "${t.slice(0, 30)}"`); }
+        if (/^(times|times new roman|serif)$/i.test(fam) || (fam && ![...document.fonts].some(f => f.family.replace(/["']/g, '') === fam && f.status === 'loaded') && !document.fonts.check(`${s.fontWeight} 16px "${fam}"`) && !/^(system-ui|-apple-system|sans-serif|serif|arial|helvetica|georgia|inherit)$/i.test(fam))) out.fonts.push(`${fam} on "${t.slice(0, 30)}"`); }
       document.querySelectorAll('a,button,[role=button],input[type=submit]').forEach(el => { if (!vis(el)) return; const s = getComputedStyle(el); const t = (el.innerText || el.value || '').trim(); const cls = (el.className || '') + '';
         const looksAction = el.tagName !== 'A' || /btn|button|cta/i.test(cls) || /^(call|book|get|schedule|start|find|request|claim|see|apply|reserve|contact)\b/i.test(t);
         if (!looksAction || !t || t.length > 60) return; const bg = s.backgroundColor; const hasBg = bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg); const hasBorder = parseFloat(s.borderTopWidth) > 0 && !/rgba\(0, 0, 0, 0\)/.test(s.borderTopColor);
@@ -164,8 +164,8 @@ const META_LINES = [
       // a form; the new page had none, and six buttons still pointed at the
       // old page's #assinar, so they go nowhere once this page replaces it.
       let sf = {}; try { sf = JSON.parse(fs.readFileSync(path.join(dir, 'inputs', 'site-facts.json'), 'utf8')); } catch (e) {}
-      const live = Array.isArray(sf.live_forms) ? sf.live_forms : [];
-      if (live.length && !r.leadForms) { const f = live[0]; faults.push(`laptop: their live page takes enquiries through a form (it asks: ${(f.asks || []).slice(0, 6).join(', ')}${f.submit ? `; button "${f.submit}"` : ''}). This page has no form: keep one that asks the same, where a buyer decides`); }
+      const live = Array.isArray(sf.live_forms) ? sf.live_forms : Array.isArray(sf.forms) ? sf.forms.filter(f => (f.fields || []).length >= 2) : [];
+      if (live.length && !r.leadForms) { const f = live[0]; const flds = f.asks || f.fields || []; const btn = f.submit || f.button || ''; faults.push(`laptop: their live page takes enquiries through a form (it asks: ${flds.slice(0, 6).join(', ')}${btn ? `; button "${btn}"` : ''}). This page has no form: keep one that asks the same, where a buyer decides`); }
       // 24 Nov (agency builds): the new page must keep what their live page
       // already does well (live-parts.json, from live-craft.cjs). GenConnect
       // lost its first-screen form, its FAQ and its "100+" reviews; LawWorks
@@ -223,7 +223,30 @@ const META_LINES = [
       await p.addStyleTag({ content: 'img,video,picture,svg image{visibility:hidden!important} *{background-image:none!important}' });
       const shot = path.join(dir, '.colour.png'); await p.screenshot({ path: shot, fullPage: true });
       const r2 = require('child_process').spawnSync('python3', [path.join(__dirname, 'colourshare.py'), shot, path.join(dir, 'brand.md')], { encoding: 'utf8' });
-      const line = (r2.stdout || '').trim(); if (line) { console.log(line); } fs.unlinkSync(shot); }
+      let line = (r2.stdout || '').trim();
+      if (!line) {
+        // Pure-Playwright fallback when python3 or Pillow is absent on a buyer's computer.
+        try {
+          const hexes = [...new Set((fs.readFileSync(path.join(dir, 'brand.md'), 'utf8').match(/#[0-9a-fA-F]{6}\b/g) || []))].slice(0, 6);
+          const b64 = fs.readFileSync(shot).toString('base64');
+          line = await p.evaluate(async ([img64, hx]) => {
+            const hls = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; if (mx === mn) return [0, l, 0]; const d = mx - mn, s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); const h = mx === r ? ((g - b) / d + (g < b ? 6 : 0)) : mx === g ? ((b - r) / d + 2) : ((r - g) / d + 4); return [h * 60, l, s]; };
+            const bh = hx.map(h => hls(parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16))).filter(([, , s]) => s > 0.2).map(([h, l]) => [h, l]);
+            if (!bh.length) return 'COLOUR: no brand hexes found in brand.md';
+            const im = new Image(); im.src = 'data:image/png;base64,' + img64; await im.decode();
+            const scale = Math.min(1, 360 / im.width, 4000 / im.height);
+            const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * scale)); c.height = Math.max(1, Math.round(im.height * scale));
+            const g = c.getContext('2d'); g.drawImage(im, 0, 0, c.width, c.height);
+            const d = g.getImageData(0, 0, c.width, c.height).data; let on = 0, off = 0; const offc = {};
+            for (let i = 0; i < d.length; i += 4) { const [h, l, s] = hls(d[i], d[i + 1], d[i + 2]); if (s < 0.18 || l < 0.06 || l > 0.96) continue; const ok = bh.some(([x, bl]) => Math.min(Math.abs(h - x), 360 - Math.abs(h - x)) <= 20 && (Math.abs(l - bl) <= 0.3 || l > 0.85)); if (ok) on++; else { off++; const k = Math.floor(h / 30) * 30; offc[k] = (offc[k] || 0) + 1; } }
+            const t = on + off; const share = t ? Math.round(100 * on / t) : 100;
+            const top = Object.entries(offc).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => `${k}deg`);
+            return `COLOUR: ${share}% of the coloured area (photos hidden) is in their brand hues ${hx.join(', ')}; off-brand hues near ${top.join(', ') || 'none'}`;
+          }, [b64, hexes]);
+        } catch (e) {}
+      }
+      if (line) console.log(line);
+      fs.unlinkSync(shot); }
     await p.close(); }
   await b.close(); fs.unlinkSync(tmp);
   // Review 14, K5 (21 Nov): the marks of an AI-made page, by the old

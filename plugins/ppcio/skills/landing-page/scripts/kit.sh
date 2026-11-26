@@ -9,6 +9,9 @@
 #   captures [--quick] [<root>] <url | folder=url>...  capture many pages at the same time
 #   progress <folder> [--watch]  the audit wait screen; --watch keeps it live until audit.html exists
 #   batch <landing-pages>       draw batch.html, the agency report: one card per client
+#   cost [session.jsonl]      tokens and dollars of a run (main chat and agents)
+#   brief <site>              one file with every text the audit agents read
+#   look <site>               print the look-ready message to send
 #   review <folder>            draw review.html: blind scores, before and after, the faults fixed
 #   report <folder>            draw audit.html from the audit files
 #   open <file>                open a page in their browser (Mac, Linux, Windows)
@@ -36,7 +39,7 @@ if ! command -v node > /dev/null 2>&1; then
   echo "First run: downloading Node.js $NODE_V from nodejs.org (about 50 MB)..."
   F="node-$NODE_V-$P.tar.gz"; T="$(mktemp -d)"; mkdir -p "$D"
   if curl -fsSL "https://nodejs.org/dist/$NODE_V/$F" -o "$T/$F" && curl -fsSL "https://nodejs.org/dist/$NODE_V/SHASUMS256.txt" -o "$T/SUMS" \
-     && (cd "$T" && grep " $F\$" SUMS | shasum -a 256 -c - > /dev/null) \
+     && (cd "$T" && grep " $F\$" SUMS | if command -v shasum > /dev/null 2>&1; then shasum -a 256 -c -; else sha256sum -c -; fi > /dev/null) \
      && rm -rf "$D/node" && mkdir -p "$D/node" && tar -xzf "$T/$F" -C "$D/node" --strip-components 1; then
     export PATH="$D/node/bin:$PATH"; rm -rf "$T"
   else
@@ -66,9 +69,10 @@ case "$cmd" in
     # More than one client page at once is agency mode. Competitor captures are part of any audit.
     n=0; for x in "${ITEMS[@]}"; do case "$x" in */competitors/*) ;; *) n=$((n+1)) ;; esac; done
     [ "$n" -gt 1 ] && { node "$K/licence.cjs" need agency || exit 4; }
-    L="$(mktemp -d)"; i=0
+    L="$(mktemp -d)"; i=0; USED_FOLDERS="|"
     for x in "${ITEMS[@]}"; do i=$((i+1))
-      case "$x" in *=http*) f="${x%%=http*}"; u="http${x#*=http}" ;; *) u="$x"; f="$R/$(echo "$u" | sed -E 's#^https?://##; s#^www\.##; s#[/.:].*##')" ;; esac
+      case "$x" in *=http*) f="${x%%=http*}"; u="http${x#*=http}" ;; *) u="$x"; base="$(echo "$u" | sed -E 's#^https?://##; s#^www\.##; s#[/.:].*##')"; f="$R/$base"; case "$USED_FOLDERS" in *"|$f|"*) f="${f}-${i}" ;; esac ;; esac
+      USED_FOLDERS="${USED_FOLDERS}${f}|"
       echo "$u|$f" > "$L/$i.job"; mkdir -p "$(dirname "$f")"
       ( node "$K/capture.cjs" "$u" "$f" $Q > "$L/$i.log" 2>&1; echo $? > "$L/$i.code" ) & done; wait
     for j in $(seq 1 $i); do IFS='|' read -r u f < "$L/$j.job"
@@ -82,30 +86,53 @@ case "$cmd" in
       [ -f "${PPCIO_HOME:-$HOME/.ppcio}/library/index.json" ] || node "$K/licence.cjs" library ;; esac
     node "$K/library.cjs" "$@" ;;
   checkfacts) node "$K/checkfacts.cjs" "$@" ;;
-  report) node "$K/licence.cjs" need site "$(basename "$(cd "${1:-.}" && pwd)")" || exit 4; node "$K/report.cjs" "$@" ;;
+  check-site) node "$K/licence.cjs" need site "$(basename "${1:-}")" ;;
+  report) node "$K/licence.cjs" need site "$(basename "$(cd "${1:-.}" && pwd)")" || exit 4
+    # The studio serving this folder, so the message carries its link.
+    for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
+    node "$K/report.cjs" "$@" ;;
   pack) node "$K/licence.cjs" need pack || exit 4; node "$K/pack.cjs" "$@" ;;
   progress) node "$K/progress.cjs" "$@" ;;
-  review) node "$K/licence.cjs" need review || exit 4; node "$K/review.cjs" "$@" ;;
+  brief) node "$K/brief.cjs" "$@" ;;
+  cost) node "$K/cost.cjs" "$@" ;;
+  await) node "$K/await.cjs" "$@" ;;
+  look) # The look-ready message, ready to send.
+    for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
+    node "$K/lookready.cjs" "$@" ;;
+  review) node "$K/licence.cjs" need review || exit 4
+    for P in $(seq 4870 4899); do [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" = "$(pwd)" ] && { export PPCIO_STUDIO="http://localhost:$P"; break; }; done
+    node "$K/review.cjs" "$@" ;;
   batch) node "$K/licence.cjs" need agency || exit 4; node "$K/batch.cjs" "$@" ;;
   view) # The studio: one local server for every site in ./landing-pages, on port 4870 (or the next free one).
+    # Run from a subfolder (landing-pages/<site>/inputs): serve the project folder above it, never the subfolder (blind tests, 26 Nov).
+    while [ ! -d landing-pages ] && [ "$(pwd)" != / ] && [ "$(pwd)" != "$HOME" ]; do cd ..; done
+    [ -d landing-pages ] || { echo "No landing-pages folder here or above. Run this from the project folder."; exit 1; }
     ROOT="$(pwd)"; P="${PPCIO_PORT:-4870}"
-    if ! curl -fs -o /dev/null "http://127.0.0.1:$P/wait?after=999999999" --max-time 1 2>/dev/null && ! curl -fs -o /dev/null "http://127.0.0.1:$P/" --max-time 1; then
+    # A studio already on this port that serves another folder belongs to another project: use the next port.
+    while :; do
+      R=$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)
+      if [ "$R" = "$ROOT" ]; then break; fi
+      if [ -z "$R" ] && [ "$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$P/" --max-time 1 2>/dev/null)" = "000" ]; then break; fi
+      P=$((P+1)); [ $P -gt 4899 ] && break
+    done
+    if [ "$(curl -fs "http://127.0.0.1:$P/root" --max-time 1 2>/dev/null)" != "$ROOT" ]; then
       mkdir -p "$ROOT/landing-pages"
       nohup node "$K/view.cjs" "$ROOT" --port "$P" > "$ROOT/landing-pages/.studio.log" 2>&1 &
       for i in 1 2 3 4 5 6 7 8 9 10; do curl -fs -o /dev/null "http://127.0.0.1:$P/" --max-time 1 && break; sleep 0.3; done
     fi
-    # The Claude desktop app opens it beside the chat from .claude/launch.json (preview_start, name "PPC.io studio").
+    # The Claude desktop app opens it in its pane from .claude/launch.json (preview_start, name "PPC.io studio").
     mkdir -p "$ROOT/.claude"
     node -e 'const f=process.argv[1],p=+process.argv[2];let j={version:"0.0.1",configurations:[]};try{j=JSON.parse(require("fs").readFileSync(f,"utf8"))}catch{}j.configurations=(j.configurations||[]).filter(c=>c.name!=="PPC.io studio");j.configurations.push({name:"PPC.io studio",url:"http://localhost:"+p,port:p});require("fs").writeFileSync(f,JSON.stringify(j,null,2)+"\n")' "$ROOT/.claude/launch.json" "$P"
-    S="${1:-}"; echo "STUDIO http://localhost:$P/${S:+s/$S/}" ;;
-  wait) node "$K/wait.cjs" "$(pwd)" --port "${PPCIO_PORT:-4870}" ;;
+    mkdir -p "$ROOT/landing-pages"; echo "$P" > "$ROOT/landing-pages/.studio-port"
+    S="${1:-}"; echo "STUDIO http://localhost:$P/${S:+s/$S/}"; [ -n "$S" ] && [ ! -f "landing-pages/$S/audit.md" ] && node "$K/firstlook.cjs" "$S" "http://localhost:$P/s/$S/" ;;
+  wait) P=$(cat landing-pages/.studio-port 2>/dev/null || echo "${PPCIO_PORT:-4870}"); node "$K/wait.cjs" "$(pwd)" --port "$P" ;;
   licence) node "$K/licence.cjs" status ;;
   unlock) node "$K/licence.cjs" unlock "$@" ;;
-  open) F="$1"; [ -e "$F" ] || { echo "No file: $F"; exit 1; }
+  open) F="$1"; case "$F" in http*) ;; *) [ -e "$F" ] || { echo "No file: $F"; exit 1; } ;; esac
     if command -v open > /dev/null 2>&1 && [ "$(uname -s)" = Darwin ]; then open "$F"
     elif command -v xdg-open > /dev/null 2>&1; then xdg-open "$F" > /dev/null 2>&1 &
     elif command -v cmd.exe > /dev/null 2>&1; then cmd.exe /c start "" "$F"
-    else echo "Open this file in your browser: $(cd "$(dirname "$F")" && pwd)/$(basename "$F")"; fi ;;
+    else case "$F" in http*) echo "Open this link in your browser: $F" ;; *) echo "Open this file in your browser: $(cd "$(dirname "$F")" && pwd)/$(basename "$F")" ;; esac; fi ;;
   *) echo "Unknown command: $cmd"; exit 1 ;;
 esac
 }

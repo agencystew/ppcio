@@ -14,6 +14,9 @@ const pages = path.join(root, 'landing-pages');
 const portArg = process.argv.indexOf('--port');
 const PORT = portArg > 0 ? +process.argv[portArg + 1] : 4870;
 const STUDIO = path.resolve(__dirname, '..', '..', '..', 'studio');
+const FULL_LIB = path.join(process.env.PPCIO_HOME || path.join(require('os').homedir(), '.ppcio'), 'library');
+const FREE_LIB = path.resolve(__dirname, '..', 'library');
+const activeLib = () => (fs.existsSync(path.join(FULL_LIB, 'index.json')) ? FULL_LIB : FREE_LIB);
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff', '.gif': 'image/gif', '.ico': 'image/x-icon' };
 const read = (f) => { try { return fs.readFileSync(f, 'utf8'); } catch { return null; } };
@@ -118,12 +121,15 @@ function events(dir, desk, facts, done) {
   const h1 = ((facts.headings || []).find((h) => h.tag === 'h1') || {}).text || facts.title;
   if (shotEnd && h1) out.push(row('scrape:read', 'done', shotEnd, shotEnd, { words: facts.words || null, headline: h1 }));
   if (!ctx && !shotEnd) return out;
-  out.push(row('context', ctx ? 'done' : 'running', shotEnd || t0, ctx || null));
+  const ctxStart = shotEnd || t0;
+  out.push(ctx ? { ...row('context', 'done', ctx, ctx), duration_ms: Math.max(0, Math.round(ctx - ctxStart)) } : row('context', 'running', ctxStart, null));
   if (!ctx) return out;
   for (const [stage, files] of STAGES) {
     const end = Math.max(0, ...files.map(at));
     if (end) {
-      out.push(row(stage, 'done', ctx, end));
+      // The screen prints each row at its start time. A kit agent's file lands when it finishes,
+      // so the row is placed at that moment and keeps its real length.
+      out.push({ ...row(stage, 'done', end, end), duration_ms: Math.max(0, Math.round(end - ctx)) });
       const n = count(dir, stage);
       if (n != null) out.push({ ...row(`${stage}_done`, 'done', end, end), user_visible: false, agent: null, micro_event: n });
     }
@@ -197,8 +203,9 @@ function siteJson(name) {
       mobileTextNodes: nodes.phone || undefined,
       title: facts.title || null,
     },
-    // The new page in the screens' frame: its pictures load from the work folder.
-    page: pageHtml ? { html: pageHtml.replace(/<head([^>]*)>/i, `<head$1><base href="./data/files/">`), at: new Date(mtime(pageFile)).toISOString() } : null,
+    // The new page in the screens' frame: its pictures load from the work folder,
+    // while in-page #anchor links still scroll inside the srcdoc frame instead of navigating away.
+    page: pageHtml ? { html: pageHtml.replace(/<head([^>]*)>/i, `<head$1><base href="./data/files/"><script>document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(!id)return;var el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}});</script>`), at: new Date(mtime(pageFile)).toISOString() } : null,
     asks: {
       build: `Build me a better page for ${host}`,
       designs: `Show me 3 new looks for ${host}`,
@@ -237,6 +244,8 @@ const server = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');
   const p = decodeURIComponent(u.pathname);
   // Claude's side: hold the request open until a press arrives after ?after=N.
+  // kit.sh asks which folder this studio serves, so a second project never reuses it.
+  if (p === '/root') { res.writeHead(200, { 'content-type': 'text/plain', 'cache-control': 'no-store' }); return res.end(root); }
   if (p === '/wait') {
     const after = +u.searchParams.get('after') || 0;
     const now = asksAfter(after);
@@ -259,6 +268,16 @@ const server = http.createServer((req, res) => {
     if (!f.startsWith(STUDIO + path.sep)) return send(res, 403, 'No');
     return sendFile(res, f);
   }
+  // Style library images served over HTTP so styles.html renders cleanly inside Studio
+  // (browsers block file:// images on http://localhost pages).
+  if (p.startsWith('/lib/')) {
+    const rel = p.slice('/lib/'.length);
+    for (const base of [activeLib(), FREE_LIB]) {
+      const f = path.resolve(base, rel);
+      if (f.startsWith(base + path.sep) && fs.existsSync(f) && fs.statSync(f).isFile()) return sendFile(res, f);
+    }
+    return send(res, 404, 'Not found');
+  }
   const m = p.match(/^\/s\/([^/]+)\/(.*)$/);
   if (!m) return send(res, 404, 'Not found');
   const [, name, rest] = m;
@@ -266,6 +285,12 @@ const server = http.createServer((req, res) => {
   if (!dir.startsWith(pages + path.sep) || !fs.existsSync(dir)) return send(res, 404, 'No such site');
   if (rest === 'data/site.json') return send(res, 200, JSON.stringify(siteJson(name)), TYPES['.json']);
   if (rest === 'ask' && req.method === 'POST') {
+    const hostHdr = String(req.headers.host || '').toLowerCase();
+    const okHost = hostHdr === `localhost:${PORT}` || hostHdr === `127.0.0.1:${PORT}`;
+    const origin = String(req.headers.origin || '').toLowerCase();
+    const okOrigin = !origin || origin === `http://localhost:${PORT}` || origin === `http://127.0.0.1:${PORT}`;
+    const ct = String(req.headers['content-type'] || '').toLowerCase();
+    if (!okHost || !okOrigin || !ct.startsWith('application/json')) return send(res, 403, 'Forbidden');
     let body = '';
     req.on('data', (c) => { body += c; if (body.length > 10000) req.destroy(); });
     req.on('end', () => { let j = {}; try { j = JSON.parse(body); } catch {} send(res, addAsk(name, j) ? 200 : 400, 'ok'); });
@@ -274,10 +299,18 @@ const server = http.createServer((req, res) => {
   if (rest.startsWith('data/files/')) {
     const f = path.resolve(dir, rest.slice('data/files/'.length));
     if (!f.startsWith(dir + path.sep)) return send(res, 403, 'No');
+    if (f.toLowerCase().endsWith('.html') && fs.existsSync(f)) {
+      let html = fs.readFileSync(f, 'utf8');
+      for (const base of [activeLib(), FREE_LIB]) {
+        const prefix = 'file://' + base.split(path.sep).map(encodeURIComponent).join('/').replace(/^file:\/\/%2F?/, 'file:///') + '/';
+        if (html.includes(prefix)) html = html.split(prefix).join('/lib/');
+      }
+      return send(res, 200, html, TYPES['.html']);
+    }
     return sendFile(res, f);
   }
   const f = path.resolve(STUDIO, rest || 'index.html');
-  if (!f.startsWith(STUDIO)) return send(res, 403, 'No');
+  if (!f.startsWith(STUDIO + path.sep) && f !== STUDIO) return send(res, 403, 'No');
   if (fs.existsSync(f) && fs.statSync(f).isFile()) return sendFile(res, f);
   return sendFile(res, path.join(STUDIO, 'index.html'));
 });

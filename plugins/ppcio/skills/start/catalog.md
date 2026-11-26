@@ -2,8 +2,8 @@
 
 ## Landing pages
 
-- **Audit my landing page**: 10 specialists check the page like a buyer and a conversion team, and compare it with the pages that win in your market.
-- **Build a better page**: pick a look from 322 top pages (the best of 1,112 we graded), then get the whole page built in your brand, reviewed and ready to put live.
+- **Audit my landing page**: A team of specialists checks the page like a buyer and a conversion team, and compares it with the pages that win in your market.
+- **Build a better page**: Pick a look from 322 top pages (the best of 1,112 we graded), then get the whole page built in your brand, reviewed and ready to put live.
 - **Many clients at once**: agency mode runs a list of client pages side by side.
 
 ## Search terms and negative keywords
@@ -30,7 +30,7 @@
 
 - **Weekly Client Report**: Writes the Monday client email with the bad news first, then checks every number in it against your data.
 - **Change Detective**: Reads your change history and finds which change moved the numbers, including Google's auto-applied recommendations.
-- **Conversion Lag Check**: Tells a real drop from conversions that haven't been counted yet. On my demo account, a 32% drop was really 15%.
+- **Conversion Lag Check**: Tells a real drop from conversions that haven't been counted yet. On the demo account, a 32% drop was really 15%.
 - **Budget Pacer**: Projects month-end spend and tells you where to move budget when you're over or under.
 - **Weekly Pulse**: Compares this week with last week and the 4-week average, flags changes over 20%, and gives 3 to 5 actions.
 - **PPC Report Narrator**: Turns campaign metrics into a client report in plain words, with the cause behind each change.

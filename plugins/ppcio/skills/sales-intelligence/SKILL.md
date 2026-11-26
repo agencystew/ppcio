@@ -17,12 +17,12 @@ Turn a prospect's URL into everything your agency needs to win the pitch. No acc
 
 A comprehensive markdown intelligence report with:
 
-1. **60-Second Brief** , One page with the strongest angle, website grade, and 3 conversation starters
-2. **Business & Market Context** , Who the prospect is and who they compete with
-3. **Website Audit** , Landing page analysis with side-by-side competitor comparison
-4. **Competitive Intelligence** , Messaging themes, white space, ad activity
-5. **Strategic Recommendations** , 2 testable campaign hypotheses backed by evidence
-6. **Internal Sales Notes** , Pain points, objection responses, quick wins (for your eyes only)
+1. **60-Second Brief**: One page with the strongest angle, website grade, and 3 conversation starters
+2. **Business & Market Context**: Who the prospect is and who they compete with
+3. **Website Audit**: Landing page analysis with side-by-side competitor comparison
+4. **Competitive Intelligence**: Messaging themes, white space, ad activity
+5. **Strategic Recommendations**: 2 testable campaign hypotheses backed by evidence
+6. **Internal Sales Notes**: Pain points, objection responses, quick wins (for your eyes only)
 
 ---
 
@@ -44,7 +44,7 @@ Helps me find the right competitors and benchmarks.
 
 ```
 Example: "Emergency plumbing services in Austin, TX"
-Example: "B2B SaaS , project management for construction teams"
+Example: "B2B SaaS: project management for construction teams"
 ```
 
 **3. Competitor URLs (1-3)**
@@ -52,9 +52,9 @@ If you know their main competitors, provide them. Otherwise, I'll auto-discover 
 
 ### Optional
 
-- **Budget context** , Does the prospect have a budget range in mind?
-- **Whether they're currently advertising** , Running Google Ads already?
-- **Specific concerns** , Anything you know about the prospect's pain points?
+- **Budget context**: Does the prospect have a budget range in mind?
+- **Whether they're currently advertising**: Running Google Ads already?
+- **Specific concerns**: Anything you know about the prospect's pain points?
 
 ---
 
@@ -92,27 +92,27 @@ If you didn't provide competitors, I find 3 by searching for businesses solving 
 | Comparable business size | Tutorial/educational sites |
 | Competing for same customers | News articles about the industry |
 
-**Intellectual Honesty Requirement:** Auto-discovered competitors always include this caveat: "Competitors identified based on search overlap , verify with the prospect before your meeting."
+**Intellectual Honesty Requirement:** Auto-discovered competitors always include this caveat: "Competitors identified based on search overlap: verify with the prospect before your meeting."
 
 ### Step 3: Landing Page Audit
 
 The hero section of the report. I analyze the prospect's site AND competitor sites across these dimensions:
 
-**3-Second Test** , Can a visitor answer "What is this? Who is it for? Why should I care?" within 3 seconds?
+**3-Second Test**: Can a visitor answer "What is this? Who is it for? Why should I care?" within 3 seconds?
 
-**Trust & Social Proof** , Using the Have/Buried/Missing framework:
+**Trust & Social Proof**: Using the Have/Buried/Missing framework:
 - What trust signals exist? (testimonials, logos, ratings, certifications)
 - Are they prominent or buried?
 - What's missing that competitors have?
 
-**Offer Strength** , How clear is the value proposition?
+**Offer Strength**: How clear is the value proposition?
 - Clarity: Is the offer immediately obvious?
 - Risk reversal: Is there a guarantee, free trial, or low-commitment entry point?
 - Urgency: Is there authentic urgency (not manufactured countdown timers)?
 
-**Positioning Alignment** , Does the website's design, language, and presentation match the positioning they claim? A "premium" service with a basic template and stock photos has a credibility problem.
+**Positioning Alignment**: Does the website's design, language, and presentation match the positioning they claim? A "premium" service with a basic template and stock photos has a credibility problem.
 
-**Conversion Path** , How easy is it to take the next step?
+**Conversion Path**: How easy is it to take the next step?
 - How many fields in the form?
 - Is the CTA prominent and clear?
 - Is click-to-call available on mobile?
@@ -137,7 +137,7 @@ The single most powerful visual in the report:
 
 Every finding must be tied to business impact. Not "your hero section could be improved" but:
 
-- "Your hero says 'Welcome to Smith Plumbing' while your top competitor says 'Emergency Plumber , 2 Hour Response Guaranteed.' That headline difference influences which search result a customer clicks."
+- "Your hero says 'Welcome to Smith Plumbing' while your top competitor says 'Emergency Plumber: 2 Hour Response Guaranteed.' That headline difference influences which search result a customer clicks."
 - "Your site has zero trust signals above the fold. All 3 competitors display Google ratings. For visitors comparing options, your site provides no reason to trust you over alternatives."
 - "Your contact form has 7 required fields. Competitor 1 has 3. Industry data suggests each additional field reduces form completion by 5-10%."
 
@@ -149,10 +149,10 @@ For each competitor, identify their primary and secondary messaging angles. Buil
 
 | Theme | Adoption Rate | Prospect Uses? | Significance |
 |-------|--------------|----------------|--------------|
-| Free consultation | 4/5 (80%) | No | Table stakes , must have |
-| 24/7 availability | 3/5 (60%) | Yes | Competitive , keep using |
-| Specific guarantee | 1/5 (20%) | No | Differentiator , opportunity |
-| Industry specialization | 0/5 (0%) | No | White space , test this |
+| Free consultation | 4/5 (80%) | No | Table stakes: must have |
+| 24/7 availability | 3/5 (60%) | Yes | Competitive: keep using |
+| Specific guarantee | 1/5 (20%) | No | Differentiator: opportunity |
+| Industry specialization | 0/5 (0%) | No | White space: test this |
 
 **White Space Identification:**
 
@@ -187,7 +187,7 @@ These are hypotheses, not guarantees. They give you something specific and evide
 
 ### Step 6: Internal Sales Notes
 
-For your team only , never share with the prospect:
+For your team only: never share with the prospect:
 
 - **Pain points** to lead with (backed by evidence from the analysis)
 - **Likely objections** with evidence-based responses
@@ -227,9 +227,9 @@ Every section of the report gets a confidence rating based on evidence quality:
 - Key gap: No reviews/testimonials above the fold, no pricing guidance
 
 **Competitors Found (auto-discovered):**
-1. Lon Smith Roofing (lonsmithroofing.com) , 4.8 stars, 600+ reviews
-2. Austin Roofing & Construction (austinroofer.com) , Specializes in storm damage
-3. Ranger Roofing (rangerroofing.com) , "Free roof inspection" lead-in offer
+1. Lon Smith Roofing (lonsmithroofing.com): 4.8 stars, 600+ reviews
+2. Austin Roofing & Construction (austinroofer.com): Specializes in storm damage
+3. Ranger Roofing (rangerroofing.com): "Free roof inspection" lead-in offer
 
 **Comparison Table:**
 
@@ -252,10 +252,10 @@ Every section of the report gets a confidence rating based on evidence quality:
 
 ## 60-Second Brief: Selection Logic
 
-The brief is the FIRST page of the report , not an afterthought.
+The brief is the FIRST page of the report: not an afterthought.
 
 **Strongest Angle Selection (ranked):**
-1. "Competitors are advertising, prospect is not" (if true , this always wins)
+1. "Competitors are advertising, prospect is not" (if true: this always wins)
 2. Specific revenue-tied LP weakness (e.g., "Your site fails the 3-Second Test")
 3. Competitive white space opportunity (e.g., "Nobody in your market owns [angle]")
 4. Market timing opportunity (e.g., "3 competitors just started advertising")
@@ -282,13 +282,13 @@ The brief is the FIRST page of the report , not an afterthought.
 
 ### No Competitors Found
 - Report on the prospect's site only
-- Flag: "No direct competitors identified via search , verify with the prospect"
+- Flag: "No direct competitors identified via search: verify with the prospect"
 - Skip comparison table
 - Focus on LP audit and general strategy
 
 ### Prospect Already Running Ads
 - Reframe pitch from "start advertising" to "improve your advertising"
-- LP audit becomes more powerful: "You're spending money sending traffic to this page , here's what's happening when they arrive."
+- LP audit becomes more powerful: "You're spending money sending traffic to this page: here's what's happening when they arrive."
 
 ### Prospect and Competitors Are Very Similar
 - Emphasize micro-differentiators and white space
@@ -299,18 +299,18 @@ The brief is the FIRST page of the report , not an afterthought.
 - Website Grade = D
 - First hypothesis: "Build a conversion-ready landing page"
 - Be honest: "Advertising before fixing the website will waste budget"
-- Still analyze competitors , the competitive intel is valuable regardless
+- Still analyze competitors: the competitive intel is valuable regardless
 
 ---
 
 ## Guardrails
 
-**NEVER** invent competitor data , only report what's observable from their websites
-**NEVER** reference Google Ads account data , none is available in this analysis
-**NEVER** guarantee specific results , these are hypotheses, not promises
+**NEVER** invent competitor data: only report what's observable from their websites
+**NEVER** reference Google Ads account data: none is available in this analysis
+**NEVER** guarantee specific results: these are hypotheses, not promises
 **NEVER** use generic conversation starters ("Have you considered PPC?")
-**NEVER** skip the Internal Sales Notes , they're the most practical section for reps
-**NEVER** present auto-discovered competitors as confirmed , always include the verification caveat
+**NEVER** skip the Internal Sales Notes: they're the most practical section for reps
+**NEVER** present auto-discovered competitors as confirmed: always include the verification caveat
 
 **ALWAYS** tie every LP finding to revenue impact, not UX theory
 **ALWAYS** include at least 1 competitor in the comparison table
@@ -335,7 +335,7 @@ The brief is the FIRST page of the report , not an afterthought.
 ## Key Principles
 
 **Specificity Over Generics**
-Every finding should be specific to THIS prospect. Not "your hero section could be improved" but "your hero says 'Welcome to Smith Plumbing' while your top competitor says 'Emergency Plumber , 2 Hour Response Guaranteed.'"
+Every finding should be specific to THIS prospect. Not "your hero section could be improved" but "your hero says 'Welcome to Smith Plumbing' while your top competitor says 'Emergency Plumber: 2 Hour Response Guaranteed.'"
 
 **Revenue Impact Over UX Theory**
 Don't cite design best practices. Tie every finding to business impact: lost clicks, lost trust, lost conversions.
@@ -354,7 +354,7 @@ If competitors were auto-discovered, say so. If evidence is thin, flag it. If a 
 - Lead with the 60-Second Brief only
 - Save the full report for after first contact
 - Use the comparison table as the "hook" in your email
-- Don't overwhelm , curiosity beats information overload
+- Don't overwhelm: curiosity beats information overload
 
 **For a Warm Lead (Prospect Expects Analysis):**
 - Deliver the full report

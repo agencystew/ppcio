@@ -35,7 +35,7 @@ async function getLibrary(key) {
   const res = await fetch(`${SERVER}/api/public/ppcio/library`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ key }) });
   const j = await res.json().catch(() => ({}));
   if (res.status === 403) throw new Error('the server did not accept this key');
-  if (res.status === 429) throw new Error('this key downloaded the library too many times this month. Email stewart@ppc.io');
+  if (res.status === 429) throw new Error('this key downloaded the library too many times this month. Email support@ppc.io');
   if (!res.ok || !j.url) throw new Error(`the library server answered ${res.status}`);
   const lib = path.join(HOME, 'library'); const tmp = path.join(HOME, 'library.download'); const tgz = path.join(HOME, 'library.tar.gz');
   const file = await fetch(j.url); if (!file.ok) throw new Error(`the download answered ${file.status}`);
@@ -68,7 +68,8 @@ if (cmd === 'status') {
   if (r.ok) process.exit(0);
   if (a === 'site') {
     // The free version: one website. The first site audited is the free one.
-    const host = String(b || '').toLowerCase().replace(/^www\./, '');
+    const host = String(b || '').toLowerCase().replace(/^www\./, '').trim();
+    if (!host) { console.log('Usage: licence.cjs need site <site-name>'); process.exit(1); }
     let first = ''; try { first = fs.readFileSync(SITES, 'utf8').trim(); } catch (e) {}
     if (!first) { fs.mkdirSync(HOME, { recursive: true }); fs.writeFileSync(SITES, host + '\n'); process.exit(0); }
     if (first === host) process.exit(0);

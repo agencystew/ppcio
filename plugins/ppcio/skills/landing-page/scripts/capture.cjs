@@ -31,6 +31,14 @@ const TAGS = [
   ['microsoft_ads', 'bat\\.bing\\.com|uetq'], ['tiktok', 'tiktok.*analytics|ttq\\.'],
 ];
 
+// What the site is built on, for the go-live step. The first match wins.
+const PLATFORMS = [
+  ['Shopify', 'cdn\\.shopify\\.com|Shopify\\.theme'], ['WordPress', 'wp-content/|wp-includes/'],
+  ['Squarespace', 'static1\\.squarespace\\.com|squarespace-cdn'], ['Wix', 'static\\.wixstatic\\.com|wix-bolt|_wixCIDX'],
+  ['Webflow', 'webflow\\.(com|js)|data-wf-page'], ['HubSpot', 'hs-scripts\\.com|hubspot'], ['Framer', 'framerusercontent\\.com|framer\\.com/m/'],
+  ['Next.js', '/_next/static/'], ['GoDaddy', 'img1\\.wsimg\\.com'], ['Duda', 'dudaone|cdn-website\\.com'],
+];
+
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 
 async function settle(p) {
@@ -234,6 +242,7 @@ async function clearPopups(p) {
     }
   } catch (e) {}
   facts.url = url; facts.final_url = p.url(); facts.status = status; facts.load_ms = loadMs; facts.lcp_ms = lcpMs; facts.blocked = blocked; facts.tags = tags;
+  facts.platform = (PLATFORMS.find(([, re]) => new RegExp(re, 'i').test(html)) || ['unknown'])[0];
 
   // The visible text, with headings marked, for the copy review.
   const text = await p.evaluate(TEXT);
@@ -349,7 +358,8 @@ async function clearPopups(p) {
   console.log(`Captured ${url} (status ${status}, loaded in ${(loadMs / 1000).toFixed(1)} s, largest paint ${lcpMs == null ? 'not measured' : (lcpMs / 1000).toFixed(1) + ' s'}).`);
   console.log(`Tags found: ${tags.join(', ') || 'none'}. Forms: ${facts.forms.length}. Phone links: ${facts.phones.length}. Photos saved: ${saved.length}.`);
   const pns = facts.phone_numbers || [];
-  if (pns.length > 1 || pns.some(n => n.where.some(w => /dials another/.test(w)))) console.log(`PHONE NUMBERS DIFFER: ${pns.map(n => `${n.digits} (${n.where.join(', ')})`).join('; ')}. Ask which one the new page uses, or in agency mode list it under "check before it goes live".`);
+  if (pns.length > 5) console.log(`PHONE NUMBERS: ${pns.length} numbers on the page, likely a location list. Use the main one in the header.`);
+  else if (pns.length > 1 || pns.some(n => n.where.some(w => /dials another/.test(w)))) console.log(`PHONE NUMBERS DIFFER: ${pns.map(n => `${n.digits} (${n.where.join(', ')})`).join('; ')}. Use the number on their live first screen without stopping to ask, and flag the mismatch first in the page-ready message (or in agency mode under "check before it goes live").`);
   console.log('Read these files:');
   for (const f of ['inputs/live-page-today.png', 'inputs/live-phone-today.png', 'inputs/live-full.jpg', 'inputs/site-page-text.md', 'inputs/site-page-text-phone.md', 'inputs/site-facts.json', 'inputs/photo-sheet.jpg', 'inputs/photos.md', facts.logo && facts.logo.file, 'craft.md', 'live-parts.json'])
     if (f && fs.existsSync(path.join(work, f))) console.log('  ' + path.join(work, f));

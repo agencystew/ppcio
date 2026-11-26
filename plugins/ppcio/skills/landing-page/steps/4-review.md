@@ -19,7 +19,9 @@ It can be wrong. Weigh it.
 
 ## 3. The verdict and the fixes
 
-Write the critic's blind scores to `r1/scores.json` as `{"live": [5 numbers], "new": [5 numbers]}`, in the order first screen, case, proof, offer, action. Then write `r1/verdict.md` as the most ruthless art director and conversion expert alive: what is beautiful and stays, then every fault: each guard line, anything broken, covered or cut off at either width, each lie (a price, "free", guarantee, time or figure that is not word for word in facts.md or site-page-text.md is a lie, wherever it sits), each buyer question left open, each thing the critic says their live page still does better, each part of case.md the page does not make, and each headline the critic called filler or a topic label, with its new line. Number the faults. Start each with a bold label of 7 words at most, ending in a full stop (`1. **Picker shows all four panels.**`), then one plain sentence, then the section heading in brackets. The review screen lists these labels as the faults you fixed.
+Write the critic's blind scores to `r1/scores.json` as `{"live": [5 numbers], "new": [5 numbers]}`, in the order first screen, case, proof, offer, action. Then write `r1/verdict.md` as the most ruthless art director and conversion expert alive: what is beautiful and stays, then every fault: each guard line, anything broken, covered or cut off at either width, an empty block larger than about a quarter of the first screen, the same button twice in the first screen (header buttons count), each lie (a price, "free", guarantee, time or figure that is not word for word in facts.md or site-page-text.md is a lie, wherever it sits), each buyer question left open, each thing the critic says their live page still does better, each part of case.md the page does not make, and each headline the critic called filler or a topic label, with its new line. Number the faults. Start each with a bold label of 7 words at most, ending in a full stop (`1. **Picker shows all four panels.**`), then one plain sentence, then the section heading in brackets. The review screen lists these labels as the faults you fixed.
+
+Add these to the faults too. Open audit.md and page.html side by side: each of the audit's top fixes that the page does not carry out (unless you held it back for a fact they must confirm), and each contradiction the audit or facts.md names that the page still shows (two recovery times, two different ages for the business). The page uses one value, or leaves the claim out. A claim wider than its source is a lie too: "upfront quote on HVAC pricing" never becomes "an upfront quote before any work starts". A vague line the audit flagged ("See available offers", a bare "Yes!") gets the real answer from facts.md, or goes.
 
 Fix every fault in one batch, each as a small edit to page.html. Never write page.html again whole. The design is decided: never start a new layout, never shrink the page or drop a strong photo to satisfy a note.
 
@@ -33,7 +35,15 @@ Look at both renders and fix anything your changes broke. The guard must print C
 
 ## 5. Show the owner
 
-Run `bash KIT/scripts/kit.sh review landing-pages/<site>` and open `review.html` in their browser: the blind scores, their page today next to the new one, and every fault the review fixed. Then show the new page in the studio (`kit.sh view <site>`, the New page tab): their live page and the new one side by side, on a laptop and a phone. The owner can type a change there; `kit.sh wait` hands it to you. In chat, say in 3 short sentences what the page does differently from their live page and why a buyer acts on it. Ask what they want changed. For each change: edit, render, look, then show it. Keep `progress.md` up to date.
+1. Run stage 5's first step now: `bash KIT/scripts/kit.sh pack landing-pages/<site>`, and check every photo still shows (KIT/steps/5-go-live.md has the 3 checks).
+2. Write `landing-pages/<site>/ready.md`:
+   - `Today:` one or two lines, only when something needs their action today (a phone number that does not match, a broken form, tracking that misses calls, Google Ads not counting bookings, an offer that ends within 14 days).
+   - 3 numbered sentences: what the new page does differently from their live page, and why a buyer acts on it. Their words and their facts, never scores.
+   - `Ask:` one line, only when the page needs one fact they have not given (what the warranty covers, which phone number to use).
+3. Run `bash KIT/scripts/kit.sh review landing-pages/<site>`. It writes `review.html` for anyone who asks (do not open it for them) and prints the page-ready message between two `----` lines.
+4. Send that text as your message, word for word, including the full path to `<site>-page.zip` (which holds `index.html`, all downloaded `assets/`, and their tracking tags so it shares cleanly without broken photos). This is the one message they get for stages 4 and 5. The studio's New page tab shows their live page and the new one side by side; `kit.sh wait` hands you any change they type there.
+
+Never report checks, scores or a "reviewer" in chat. They are in the review file for anyone who asks. For each change: edit, render, look, then show it. Keep `progress.md` up to date.
 
 ---
 

@@ -169,7 +169,7 @@ Profitability Check: Does margin support this CPA? Yes/No
 | Channel | Images Needed | Videos Needed | Special Requirements | Timeline Impact |
 |---------|--------------|--------------|---------------------|----------------|
 | Meta Ads | 8-10 | 3+ recommended | Carousel + single image + video variations | 0 weeks if ready, 2-4 weeks if not |
-| Microsoft Ads | 0 (import) | 0 | None , imports Google text ads directly | 1-2 days to import |
+| Microsoft Ads | 0 (import) | 0 | None: imports Google text ads directly | 1-2 days to import |
 | LinkedIn Ads | 5+ | Nice to have | Professional quality, not casual | 1-2 weeks |
 | TikTok Ads | Nice to have | 5-8 REQUIRED | UGC-style, vertical, phone-shot OK | 4-6 weeks if starting from 0 |
 
@@ -200,7 +200,7 @@ Profitability Check: Does margin support this CPA? Yes/No
 | Available Budget | Assessment | Recommendation |
 |-----------------|-----------|----------------|
 | Current Google spend >= 2x channel minimum | Viable | Can allocate without cannibalizing Google |
-| Current spend = 1-2x channel minimum | Stretch | Risky , must reduce Google or have new budget |
+| Current spend = 1-2x channel minimum | Stretch | Risky: must reduce Google or have new budget |
 | Current spend < 1x channel minimum | Too early | "Scale Google to $X/month first, then revisit" |
 
 **Critical question:** Is the expansion budget NEW money or carved from Google? If carved from Google, quantify the cannibalization risk: "Reducing Google by $2K/month could cost [X] conversions at your current CPA."
@@ -305,7 +305,7 @@ CONFIDENCE: HIGH / MODERATE / LOW
 
 #### Executive Summary
 
-**Primary Recommendation:** [Channel] , [1-2 sentence evidence-based reason]
+**Primary Recommendation:** [Channel]: [1-2 sentence evidence-based reason]
 
 **Expected CPA Range:** $X-Y (vs $Z Google baseline)
 **Timeline to Launch:** X weeks
@@ -320,8 +320,8 @@ CONFIDENCE: HIGH / MODERATE / LOW
 |---------|---------|-------------|----------|-------------|-------------|------------|
 | [#1 Channel] | Recommended | $X-Y | X weeks | $X/mo | +X% | [Primary evidence] |
 | [#2 Channel] | Secondary | $X-Y | X weeks | $X/mo | +X% | [Primary evidence] |
-| [#3 Channel] | Not Yet Ready | $X-Y | X weeks | $X/mo | , | [Blocker + gate] |
-| [#4 Channel] | Don't Pursue | $X-Y | , | , | , | [Evidence for rejection] |
+| [#3 Channel] | Not Yet Ready | $X-Y | X weeks | $X/mo |: | [Blocker + gate] |
+| [#4 Channel] | Don't Pursue | $X-Y |: |: |: | [Evidence for rejection] |
 
 ---
 
@@ -486,13 +486,13 @@ CONFIDENCE: HIGH / MODERATE / LOW
 
 **What I Cannot Do Without API Access:**
 
-1. **Auto-scan competitor ads** , You must manually check Meta/TikTok/LinkedIn ad libraries
-2. **Pull Google Ads demographics** , You must export device/age/time reports
-3. **Assess creative readiness from pages** , You must describe your available assets
-4. **Check platform policy compliance** , You must verify restricted industry policies
-5. **Automated handoffs** , Cannot auto-trigger LP audit or competitor deep-dive
-6. **Cross-platform attribution** , Cannot set up unified measurement
-7. **Historical benchmarking** , Cannot compare against industry-specific conversion data
+1. **Auto-scan competitor ads**: You must manually check Meta/TikTok/LinkedIn ad libraries
+2. **Pull Google Ads demographics**: You must export device/age/time reports
+3. **Assess creative readiness from pages**: You must describe your available assets
+4. **Check platform policy compliance**: You must verify restricted industry policies
+5. **Automated handoffs**: Cannot auto-trigger LP audit or competitor deep-dive
+6. **Cross-platform attribution**: Cannot set up unified measurement
+7. **Historical benchmarking**: Cannot compare against industry-specific conversion data
 
 ---
 

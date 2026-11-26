@@ -54,7 +54,7 @@ Every fact includes where it was found: hero section, about page, footer, FAQ, p
 ### Required Input
 
 **1. Website Content**
-- Option A: User provides a URL (use Firecrawl or manual browsing to extract)
+- Option A: User provides a URL (read the page with your web tool, or capture it with the landing-page kit)
 - Option B: User pastes the page content directly
 - Minimum: Homepage content
 - Better: Homepage + About + Services/Products page

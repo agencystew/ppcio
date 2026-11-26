@@ -43,3 +43,39 @@ ${fixes.length ? `<div class="card"><h2>What the review fixed</h2><ol>${fixes.ma
 </div></html>`;
 fs.writeFileSync(path.join(work, 'review.html'), html);
 console.log(`Wrote ${path.join(work, 'review.html')}${sc ? '' : ' (no r1/scores.json, so no scores)'}`);
+
+// The page-ready message, printed ready to send, so every run gives the buyer the same message.
+// The model writes ready.md first: an optional "Today:" line, 3 numbered sentences, an optional "Ask:" line.
+const site = path.basename(work);
+const ready = read('ready.md');
+const zip = path.join(work, `${site}-page.zip`);
+if (!ready.trim()) {
+  console.log(`\nNEXT: write ${path.join(work, 'ready.md')} (an optional "Today:" line for what they must check today, 3 numbered sentences on what the new page does differently and why a buyer acts, in their words, never scores, and an optional "Ask:" line for one missing fact). ${fs.existsSync(zip) ? '' : 'Run kit.sh pack first. '}Then run kit.sh review again: it prints the message to send.`);
+  process.exit(0);
+}
+if (!fs.existsSync(zip)) { console.log(`\nNEXT: run kit.sh pack landing-pages/${site} first, so the message carries the file to hand over. Then run kit.sh review again.`); process.exit(0); }
+const line = re => (ready.match(re) || [])[1];
+const today = line(/^\s*\**today:?\**:?\s*(.+)$/im);
+const ask = line(/^\s*\**ask:?\**:?\s*(.+)$/im);
+const says = ready.split('\n').map(l => l.match(/^\s*\d+\.\s+(.+)$/)).filter(Boolean).map(m => m[1].trim()).slice(0, 3);
+let sf = {}; try { sf = JSON.parse(read('inputs/site-facts.json')); } catch (e) {}
+const platform = String(sf.platform || 'unknown').toLowerCase();
+const GO = {
+  wordpress: 'To put it live on WordPress, your web person adds it as a new page with a Custom HTML block. It takes about 30 minutes.',
+  shopify: 'Your site runs on Shopify, which does not take a whole page file well. I can give you each section to paste, with its photo and colours.',
+  squarespace: 'Your site runs on Squarespace, which does not take a whole page file well. I can give you each section to paste, with its photo and colours.',
+  wix: 'Your site runs on Wix, which does not take a whole page file well. I can give you each section to paste, with its photo and colours.',
+  webflow: 'Your site runs on Webflow. Your web person can rebuild it from this file in about an hour, or I can give you each section to paste.',
+};
+const go = GO[platform] || 'To put it live, send this file to whoever runs your website. It holds the page, its photos and your tracking tags, and takes them about 30 minutes. Tell me where your site is built (WordPress, Shopify, Wix...) and I\'ll give you the exact steps.';
+const link = process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/` : path.join(work, 'page.html');
+const msg = [
+  today ? `**Check this today:** ${today}\n` : '',
+  `**Your new page is ready:** ${link}`,
+  process.env.PPCIO_STUDIO ? '(Your page today and the new one side by side, on a laptop and a phone.)\n' : '',
+  says.join(' '), '',
+  `${go}`, `The file to hand over: ${zip}`, '',
+  ask ? `${ask}\n` : '',
+  'Tell me any change and I\'ll fold it in.',
+].filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Attach page.html too, or show it in your app's preview, so they can share it.\n----\n${msg}\n----`);

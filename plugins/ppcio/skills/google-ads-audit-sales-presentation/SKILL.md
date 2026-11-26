@@ -1,6 +1,6 @@
 ---
 name: google-ads-audit-sales-presentation
-description: "Create stunning, animation-rich HTML sales presentations from Google Ads audit data. Converts audit findings (JSON, chat summaries, or raw data) into visually compelling Lemonade.io-styled presentations for client pitches. Use when you have audit results and need to present them professionally."
+description: "Create stunning, animation-rich HTML sales presentations from Google Ads audit data. Converts audit findings (JSON, chat summaries, or raw data) into visually compelling high-contrast agency-branded presentations for client pitches. Use when you have audit results and need to present them professionally."
 ---
 
 # Google Ads Audit Sales Presentation Skill
@@ -10,17 +10,17 @@ description: "Create stunning, animation-rich HTML sales presentations from Goog
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 - The data: In Google Ads, open Campaigns, set the dates to the last 90 days, add the columns Cost, Clicks, Conversions, Cost / conv. and Search impr. share (Columns, then Modify columns), then press Download above the table and pick .csv. Drop the file here. Say this to them in one line when you ask for it.
 
-Transform Google Ads audit findings into zero-dependency, animation-rich HTML presentations that sell. Built specifically for PPC agencies to present audit results with Lemonade.io's distinctive, high-energy visual style.
+Transform Google Ads audit findings into zero-dependency, animation-rich HTML presentations that sell. Built specifically for PPC agencies to present audit results in a bold, high-contrast visual style (adapt to your agency's own brand colours and name when provided).
 
 ---
 
 ## Core Philosophy
 
-1. **Zero Dependencies** , Single HTML files with inline CSS/JS. No npm, no build tools. Send to client, they open, it works.
-2. **Sell, Don't Just Report** , This isn't a data dump. Every slide should move the client toward action.
-3. **Show the Pain, Then the Cure** , Lead with problems (their money is bleeding), then present your solution.
-4. **Lemonade.io Aesthetic** , Bold, high-contrast, motion-forward. Professional but energetic. Yellow accents on dark backgrounds.
-5. **Narrative Over Numbers** , Tell the story of their account. Why it's struggling, what's possible, how you'll get there.
+1. **Zero Dependencies**: Single HTML files with inline CSS/JS. No npm, no build tools. Send to client, they open, it works.
+2. **Sell, Don't Just Report**: This isn't a data dump. Every slide should move the client toward action.
+3. **Show the Pain, Then the Cure**: Lead with problems (their money is bleeding), then present your solution.
+4. **High-Contrast Agency Aesthetic** - Bold, high-contrast, motion-forward. Professional but energetic. Yellow accents on dark backgrounds.
+5. **Narrative Over Numbers**: Tell the story of their account. Why it's struggling, what's possible, how you'll get there.
 
 ---
 
@@ -42,7 +42,7 @@ First, determine what audit data the user has:
 
 **Mode D: Enhancement/Revision**
 - User has an existing presentation to improve
-- Read existing file, understand structure, enhance with Lemonade.io styling
+- Read existing file, understand structure, enhance with the agency's styling
 
 ---
 
@@ -56,19 +56,19 @@ If audit data isn't structured, extract key elements via AskUserQuestion:
 - Header: "Account"
 - Question: "What's the account name and monthly spend range?"
 - Options:
-  - "Small ($1-5K/mo)" , Starter accounts
-  - "Medium ($5-25K/mo)" , Growing accounts
-  - "Large ($25-100K/mo)" , Established accounts
-  - "Enterprise ($100K+/mo)" , Major accounts
+  - "Small ($1-5K/mo)": Starter accounts
+  - "Medium ($5-25K/mo)": Growing accounts
+  - "Large ($25-100K/mo)": Established accounts
+  - "Enterprise ($100K+/mo)": Major accounts
 
 **Question 2: Current Health**
 - Header: "Status"
 - Question: "What's your overall assessment of this account?"
 - Options:
-  - "Critical (Grade D)" , Bleeding money, fundamental issues
-  - "Needs Work (Grade C)" , Multiple problems, underperforming
-  - "Good (Grade B)" , Solid but room for improvement
-  - "Excellent (Grade A)" , Fine-tuning opportunities
+  - "Critical (Grade D)": Bleeding money, fundamental issues
+  - "Needs Work (Grade C)": Multiple problems, underperforming
+  - "Good (Grade B)": Solid but room for improvement
+  - "Excellent (Grade A)": Fine-tuning opportunities
 
 ### Step 1.2: Key Findings
 
@@ -137,15 +137,15 @@ const presentation = {
 
 ---
 
-## Phase 3: Style Application (Lemonade.io Design System)
+## Phase 3: Style Application (High-Contrast Agency Design System)
 
 ### Color Palette
 
 ```css
 :root {
   /* Primary Colors */
-  --lemonade-yellow: #F6DD00;        /* Accent, highlights, CTAs */
-  --lemonade-blue: #1F0AE5;          /* Interactive elements */
+  --brand-accent: #F6DD00;        /* Accent, highlights, CTAs */
+  --brand-secondary: #1F0AE5;          /* Interactive elements */
   --black: #000000;                   /* Primary backgrounds */
   --white: #FFFFFF;                   /* Text on dark */
 
@@ -170,7 +170,7 @@ const presentation = {
 ### Typography
 
 ```css
-/* Font Stack - Lemonade.io Style */
+/* Font Stack - Agency Deck Style */
 @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap');
 
 :root {
@@ -205,7 +205,7 @@ const presentation = {
 ### Animation Patterns
 
 ```css
-/* Lemonade.io Motion - Smooth, performant */
+/* Deck Motion - Smooth, performant */
 :root {
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -257,7 +257,7 @@ const presentation = {
 ### Interactive Elements
 
 ```javascript
-/* Custom Cursor Trail - Lemonade.io Signature */
+/* Custom Cursor Trail */
 class CursorTrail {
   constructor() {
     this.dots = [];
@@ -273,7 +273,7 @@ class CursorTrail {
         position: fixed;
         width: ${20 - i}px;
         height: ${20 - i}px;
-        background: var(--lemonade-yellow);
+        background: var(--brand-accent);
         border-radius: 50%;
         pointer-events: none;
         z-index: 9999;
@@ -312,8 +312,8 @@ if (window.innerWidth > 768) {
 <section class="slide title-slide">
   <div class="title-content">
     <div class="agency-logo reveal">
-      <!-- Lemonade logo or agency name -->
-      <span class="logo-text">LEMONADE</span>
+      <!-- Your agency logo or name -->
+      <span class="logo-text">YOUR AGENCY</span>
     </div>
 
     <h1 class="reveal display-text">
@@ -372,7 +372,7 @@ if (window.innerWidth > 768) {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.3em;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
 }
 
 .title-slide h1 {
@@ -450,9 +450,9 @@ if (window.innerWidth > 768) {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.2em;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
   padding: 0.5rem 1rem;
-  border: 1px solid var(--lemonade-yellow);
+  border: 1px solid var(--brand-accent);
   border-radius: 2rem;
   margin-bottom: 2rem;
 }
@@ -670,7 +670,7 @@ if (window.innerWidth > 768) {
 
 .dimension-fill {
   height: 100%;
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   border-radius: 3px;
   transition: width 1s var(--ease-out-expo);
 }
@@ -862,7 +862,7 @@ if (window.innerWidth > 768) {
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
   opacity: 0.5;
 }
 
@@ -871,7 +871,7 @@ if (window.innerWidth > 768) {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
   padding: 0.5rem 1rem;
   background: rgba(246, 221, 0, 0.1);
   border-radius: 0.25rem;
@@ -1178,7 +1178,7 @@ if (window.innerWidth > 768) {
 .opportunity-quote {
   font-size: var(--text-h3);
   color: var(--white);
-  border-left: 4px solid var(--lemonade-yellow);
+  border-left: 4px solid var(--brand-accent);
   padding-left: 2rem;
   margin: 0;
   max-width: 800px;
@@ -1260,7 +1260,7 @@ if (window.innerWidth > 768) {
 
 .phase-card.phase-1 { border-top: 4px solid var(--waste-red); }
 .phase-card.phase-2 { border-top: 4px solid var(--warning-orange); }
-.phase-card.phase-3 { border-top: 4px solid var(--lemonade-yellow); }
+.phase-card.phase-3 { border-top: 4px solid var(--brand-accent); }
 .phase-card.phase-4 { border-top: 4px solid var(--opportunity-green); }
 
 .phase-header {
@@ -1274,7 +1274,7 @@ if (window.innerWidth > 768) {
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
   opacity: 0.5;
 }
 
@@ -1317,7 +1317,7 @@ if (window.innerWidth > 768) {
   content: '→';
   position: absolute;
   left: 0;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
 }
 
 .phase-impact {
@@ -1330,7 +1330,7 @@ if (window.innerWidth > 768) {
 .phase-connector {
   flex: 0 0 40px;
   height: 2px;
-  background: linear-gradient(90deg, var(--dark-border) 0%, var(--lemonade-yellow) 50%, var(--dark-border) 100%);
+  background: linear-gradient(90deg, var(--dark-border) 0%, var(--brand-accent) 50%, var(--dark-border) 100%);
   align-self: center;
   margin-top: -60px;
 }
@@ -1374,7 +1374,7 @@ if (window.innerWidth > 768) {
 }
 
 .text-highlight {
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
 }
 
 .quickwins-list {
@@ -1396,7 +1396,7 @@ if (window.innerWidth > 768) {
 }
 
 .quickwin-item:hover {
-  border-color: var(--lemonade-yellow);
+  border-color: var(--brand-accent);
 }
 
 .quickwin-number {
@@ -1405,7 +1405,7 @@ if (window.innerWidth > 768) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   color: var(--black);
   font-family: var(--font-display);
   font-size: 1.25rem;
@@ -1442,20 +1442,20 @@ if (window.innerWidth > 768) {
   gap: 2rem;
   padding: 1.5rem 2rem;
   background: rgba(246, 221, 0, 0.1);
-  border: 2px solid var(--lemonade-yellow);
+  border: 2px solid var(--brand-accent);
   border-radius: 0.75rem;
 }
 
 .total-label {
   font-size: var(--text-body);
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
 }
 
 .total-value {
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
 }
 </style>
 ```
@@ -1532,7 +1532,7 @@ if (window.innerWidth > 768) {
 }
 
 .investment-card.featured {
-  border: 2px solid var(--lemonade-yellow);
+  border: 2px solid var(--brand-accent);
   transform: scale(1.05);
 }
 
@@ -1541,7 +1541,7 @@ if (window.innerWidth > 768) {
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   color: var(--black);
   font-size: 0.625rem;
   font-weight: 700;
@@ -1570,7 +1570,7 @@ if (window.innerWidth > 768) {
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
-  color: var(--lemonade-yellow);
+  color: var(--brand-accent);
   margin-bottom: 1.5rem;
 }
 
@@ -1710,7 +1710,7 @@ if (window.innerWidth > 768) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   color: var(--black);
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -1734,7 +1734,7 @@ if (window.innerWidth > 768) {
 .cta-button {
   display: inline-block;
   padding: 1.25rem 3rem;
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   color: var(--black);
   font-family: var(--font-display);
   font-size: var(--text-body);
@@ -2009,7 +2009,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .nav-dot.active {
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   transform: scale(1.3);
 }
 
@@ -2026,7 +2026,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .progress-fill {
   height: 100%;
-  background: var(--lemonade-yellow);
+  background: var(--brand-accent);
   width: 0%;
   transition: width 0.1s linear;
 }
@@ -2140,7 +2140,7 @@ acme-corp-audit-presentation-2026-01-28.html
 Your audit presentation is ready!
 
 📁 File: [filename].html
-🎨 Style: Lemonade.io Design System
+🎨 Style: High-Contrast Agency Design System
 📊 Slides: [count]
 
 **Navigation:**
@@ -2171,7 +2171,7 @@ Would you like me to make any adjustments?
 
 ✅ **ALWAYS** lead with business impact, not technical metrics
 ✅ **ALWAYS** include specific evidence for every claim
-✅ **ALWAYS** maintain the Lemonade.io visual identity
+✅ **ALWAYS** maintain a consistent, high-contrast agency visual identity (using the user's own agency logo and brand colours if supplied)
 ✅ **ALWAYS** end with a clear call-to-action
 
 ---
@@ -2216,9 +2216,9 @@ Before finalizing:
 
 ## Related Skills
 
-- **deep-account-audit-agent** , Generates the audit JSON this skill consumes
-- **ppc-account-health-check** , Quick audits for simpler presentations
-- **landing-page-quick-audit** , Detailed LP findings to include
+- **deep-account-audit-agent**: Generates the audit JSON this skill consumes
+- **ppc-account-health-check**: Quick audits for simpler presentations
+- **landing-page-quick-audit**: Detailed LP findings to include
 
 ---
 

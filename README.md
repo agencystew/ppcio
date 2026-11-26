@@ -17,6 +17,14 @@ Claude asks for your website and shows you the first 3 things a buyer notices on
 
 If you bought the licence, paste your key into the chat at any time. It starts with `PPCIO-`.
 
+## Other AI tools
+
+PPC.io works best in Claude Code, which does the best design work. It also works in Codex, Cursor, Gemini CLI and other AI tools that can run commands. Paste this one line into your terminal:
+
+    curl -fsSL https://raw.githubusercontent.com/agencystew/ppcio/main/install.sh | sh
+
+It puts PPC.io in `~/.ppcio/kit`, adds its skills to each AI tool it finds, and gets the page checker ready. Then open your AI tool in any folder and ask "what can PPC.io do for me?". Run the same line again to update.
+
 ## Free and licensed
 
 | | Free | PPC.io Pro |

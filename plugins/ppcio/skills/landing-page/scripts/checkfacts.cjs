@@ -74,7 +74,7 @@ for (const f of sources) {
 const yrs = said.map(x => x.year);
 if (yrs.length && Math.max(...yrs) - Math.min(...yrs) > 5) {
   const seen = new Set(); const lines = said.filter(x => { const k = x.text.toLowerCase() + x.page; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 8);
-  console.log(`CONFLICTING CLAIMS: their site gives different ages for the business. Never pick one by chance. With the owner here, ask them one short question; with no one to ask (agency mode), use the year their About page states (a year such as "since 1993" beats a count such as "over 50 years", which goes stale), and leave the others off the page.\n` + lines.map(x => `  - "${x.text}" (${x.page})`).join('\n'));
+  console.log(`CONFLICTING CLAIMS: their site gives different ages for the business. Never pick one by chance. Do not stop to ask now: list both under "## To confirm" and leave them out of every fix and the build until the owner settles them (in agency mode, use the year their About page states, because a year beats a count of years that goes stale).\n` + lines.map(x => `  - "${x.text}" (${x.page})`).join('\n'));
 }
 console.log(bad ? `${bad} of ${total} quotes are not on their site. Fix each one: copy it word for word from the captured text, or mark it as the owner's words with where they said it, or remove it.` : `All ${total} quotes are on their site, word for word.`);
 process.exit(bad ? 1 : 0);

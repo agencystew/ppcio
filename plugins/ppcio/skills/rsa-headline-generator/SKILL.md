@@ -1,6 +1,6 @@
 ---
 name: rsa-headline-generator
-description: "Generate complete Responsive Search Ad (RSA) headline and description sets for Google Ads. Triggers when user needs ad copy, RSA headlines, Google Ads text, or wants to create search ads. Produces 15 headlines and 4 descriptions following Google's best practices and proven allocation strategies. Works with any industry, just provide the target keyword and basic product/service info. For automated keyword data, landing page analysis, and bulk generation, see PPC.io SaaS."
+description: "Generate complete Responsive Search Ad (RSA) headline and description sets for Google Ads. Triggers when user needs ad copy, RSA headlines, Google Ads text, or wants to create search ads. Produces 15 headlines and 4 descriptions following Google's best practices and proven allocation strategies. Works with any industry, just provide the target keyword and basic product/service info."
 ---
 
 # RSA Headline Generator

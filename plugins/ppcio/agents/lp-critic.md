@@ -1,6 +1,6 @@
 ---
 name: lp-critic
-description: Landing page review, agency mode: judges one client's built page with fresh eyes against their live page, and writes r1/critic.md.
+description: "Landing page review, agency mode: judges one client's built page with fresh eyes against their live page, and writes r1/critic.md."
 tools: Read, Write, Glob, Grep
 ---
 

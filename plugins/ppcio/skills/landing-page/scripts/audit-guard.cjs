@@ -11,7 +11,7 @@ const ABSENCE_SUBJECTS = [
   { subject: 'cta', titleKeywords: /\b(cta|call to action|button|action)\b/i,
     present: /\b(get|start|book|buy|reserve|enquir|sign up|try|request|quote|contact|order|claim|shop|subscribe|download|begin)\b/i },
   { subject: 'price', titleKeywords: /\b(price|pricing|cost|how much)\b/i,
-    present: /(£|\$|€)\s?\d|\bfrom\s+(£|\$|€)?\s?\d|\bper\s+(month|year|person|pp)\b|\bfree\s+(plan|tier|trial|quote|consultation|estimate|shipping|delivery)\b/i },
+    present: /(£|\$|€)\s?\d|\bfrom\s+(£|\$|€)?\s?\d|\bper\s+(month|year|person|pp)\b|\bfree\s+(plan|tier|trial|shipping|delivery)\b/i },
   { subject: 'reviews/social proof', titleKeywords: /\b(review|social proof|testimonial|rating|stars?)\b/i,
     // Stricter than the app: a "5-Star Rated" badge is not a review. Only a count of reviews proves them.
     present: /\b\d[\d,.]*\+?\s+(google |verified |customer |5-star )?(reviews|ratings)\b/i },
@@ -45,10 +45,11 @@ function guard(work) {
       const t = typeof f?.title === 'string' ? f.title : '';
       if (!ABSENCE_CLAIM.test(t) || META_COVERAGE.test(t) || PLACEMENT.test(t)) return true;
       // Stricter than the app: the missing thing must be what "no" points at ("No price on the page",
-      // "Reviews are missing"), so "Your button has no explanation" is not read as "no button".
+      // "Reviews are missing"), so "Your button has no explanation" is not read as "no button",
+      // and "No starting price" never matches "star" inside "starting".
       const says = s => { const k = s.titleKeywords.source.replace(/^\\b|\\b$/g, '');
-        return new RegExp(`\\b(no|missing|lacks?|without (a|any)|none of the)\\s+(\\w+\\s+){0,2}${k}`, 'i').test(t)
-          || new RegExp(`${k}\\w*\\s+(is|are)\\s+(missing|absent|not (shown|on the page))`, 'i').test(t); };
+        return new RegExp(`\\b(no|missing|lacks?|without (a|any)|none of the)\\s+(\\w+\\s+){0,2}${k}s?\\b`, 'i').test(t)
+          || new RegExp(`\\b${k}s?\\b\\s+(is|are)\\s+(missing|absent|not (shown|on the page))`, 'i').test(t); };
       for (const s of ABSENCE_SUBJECTS) if (says(s) && s.present.test(desk)) {
         const line = desk.split('\n').find(l => s.present.test(l)) || '';
         log.push(`Dropped (${b}): "${t}". It says the ${s.subject} is missing, but the page has: "${line.trim().slice(0, 120)}"`); return false;

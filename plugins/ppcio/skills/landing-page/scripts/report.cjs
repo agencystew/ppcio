@@ -11,11 +11,22 @@
 //   context.md, inputs/site-facts.json, inputs/live-*.png, competitors/*/, brand.json
 // brand.json (optional, for an agency): {"name": "Acme Digital", "logo": "brand/logo.png"}
 const fs = require('fs'); const path = require('path');
+const { computeAuditScore } = require('./score.cjs');
 const work = path.resolve(process.argv[2] || '.');
 const site = path.basename(work);
 const R = path.join(__dirname, 'report');
 const read = f => { try { return JSON.parse(fs.readFileSync(path.join(work, f), 'utf8')); } catch (e) { return null; } };
 const text = f => { try { return fs.readFileSync(path.join(work, f), 'utf8'); } catch (e) { return ''; } };
+const MIME = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.gif': 'image/gif' };
+const dataUri = (rel) => {
+  if (!rel) return null;
+  if (/^(data:|https?:)/i.test(rel)) return rel;
+  const full = path.resolve(work, rel);
+  if (!full.startsWith(work + path.sep) || !fs.existsSync(full)) return rel;
+  const mime = MIME[path.extname(full).toLowerCase()];
+  if (!mime) return rel;
+  try { return `data:${mime};base64,${fs.readFileSync(full).toString('base64')}`; } catch (e) { return rel; }
+};
 
 // The app's credibility guards run first: false 'missing' claims, quotes not on the page, repeats.
 const dropped = require('./audit-guard.cjs')(work);
@@ -36,14 +47,14 @@ for (const f of ['leaks', 'copy', 'offer', 'actions', 'competitive', 'ad-match']
 // draws (what held the agent back, its self check) may name files.
 const INTERNAL = /\b[\w-]+\.(png|jpe?g|webp|json|md|html|cjs|txt)\b|structural inference|\bcraft notes\b|\b(the|a|this) (scrape|capture|inventory)\b|site-facts|\bfacts\.md\b/i;
 const NOT_DRAWN = /held_back|uncertainty|self_check|evidence_for|source|^url$|shot/i;
-for (const f of ['leaks', 'copy', 'offer', 'actions', 'competitive', 'ad-match', 'forensics', 'buyers'].concat(fs.existsSync(path.join(work, 'audit')) ? fs.readdirSync(path.join(work, 'audit')).filter(x => /^journey-\d+\.json$/.test(x)).map(x => x.replace(/\.json$/, '')) : [])) {
+for (const f of ['leaks', 'copy', 'offer', 'actions', 'competitive', 'ad-match', 'forensics', 'buyers', 'trust', 'anatomy', 'psych', 'design'].concat(fs.existsSync(path.join(work, 'audit')) ? fs.readdirSync(path.join(work, 'audit')).filter(x => /^journey-\d+\.json$/.test(x)).map(x => x.replace(/\.json$/, '')) : [])) {
   const found = new Set(); const walk = (v, k = '') => { if (NOT_DRAWN.test(k)) return; if (typeof v === 'string') { const m = v.match(INTERNAL); if (m) found.add(`${k}: "${m[0]}"`); }
     else if (Array.isArray(v)) v.forEach(x => walk(x, k)); else if (v && typeof v === 'object') Object.entries(v).forEach(([k2, x]) => walk(x, k2)); };
   walk(read(`audit/${f}.json`)); if (found.size) blanks.push(`audit/${f}.json names a file or how we worked, which the owner would see (${[...found].slice(0, 3).join('; ')}). Say what is on their page in plain words instead`);
 }
 if (blanks.length) { console.log(`NOT DRAWN: these audit files hold lines the owner must not see. Fix each line (a blank: use a fact from facts.md or site-page-text.md, or rewrite the line without it), then run report again:\n- ${blanks.join('\n- ')}`); process.exit(3); }
 const A = {};
-for (const k of ['leaks', 'actions', 'offer', 'ad-match', 'competitive', 'forensics', 'copy', 'buyers']) {
+for (const k of ['leaks', 'actions', 'offer', 'ad-match', 'competitive', 'forensics', 'copy', 'buyers', 'trust', 'anatomy', 'psych', 'design']) {
   const d = read(`audit/${k}.json`);
   if (d && !d.error) A[k.replace('-', '_')] = d;
 }
@@ -66,29 +77,37 @@ const pick = re => { const k = Object.keys(ctx).find(k => re.test(k)); return k 
 
 const facts = read('inputs/site-facts.json') || {};
 const parts = (facts.title || '').split(/\s[|\-–—:·]\s/).map(s => s.trim()).filter(Boolean);
-const name = parts.find(p => p.toLowerCase().replace(/[^a-z0-9]/g, '').includes(site.toLowerCase().replace(/[^a-z0-9]/g, '')))
+const flatName = s => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
+const name = parts.find(p => flatName(p).includes(flatName(site)) || (flatName(p).length > 3 && flatName(site).startsWith(flatName(p))))
   || site.charAt(0).toUpperCase() + site.slice(1);
 const CD = path.join(work, 'competitors');
 const blocked = (fs.existsSync(CD) ? fs.readdirSync(CD) : []).filter(d => fs.existsSync(path.join(CD, d, 'NOT-CAPTURED.txt')));
 const has = f => fs.existsSync(path.join(work, f));
+const brand = read('brand.json');
+if (brand && brand.logo) brand.logo = dataUri(brand.logo);
+const score = computeAuditScore(A);
 const data = {
   name, site, url: String(facts.final_url || facts.url || '').replace(/#.*$/, ''), date: new Date().toISOString().slice(0, 10),
+  composite_score: score,
   h1: (facts.headings || []).find(h => h.tag === 'h1')?.text || '', button: (() => { const bs = (facts.buttons || []).filter(b => b.top > 100 && b.top < 900);
     return (bs.find(b => /^tel:/.test(b.href)) || bs.find(b => /call|book|quote|schedule|estimate|appointment|get started|free|contact|order|buy|start/i.test(b.text)) || bs.find(b => !/^#|^https?:\/\/[^/]+\/?$/.test(b.href)))?.text || ''; })(),
   forms: facts.forms || [], lcp_ms: facts.lcp_ms ?? null, tags: facts.tags || [],
-  shots: { laptop: has('inputs/live-page-today.png') ? 'inputs/live-page-today.png' : null, phone: has('inputs/live-phone-today.png') ? 'inputs/live-phone-today.png' : null },
+  shots: {
+    laptop: has('inputs/live-page-today.png') ? dataUri('inputs/live-page-today.png') : null,
+    phone: has('inputs/live-phone-today.png') ? dataUri('inputs/live-phone-today.png') : null,
+  },
   biz: { sell: pick(/what they sell|what they do|^business$|^sells?$/), who: pick(/who buys|buyers?$|customers?$|sell to/), where: pick(/^where( they (work|sell))?$|area|location/), win: (() => { const w = pick(/win/); const plain = { purchase: 'A sale', quote_request: 'A quote request', lead_form: 'A form enquiry', call: 'A phone call', appointment_booking: 'A booking', demo_request: 'A demo request', trial_signup: 'A trial sign-up', signup: 'A sign-up', application: 'An application', download: 'A download', donation: 'A donation' };
       const m = w.match(/^([A-Za-z_]+)\b\s*(.*)$/); if (!m || !plain[m[1].toLowerCase()]) return w; return m[2] ? m[2].replace(/^./, c => c.toUpperCase()) : plain[m[1].toLowerCase()]; })(),
     from: pick(/visitors|come from|traffic/) },
-  blocked, brand: read('brand.json'), ...A,
+  blocked, brand, ...A,
 };
-// A thumbnail for each competitor: its own laptop screenshot, when the capture saved one.
+// A thumbnail for each competitor: its own laptop screenshot, embedded so audit.html stands alone when shared.
 if (data.competitive && Array.isArray(data.competitive.competitors)) for (const c of data.competitive.competitors) {
   const host = String(c.url || '').replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[./]/)[0].toLowerCase();
   const flat = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
   const dir = (fs.existsSync(CD) ? fs.readdirSync(CD) : []).find(d => host && (flat(d).startsWith(flat(host)) || flat(host).startsWith(flat(d))));
   const shot = dir && ['inputs/live-page-today.png', 'live-page-today.png'].map(f => `competitors/${dir}/${f}`).find(has);
-  if (shot) c.shot = shot;
+  if (shot) c.shot = dataUri(shot);
 }
 
 const art = {};
@@ -103,3 +122,17 @@ const out = fs.readFileSync(path.join(__dirname, 'report-template.html'), 'utf8'
 fs.writeFileSync(path.join(work, 'audit.html'), out);
 const got = Object.keys(A).filter(k => k !== 'journeys' && A[k]).concat(A.journeys.length ? [`${A.journeys.length} journeys`] : []);
 console.log(`Wrote ${path.join(work, 'audit.html')}\nFrom: ${got.join(', ')}`);
+// The audit-done message, ready to send, so every app sends the same one (26 Nov: models skipped it when it was only a rule).
+const md = text('audit.md');
+const verdict = (md.match(/\*\*Verdict:\*\*\s*(.+)/) || [])[1] || '';
+const fixSec = (md.split(/^## (?:What to )?fix first\s*$/mi)[1] || '').split(/^## /m)[0];
+const top = fixSec.split(/^\d+\.\s+/m).slice(1).map(item => item.match(/\*\*Now:?\*\*:?\s*([\s\S]+?)\s*\*\*Change to:?\*\*:?\s*([\s\S]+?)\s*(?:\*\*Why|$)/)).filter(Boolean).map(m => [m[0], m[1].replace(/\s+/g, ' '), m[2].replace(/\s+/g, ' ')]).slice(0, 3);
+const studio = process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/` : path.join(work, 'audit.html');
+if (verdict && top.length) {
+  const lines = [`**Your audit is ready${score != null ? `: ${name} scores ${score} out of 100` : ''}.**`, '', verdict, '', '**The 3 fixes that win you the most enquiries:**'];
+  top.forEach((m, i) => lines.push(`${i + 1}. **Now:** ${m[1].trim()}\n   **Change to:** ${m[2].trim()}`));
+  lines.push('', `The full audit, with your buyers, your competitors and every fix: ${studio}`);
+  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your chat message, word for word. Add one line at the end that says what you do next, from the stage you are in (the look for their new page, about 10 minutes). Then start that stage in this same turn, with no other message before it.\n----\n${lines.join('\n')}\n----`);
+} else {
+  console.log('NEXT: audit.md has no verdict or no "What to fix first" list in the Now / Change to form. Fix audit.md, then run report again.');
+}

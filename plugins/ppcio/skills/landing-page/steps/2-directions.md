@@ -8,16 +8,16 @@ Run `bash KIT/scripts/kit.sh licence`. When it prints `FREE`, stop here, before 
 
 ## 1. The buyer, the case and the brand
 
-First tell the owner in one line: "I'm writing up your buyers and your brand first. That takes about 5 minutes, then you pick a look." Then do steps 1 and 2 of `KIT/steps/3-build.md` (`buyer.md`, `keep.md`, `case.md`, `brand.md`). The directions are built on them.
+Do steps 1 and 2 of `KIT/steps/3-build.md` (`buyer.md`, `keep.md`, `case.md`, `brand.md`). The directions are built on them.
 
 ## 2. The style board
 
     bash KIT/scripts/kit.sh library board landing-pages/<site>/directions/styles.html <niche> <words for what they sell>
 
-`<niche>` is a slug from `bash KIT/scripts/kit.sh library niches`: their own trade, or the closest one (an AV installer for offices: consulting). The words are what they sell, never their city. It writes a board of 9 styles (their niche first, then pages from the same family of trades) and prints each one's images and notes. Open the board in their browser. Ask: "Which number do you like? Or say 'you choose' and I'll design 3 directions for you."
+`<niche>` is a slug from `bash KIT/scripts/kit.sh library niches`: their own trade, or the closest one (an AV installer for offices: consulting). The words are what they sell, never their city. It writes a board of 9 styles (their niche first, then pages from the same family of trades) and prints each one's images and notes. Its link is `<studio address>data/files/directions/styles.html` (the studio address ends in `/s/<site>/`). Give that link and open it as SKILL.md says; never give a bare file path. Do not wait for them. Pick the style that fits their buyer best and build their first screen in it (part 3). `kit.sh look` prints the look-ready message with both links (part 3). A style they name or number later switches the build to it.
 
-- They pick a number: go to part 3.
-- They say "you choose", or none fits: go to part 4.
+- Your pick, or the number they send: part 3.
+- None of the 9 fits their buyer: part 4.
 
 ## 3. Their page in the style they picked
 
@@ -29,7 +29,8 @@ The style's images and notes are in what the board printed under that number: it
 - It is a style, never a template. Take no word, number, name, review, logo or photo from it, and never its headings or its sections one for one: plan the sections buyer.md needs, in your order. It never appears on the page and is never named.
 - Beat it. Improve on it everywhere, for a better experience for the buyer and more enquiries for the owner, and fix where it falls short ("Weak").
 - Render it at both sizes (part 5) and look at both renders beside the style's images. Fix what they show.
-- Show them `directions/a.html` and ask: "Build the whole page in this look, or change something first?" Make their changes. Build the full page only after they say go. Then write `directions/choice.md`: a first line `Style <number>, <domain>.` (the studio names the look from it), their words, and one plain sentence on how their page takes the style ("Your page takes its big photo and calm, roomy type, in your own green and with your own vans"). Read it to them. Update `progress.md`.
+- Write `directions/choice.md`: a first line `Style <number>, <domain>.` (the studio names the look from it), then one plain sentence on how their page takes the style ("Your page takes its big photo and calm, roomy type, in your own green and with your own vans"), then up to 3 lines that start `- `, each one thing the look does for their buyer.
+- Run `bash KIT/scripts/kit.sh look <site>`. Send the text it prints between the two `----` lines as your message, word for word. Go to stage 4 in the same turn. A change they send while you build goes into the build. Update `progress.md`.
 
 ## 4. Three directions of your own
 
@@ -56,9 +57,9 @@ Look at all 6 renders. Fix anything broken, cut off or hard to read before the o
 
 ### The board
 
-Write `directions/board.html`: the 3 directions side by side, each with its laptop and phone first screen (the render images), a name of 2 to 4 words, and one sentence on the idea in plain words ("Your crew and vans lead, with the 4.9 rating beside the call button"). Under the board, a line: "Pick one, or tell me what to mix." Open it in their browser.
+Write `directions/board.html`: the 3 directions side by side, each with its laptop and phone first screen (the render images), a name of 2 to 4 words, and one sentence on the idea in plain words ("Your crew and vans lead, with the 4.9 rating beside the call button"). Pick the strongest for their buyer. Send the look-ready message with the board link and your pick: "I'm building the whole page in <name> now, about 10 minutes. Say a letter or what to mix and I'll fold it in." Then go to stage 4 in the same turn.
 
-Write `directions/choice.md` when they choose: the direction, what they want mixed in, and their exact words. Update `progress.md`.
+Write `directions/choice.md` with your pick before stage 4 starts: the direction, and any mix or words they send later. Update `progress.md`.
 
 ## 5. Rendering
 

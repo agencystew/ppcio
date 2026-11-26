@@ -4,6 +4,7 @@
 // score, the 3 biggest fixes, and links to the audit, the review and the page.
 // A client that failed shows its reason (NOT-CAPTURED.txt or the line in batch.md).
 const fs = require('fs'); const path = require('path');
+const { computeAuditScore } = require('./score.cjs');
 const root = path.resolve(process.argv[2] || 'landing-pages');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const J = f => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return null; } };
@@ -12,6 +13,16 @@ const dirs = fs.readdirSync(root).filter(d => fs.statSync(path.join(root, d)).is
 const cards = dirs.map(d => {
   const w = path.join(root, d); const has = f => fs.existsSync(path.join(w, f));
   const leaks = J(path.join(w, 'audit/leaks.json')) || {};
+  const score = computeAuditScore({
+    leaks,
+    actions: J(path.join(w, 'audit/actions.json')),
+    offer: J(path.join(w, 'audit/offer.json')),
+    ad_match: J(path.join(w, 'audit/ad-match.json')),
+    trust: J(path.join(w, 'audit/trust.json')),
+    anatomy: J(path.join(w, 'audit/anatomy.json')),
+    psych: J(path.join(w, 'audit/psych.json')),
+    design: J(path.join(w, 'audit/design.json')),
+  });
   const facts = J(path.join(w, 'inputs/site-facts.json')) || {};
   const flat = x => x.toLowerCase().replace(/[^a-z0-9]/g, '');
   const name = (facts.title || '').split(/\s[|\-–—:·]\s/).map(x => x.trim()).find(x => flat(x).includes(flat(d)) || (flat(d).includes(flat(x)) && flat(x).length > 4)) || d;
@@ -23,7 +34,7 @@ const cards = dirs.map(d => {
   const status = failed ? 'Failed' : has('page.html') && rounds.length ? 'Page done' : has('audit.html') ? 'Audit done' : 'Not finished';
   const links = [['audit.html', 'Audit'], ['review.html', 'Review'], ['page.html', 'New page']].filter(([f]) => has(f)).map(([f, t]) => `<a href="${d}/${f}">${t}</a>`).join('');
   return `<article class="${failed ? 'bad' : ''}"><div class="shot">${shot ? `<img src="${shot}" alt="${esc(name)}" loading="lazy">` : ''}${rounds[0] ? '<span>New page</span>' : ''}</div>
-<div class="body"><h2>${esc(name)}${typeof leaks.overall_score === 'number' ? `<b>${leaks.overall_score}</b>` : ''}</h2><p class="st">${status}</p>
+<div class="body"><h2>${esc(name)}${typeof score === 'number' ? `<b>${score}</b>` : ''}</h2><p class="st">${status}</p>
 ${failed ? `<p class="why">${esc(failed.slice(0, 220))}</p>` : fixes.length ? `<ol>${fixes.map(f => `<li>${esc(f)}</li>`).join('')}</ol>` : ''}
 ${links ? `<nav>${links}</nav>` : ''}</div></article>`;
 }).join('');

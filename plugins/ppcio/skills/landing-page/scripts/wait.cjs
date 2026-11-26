@@ -19,16 +19,27 @@ const WHAT = {
   live: (a) => `Get the new page for ${a.site} ready to go live: run the go-live step (pack the page, then say where the zip is and how to put it live).`,
 };
 
-const req = http.get({ host: '127.0.0.1', port: PORT, path: `/wait?after=${after}`, timeout: 26 * 60 * 1000 }, (res) => {
-  let b = '';
-  res.on('data', (c) => (b += c));
-  res.on('end', () => {
-    let j = { list: [], total: after };
-    try { j = JSON.parse(b); } catch {}
-    fs.writeFileSync(seenFile, String(j.total));
-    if (!j.list.length) { console.log('No press in 25 minutes. Run `kit.sh wait` again to keep listening.'); return; }
-    console.log('The owner pressed in the studio. Do this now, then run `kit.sh wait` again in the background:');
-    for (const a of j.list) console.log('- ' + (WHAT[a.kind] || ((x) => JSON.stringify(x)))(a));
+// It keeps listening until a press comes, so an idle studio never wakes Claude (a "nobody pressed"
+// message in chat is noise to the owner).
+let fails = 0;
+function listen(after) {
+  const req = http.get({ host: '127.0.0.1', port: PORT, path: `/wait?after=${after}`, timeout: 26 * 60 * 1000 }, (res) => {
+    let b = '';
+    res.on('data', (c) => (b += c));
+    res.on('end', () => {
+      fails = 0;
+      let j = { list: [], total: after };
+      try { j = JSON.parse(b); } catch {}
+      fs.writeFileSync(seenFile, String(j.total));
+      if (!j.list.length) return listen(j.total);
+      console.log('The owner pressed in the studio. Do this now, then run `kit.sh wait` again in the background:');
+      for (const a of j.list) console.log('- ' + (WHAT[a.kind] || ((x) => JSON.stringify(x)))(a));
+    });
   });
-});
-req.on('error', () => { console.log('The studio is not running. Start it with `kit.sh view`.'); process.exit(3); });
+  req.on('timeout', () => req.destroy());
+  req.on('error', () => {
+    if (++fails > 10) { console.log('The studio stopped. Say nothing to the owner about it; start it again with `kit.sh view` the next time you show them something.'); process.exit(3); }
+    setTimeout(() => listen(after), 30000);
+  });
+}
+listen(after);

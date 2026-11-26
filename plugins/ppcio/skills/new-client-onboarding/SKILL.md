@@ -166,7 +166,7 @@ Build data confidence and eliminate obvious waste. Do NOT optimize,you don't hav
 |------------|-------------------|------------|
 | Alignment waste (can never convert) | 0.85+ | Broad or Phrase negative |
 | Audience waste (wrong person) | 0.75+ | Phrase negative |
-| Performance waste (economics) | NOT YET , need 50+ clicks | Hold for Optimization |
+| Performance waste (economics) | NOT YET: need 50+ clicks | Hold for Optimization |
 
 **Priority 3: Budget Health**
 - Is budget being utilized? (Target: 85-95% utilization)
@@ -426,7 +426,7 @@ ACCOUNT HEALTH: GREEN / AMBER / RED
 **Phase:** [Current phase name]
 **Goal:** [What this phase is about]
 **Risk Tolerance:** [CONSERVATIVE / BALANCED / AGGRESSIVE]
-**Transition Check:** [Criteria met / Not met , specific reason]
+**Transition Check:** [Criteria met / Not met: specific reason]
 - [Detail: "23 conversions accumulated, need 30 for transition. At current rate, expect threshold in 1-2 weeks."]
 
 ---
@@ -458,10 +458,10 @@ ACCOUNT HEALTH: GREEN / AMBER / RED
 
 | Metric | Current | vs Target | vs Baseline (Week 1) |
 |--------|---------|-----------|---------------------|
-| Spend | $X | , | +/-X% |
-| Conversions | X | , | +/-X% |
+| Spend | $X |: | +/-X% |
+| Conversions | X |: | +/-X% |
 | CPA / ROAS | $X | X% above/below | +/-X% |
-| CVR | X% | , | +/-X% |
+| CVR | X% |: | +/-X% |
 
 **Cumulative conversions since engagement start:** X
 
@@ -586,14 +586,14 @@ ACCOUNT HEALTH: GREEN / AMBER / RED
 
 **What I Cannot Do Without API Access:**
 
-1. **Persistent state** , No memory between sessions. You must re-provide context each time.
-2. **Daily monitoring** , No automated daily checks for budget, tracking, CPC anomalies.
-3. **Auto-detect phase** , You tell me the week number; I determine the phase.
-4. **Closed-loop tracking** , You must manually report which recommendations were executed.
-5. **Phase transition automation** , I recommend transitions; you must track the timeline.
-6. **Graduation handoff** , Manual process; no automated transfer to weekly audit.
-7. **Accumulated intelligence** , You must carry forward key learnings between sessions.
-8. **Client-ready PDF** , Markdown output only.
+1. **Persistent state**: No memory between sessions. You must re-provide context each time.
+2. **Daily monitoring**: No automated daily checks for budget, tracking, CPC anomalies.
+3. **Auto-detect phase**: You tell me the week number; I determine the phase.
+4. **Closed-loop tracking**: You must manually report which recommendations were executed.
+5. **Phase transition automation**: I recommend transitions; you must track the timeline.
+6. **Graduation handoff**: Manual process; no automated transfer to weekly audit.
+7. **Accumulated intelligence**: You must carry forward key learnings between sessions.
+8. **Client-ready PDF**: Markdown output only.
 
 ---
 

@@ -430,7 +430,7 @@ data.push({
 ## Script Categories
 
 ### Data Extraction & Reporting
-See `references/export-patterns.md`:
+Common scripts in this category:
 - Campaign/Ad Group/Keyword/Ad performance exports
 - Search terms with spend and conversion data
 - Quality Score tracking over time
@@ -439,7 +439,7 @@ See `references/export-patterns.md`:
 - Cross-account MCC rollups
 
 ### Anomaly Detection & Alerts
-See `references/alert-patterns.md`:
+Common scripts in this category:
 - Spend anomalies (spikes/drops vs historical)
 - CTR/CVR degradation week-over-week
 - Broken URLs and 404 detection
@@ -448,7 +448,7 @@ See `references/alert-patterns.md`:
 - Impression share drops
 
 ### Account Hygiene & Optimization
-See `references/hygiene-patterns.md`:
+Common scripts in this category:
 - Search term mining (negatives + keyword promotion)
 - Duplicate keyword detection (cross-campaign)
 - Pausing zero-conversion keywords
@@ -457,14 +457,14 @@ See `references/hygiene-patterns.md`:
 - RSA asset performance analysis
 
 ### Competitive Intelligence
-See `references/competitive-patterns.md`:
+Common scripts in this category:
 - Auction insights exports
 - Impression share tracking over time
 - Top-of-page rate monitoring
 - Competitor appearance frequency
 
 ### Automation & Bid Management
-See `references/automation-patterns.md`:
+Common scripts in this category:
 - Rule-based bid adjustments with dry-run
 - Pause/enable based on performance thresholds
 - Budget reallocation between campaigns
@@ -472,7 +472,7 @@ See `references/automation-patterns.md`:
 - Seasonal bid modifiers
 
 ### MCC & Cross-Account
-See `references/mcc-patterns.md`:
+Common scripts in this category:
 - Sequential iteration with progress checkpoints
 - Parallel processing with executeInParallel
 - Cross-account anomaly detection

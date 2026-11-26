@@ -102,27 +102,27 @@ Before analyzing performance, determine if PMAX should even be running.
 **Q1: What's the business model?**
 - Ecommerce (products): Proceed
 - Lead gen with CRM/offline conversion tracking: Proceed with caution
-- Lead gen WITHOUT CRM integration: STOP , recommend against PMAX
-- Local services (plumbers, dentists): STOP , use Local Services Ads + Search
-- B2B with 6+ month sales cycles: STOP , attribution lag breaks PMAX
+- Lead gen WITHOUT CRM integration: STOP: recommend against PMAX
+- Local services (plumbers, dentists): STOP: use Local Services Ads + Search
+- B2B with 6+ month sales cycles: STOP: attribution lag breaks PMAX
 
 **Q2: Are existing Search/Shopping campaigns performing?**
 - Yes, hitting targets consistently: Proceed
-- No, or no Search campaigns exist: STOP , build Search foundation first
+- No, or no Search campaigns exist: STOP: build Search foundation first
 
 **Q3: Monthly conversion volume?**
 - Ecommerce: 50+ purchases/month: Proceed
 - Lead gen: 30+ qualified leads/month: Proceed
-- Below thresholds: STOP , insufficient data for algorithm learning
+- Below thresholds: STOP: insufficient data for algorithm learning
 
 **Q4: [Lead Gen Only] CRM integration with offline conversion tracking?**
 - Yes, working correctly (SQL/Closed-Won events feeding back): Proceed
-- No or unsure: STOP , PMAX will optimize for junk leads
+- No or unsure: STOP: PMAX will optimize for junk leads
 
 **Q5: Monthly ad budget?**
 - $5,000+/month: Proceed
 - $2,000-$5,000: Borderline (expect slower learning)
-- <$2,000: STOP , better ROI from focused Search/Shopping
+- <$2,000: STOP: better ROI from focused Search/Shopping
 
 **Disqualifiers (recommend killing PMAX):**
 - Account has <30 conversions/month total
@@ -168,9 +168,9 @@ The most important check. Always do this before anything else.
 ```
 Estimated Brand Cannibalization = Brand Search Decline (conversions) / PMAX Conversions
 
-If ratio > 0.5: Severe cannibalization , PMAX is mostly brand capture
-If ratio 0.2-0.5: Moderate cannibalization , some incremental value
-If ratio < 0.2: Minimal cannibalization , PMAX appears incremental
+If ratio > 0.5: Severe cannibalization: PMAX is mostly brand capture
+If ratio 0.2-0.5: Moderate cannibalization: some incremental value
+If ratio < 0.2: Minimal cannibalization: PMAX appears incremental
 ```
 
 **Verdict options:**
@@ -238,13 +238,13 @@ Check creative and targeting quality.
 
 Check if the user is making any of these common errors:
 
-1. **Starting PMAX without Search foundation** , No historical conversion data for algorithm
-2. **Lead gen without CRM integration** , Optimizing for form fills, not revenue
-3. **Not excluding brand keywords** , Cannibalizing cheap branded traffic
-4. **Insufficient creative assets** , Algorithm has nothing to test
-5. **"Presence or Interest" location targeting** , Wasting money on irrelevant geography
-6. **Over-editing during learning phase** , Perpetual learning state from constant changes
-7. **Micro-conversions as primary goal** , Optimizing for scroll depth or page views
+1. **Starting PMAX without Search foundation**: No historical conversion data for algorithm
+2. **Lead gen without CRM integration**: Optimizing for form fills, not revenue
+3. **Not excluding brand keywords**: Cannibalizing cheap branded traffic
+4. **Insufficient creative assets**: Algorithm has nothing to test
+5. **"Presence or Interest" location targeting**: Wasting money on irrelevant geography
+6. **Over-editing during learning phase**: Perpetual learning state from constant changes
+7. **Micro-conversions as primary goal**: Optimizing for scroll depth or page views
 
 ### Step 6: Verdict and Recommendations
 
@@ -329,7 +329,7 @@ What data was missing, what limitations affected the analysis, what the user sho
 If PMAX performance is poor and the account is ecommerce:
 - Check feed quality BEFORE blaming PMAX settings
 - Common feed issues: generic titles, inaccurate pricing, poor images, missing GTINs
-- "Your product titles say 'Great Shirt' instead of 'Nike Dri-FIT Running Shirt Men's Size L' , that's why PMAX Shopping placements underperform"
+- "Your product titles say 'Great Shirt' instead of 'Nike Dri-FIT Running Shirt Men's Size L': that's why PMAX Shopping placements underperform"
 
 ### New PMAX Campaign (<30 days)
 

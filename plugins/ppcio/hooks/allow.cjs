@@ -10,10 +10,12 @@ let raw = ''; process.stdin.on('data', d => (raw += d)).on('end', () => {
   let ok = false;
   if (e.tool_name === 'Bash') {
     const c = String(t.command || '').trim();
-    const q = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // One kit command, no other command chained to it.
-    const m = c.match(new RegExp(`^bash\\s+["']?${q(KIT)}["']?(\\s+(.*))?$`));
-    ok = !!m && !/[;&|`<>]|\$\(/.test(m[2] || '');
+    // One kit command, no other command chained to it. Resolve the script path so
+    // un-normalized paths from start/SKILL.md (.../start/../landing-page/scripts/kit.sh) match.
+    const m = c.match(/^bash\s+(?:"([^"]+)"|'([^']+)'|([^\s"'`;&|<>]+))(?:\s+(.*))?$/);
+    const script = m && (m[1] || m[2] || m[3]);
+    const rest = (m && m[4]) || '';
+    ok = !!script && path.resolve(cwd, script) === KIT && !/[;&|`<>]|\$\(/.test(rest);
     if (!ok) { const k = c.match(/^mkdir\s+-p\s+(["']?)([^;&|`<>$"']+)\1$/); ok = !!k && inside(k[2], pages); }
   } else if (['Write', 'Edit', 'MultiEdit'].includes(e.tool_name)) {
     ok = inside(t.file_path, pages);

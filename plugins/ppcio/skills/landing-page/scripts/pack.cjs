@@ -18,7 +18,8 @@ const EXT = { 'font/woff2': '.woff2', 'font/woff': '.woff', 'application/font-wo
 (async () => {
   const dir = path.join(work, 'assets'); fs.mkdirSync(dir, { recursive: true });
   let ok = 0; const failed = [];
-  for (const u of [...urls].filter(u => !skip(u))) {
+  const sortedUrls = [...urls].filter(u => !skip(u)).sort((a, b) => b.length - a.length);
+  for (const u of sortedUrls) {
     try {
       const r = await fetch(u, { headers: { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/131 Safari/537.36' }, signal: AbortSignal.timeout(20000) });
       const type = (r.headers.get('content-type') || '').split(';')[0].trim();
@@ -36,10 +37,10 @@ const EXT = { 'font/woff2': '.woff2', 'font/woff': '.woff', 'application/font-wo
   // The live copy (buyer test, 26 Nov). Their tracking tags go only here, so drafts and renders never send
   // visits to their analytics, and the owner gets one folder and one zip to hand over.
   const live = path.join(work, 'live'); fs.rmSync(live, { recursive: true, force: true }); fs.mkdirSync(path.join(live, 'assets'), { recursive: true });
-  for (const a of fs.readdirSync(dir)) fs.copyFileSync(path.join(dir, a), path.join(live, 'assets', a));
+  for (const a of fs.readdirSync(dir)) { const srcA = path.join(dir, a); if (fs.statSync(srcA).isFile()) fs.copyFileSync(srcA, path.join(live, 'assets', a)); }
   let tags = ''; try { tags = fs.readFileSync(path.join(work, 'inputs', 'tracking-tags.html'), 'utf8').replace(/^<!--[^]*?-->\s*/, '').trim(); } catch (e) {}
   let page = html; const MARK = '<!-- ppcio:tracking-tags -->';
-  if (tags) page = page.includes(MARK) ? page.replace(MARK, tags) : page.replace(/<\/head>/i, tags + '\n</head>');
+  if (tags) page = page.includes(MARK) ? page.replace(MARK, () => tags) : page.replace(/<\/head>/i, () => tags + '\n</head>');
   fs.writeFileSync(path.join(live, 'index.html'), page);
   const zip = path.join(work, `${path.basename(work)}-page.zip`); fs.rmSync(zip, { force: true });
   const z = require('child_process').spawnSync('zip', ['-qr', zip, '.'], { cwd: live });
