@@ -1,0 +1,22 @@
+{
+  "name": "ppcio",
+  "version": "0.7.0",
+  "displayName": "PPC.io",
+  "description": "Everything PPC.io in your own Claude: the landing page audit and build studio, 25 Google Ads skills, and the PPC.io style library. Just ask: what can PPC.io do for me?",
+  "author": {
+    "name": "PPC.io",
+    "url": "https://ppc.io"
+  },
+  "homepage": "https://ppc.io",
+  "keywords": [
+    "google ads",
+    "ppc",
+    "landing page",
+    "cro",
+    "landing page audit",
+    "search terms",
+    "negative keywords",
+    "client reporting",
+    "agency"
+  ]
+}

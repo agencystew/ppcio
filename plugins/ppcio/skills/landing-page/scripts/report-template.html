@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500..800;1,9..144,500..800&display=swap">
+<!-- The postclick app's audit look (look-v26). Made by report.cjs. Never edit audit.html by hand. -->
+<style>/*__CSS__*/</style>
+<style>
+/* The kit has no app rail and no app shell. These few rules stand in for them. */
+html, body { margin: 0; background: #fff; }
+.v26 .app { grid-template-columns: minmax(0, 1fr); }
+.v26 .au-hero { background: #fff; border-bottom: 1px solid var(--g100); padding: 28px 0 32px; }
+.v26 .hv-site .lg { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: var(--p50); color: var(--p700); font-weight: 800; font-size: 15px; }
+.v26 .kit-verdict { margin: 18px 0 0; max-width: 46ch; font-size: 20px; line-height: 1.4; font-weight: 600; color: var(--g700); }
+.v26 .tabbar .tabs a { cursor: pointer; }
+.v26 .view[hidden] { display: none !important; }
+.v26 { --top: 0px !important; }
+.t2-mx img { object-position: left top; } /* the app keeps room for its phone header; the kit has none */
+.v26 .cr button, .v26 .br-rows a, .v26 .br-all { cursor: pointer; }
+.v26 .kit-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+.v26 .kit-brand img { height: 28px; width: auto; }
+.v26 .kit-foot { max-width: 1440px; margin: 0 auto; padding: 32px 44px 48px; color: var(--g600); font-size: 14px; }
+@media (max-width: 1100px) { .v26 .kit-foot { padding-inline: 20px; } }
+.v26 .cpy.done { color: var(--ok); }
+.v26 .bj-one-buyer > * + * { margin-top: 56px; }
+@media (max-width: 700px) { .v26 .kit-verdict { max-width: calc(100% - 92px); font-size: 17px; margin-top: 14px; } }
+@media (max-width: 900px) { .v26 .bj-one-buyer > * + * { margin-top: 44px; } }
+@media (min-width: 1181px) { .v26 .crs .cr.kit-half { grid-column: span 3; } .v26 .crs .cr.kit-full { grid-column: span 6; } }
+</style>
+</head>
+<body>
+<div class="v26"><div class="v26-in io"><div class="app"><div class="main"><main class="screen pagex on" id="scr" data-screen="audit"></main><p class="kit-foot" id="foot"></p></div></div></div></div>
+<script>
+const D = /*__DATA__*/null, IC = /*__ICONS__*/null, ART = /*__ART__*/null;
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ic = k => (IC && IC[k]) || '';
+const art = k => (ART && ART[k]) || '';
+const n = (x, one, many) => `${x} ${x === 1 ? one : (many || one + 's')}`;
+const words = ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+const cap = s => (s = String(s || '').trim()) ? s[0].toUpperCase() + s.slice(1) : '';
+const first = (s, max = 180) => { s = String(s || '').trim(); const m = s.match(/^.{20,}?[.!?](?=\s|$)/); s = m ? m[0] : s; return s.length > max ? s.slice(0, max - 1).replace(/\s+\S*$/, '') + '…' : s; };
+const dot = s => { s = String(s || '').trim(); return !s || /[.!?…]$/.test(s) ? s : s + '.'; };
+const sev = s => { s = String(s || '').toUpperCase(); return s === 'S1' || s === 'HIGH' || s === 'CRITICAL' ? 1 : s === 'S2' || s === 'MEDIUM' ? 2 : s === 'S3' || s === 'LOW' ? 3 : 4; };
+
+// ---------- The data, in the shape the screen needs ----------
+const L = D.leaks || {}, AC = D.actions || {}, OF = D.offer || {}, CO = D.competitive || {}, FO = D.forensics || {}, CP = D.copy || {}, AM = D.ad_match || {}, BU = D.buyers || {};
+const score = L.overall_score ?? AC.action_score ?? null;
+
+const fixes = [
+  ...['killers', 'copy', 'friction'].flatMap(k => (L[k] || []).map(f => ({ t: f.title, s: sev(f.severity), why: f.why_it_costs || f.mechanism, now: f.evidence, how: f.detail, neu: f.rewrite }))),
+  ...(AC.findings || []).filter(f => f.surface !== 'tracking').map(f => ({ t: f.title, s: sev(f.severity), why: f.mechanism, now: f.evidence, how: f.fix || f.detail, neu: null })),
+].filter(f => f.t).sort((a, b) => a.s - b.s);
+const seen = new Set(); const FX = fixes.filter(f => { const k = f.t.toLowerCase().slice(0, 40); if (seen.has(k)) return false; seen.add(k); return true; });
+
+const P = (BU.personas || []).map((p, i) => {
+  const role = String(p.name || '').split(/\s+(?:at|for|in|who)\s+|,\s*/i)[0];
+  const j = (D.journeys || []).find(j => j.persona_name === p.name) || (D.journeys || [])[i] || null;
+  return { p, j, label: p.persona_alias ? `${p.persona_alias}, ${/^[A-Z][a-z]+\s+[A-Z]/.test(role) ? role : role.charAt(0).toLowerCase() + role.slice(1)}` : cap(role), ready: !!j && j.bounce_risk_score < 40 };
+});
+const ready = P.filter(x => x.ready).length;
+// Test buyers are the personas whose journey ran. Three personas and two journeys said "3 test buyers" (buyer test, 26 Nov).
+const tested = P.filter(x => x.j).length;
+
+const checkName = { specific: 'A specific offer', priced: 'A clear price', guaranteed: 'A guarantee', urgent: 'A real reason to act now', differentiated: 'A reason to pick you', awareness_matched: 'Words that match where the buyer is', bonus_stacked: 'Something extra' };
+const checks = Object.entries(OF.checks || {}).map(([k, c]) => ({ k, name: checkName[k] || cap(k.replace(/_/g, ' ')), ...c }));
+const missing = checks.filter(c => !c.pass && (c.score ?? 0) < 40), weak = checks.filter(c => !c.pass && (c.score ?? 0) >= 40), passed = checks.filter(c => c.pass);
+
+const vague = ((FO.promise_density || {}).vaguest_lines || []).filter(v => v.line && v.rewrite);
+const paste = (CP.rewrites || []).map(r => ({ label: cap(r.section), now: r.original, neu: r.rewrite }))
+  .concat((CP.additions || []).map(a => ({ label: cap(a.placement), now: null, neu: a.copy })));
+// Only the copy agent writes words to paste. Fix instructions stay on the Fixes tab.
+
+const tech = [
+  ...(AC.findings || []).filter(f => f.surface === 'tracking').map(f => ({ t: f.title, p: f.fix || f.detail })),
+  ...(D.lcp_ms > 2500 ? [{ t: `The page takes ${(D.lcp_ms / 1000).toFixed(1)} seconds to show its main content`, p: 'Under 2.5 seconds keeps more of the people who click your ad.' }] : []),
+].filter(x => x.t);
+const devList = [...(FO.mobile_specific_issues || []), ...(FO.a11y_issues || [])].map(s => typeof s === 'string' ? s : (s.issue || s.title || '')).filter(s => s && !/^(coverage note|note:|no (mobile|phone) (render|screenshot))/i.test(s));
+const fiveSec = FO.above_fold_5_second_test || {};
+const passedTech = [
+  fiveSec.what_is_it_clear && 'It is clear what you sell',
+  fiveSec.who_is_it_for_clear && 'It is clear who it is for',
+  fiveSec.what_to_do_clear && 'It is clear what to do next',
+  (FO.reading_grade || {}).verdict && (/^(match|ok|good|pass)/i.test(FO.reading_grade.verdict) ? 'Easy to read for your buyers' : /\s/.test(FO.reading_grade.verdict) ? `Reading level: ${FO.reading_grade.verdict}` : null),
+  AC.tracking && AC.tracking.can_measure_conversions && 'Tracking can count your leads',
+  D.lcp_ms && D.lcp_ms <= 2500 && `The page loads in ${(D.lcp_ms / 1000).toFixed(1)} seconds`,
+].filter(Boolean);
+
+const comps = (CO.competitors || []).filter(c => c.name);
+const axisWords = { social_proof: 'proof', cta: 'the button', primary_cta: 'the button', hero_headline: 'the headline', pricing: 'price', offer: 'the offer' };
+const axis = a => String(a || '').split(/\s*(?:,|\band\b|&|\/)\s*/).filter(Boolean).map(x => axisWords[x.trim().toLowerCase()] || x.trim().toLowerCase().replace(/_/g, ' ')).join(' and ');
+const axes = hs => [...new Set(hs.slice(0, 3).flatMap(h => axis(h.axis).split(' and ')))].slice(0, 2).join(' and ');
+
+// ---------- Tabs ----------
+const TABS = [
+  { v: 'overview', name: 'Overview', ok: true },
+  { v: 'fixes', name: 'Fixes', ok: FX.length, count: FX.length },
+  { v: 'buyers', name: 'Buyer journey', ok: P.length, count: tested || P.length },
+  { v: 'copy', name: 'Copy and offer', ok: paste.length || checks.length || vague.length, count: paste.length || missing.length },
+  { v: 'competitors', name: 'Competitors', ok: comps.length, count: comps.length },
+  { v: 'technical', name: 'Technical', ok: tech.length || devList.length, count: tech.length + devList.length },
+].filter(t => t.ok);
+const host = (String(D.url || '').replace(/^https?:\/\//, '').split('/')[0] || String(D.site || '')).replace(/^www\./, '');
+const disc = size => score == null ? '' : `<div class="disc ${size}" data-band="${score < 50 ? 'low' : score < 75 ? 'middling' : 'good'}" role="img" aria-label="Score ${score} of 100" title="This score shows how well your page fits its buyers."><b>${score}</b><span>page score</span></div>`;
+
+const nav = `<nav class="tabbar one" aria-label="Audit"><div class="wrap">
+  <span class="tb-me">${disc('sm')}<b>${esc(host)}</b></span>
+  <div class="tabs">${TABS.map(t => `<a href="#${t.v}" data-v="${t.v}">${ic('tab_' + t.name)}<span>${esc(t.name)}</span>${t.count ? `<span class="tx-sr">, ${t.count}</span>` : ''}</a>`).join('')}</div>
+  <label class="tb-pick"><select aria-label="Audit section">${TABS.map(t => `<option value="${t.v}">${esc(t.name)}</option>`).join('')}</select></label>
+  ${D.brand && D.brand.name ? `<span class="kit-brand">${D.brand.logo ? `<img src="${esc(D.brand.logo)}" alt="">` : ''}<span>${esc(D.brand.name)}</span></span>` : ''}
+</div></nav>`;
+
+const hero = `<section class="stage slim au-hero"><div class="wrap"><header class="hv hv-compact">
+  <div class="hv-copy">
+    <div class="hv-top"><a class="hv-site" href="${esc(D.url)}" target="_blank" rel="noopener noreferrer"><span class="lg" aria-hidden="true">${esc((D.name || host).charAt(0).toUpperCase())}</span><span>${esc(host)}</span></a></div>
+    <h1>Your <em class="sf">audit.</em></h1>
+    ${L.one_line_verdict ? `<p class="kit-verdict">${esc(dot(L.one_line_verdict))}</p>` : ''}
+  </div>
+  <div class="hv-score hv-disc">${disc('md')}</div>
+</header></div></section>`;
+
+// ---------- Overview ----------
+const biz = [
+  ['What you sell', D.biz && D.biz.sell], ['Who you sell to', D.biz && D.biz.who], ['Your offer', OF.current_offer],
+  ['Where you sell', D.biz && D.biz.where], ['What a win is', D.biz && D.biz.win], ['Where visitors come from', D.biz && D.biz.from], ['Your competitors', comps.map(c => c.name).join(', ').replace(/, ([^,]*)$/, ' and $1')],
+].filter(r => r[1]);
+const top3 = FX.slice(0, 3);
+
+const cards = [];
+if (P.length) {
+  let fr = null, who = P[0];
+  for (const x of P) { const m = x.j && (x.j.moments || []).find(m => m.friction); if (m) { fr = m; who = x; break; } }
+  const said = fr ? fr.thought : ((P[0].p.objections || [])[0] || {}).says;
+  cards.push({ area: 'buyers', wide: true, to: 'buyers', v: `<span class="cr-cast"><img alt="" src="${art('buyer-ready')}"><img alt="" src="${art('buyer-first')}"></span>`,
+    t: ready ? (ready === tested ? `${tested === 1 ? 'Your test buyer is' : tested === 2 ? 'Both your test buyers are' : `All ${tested} of your test buyers are`} ready to act.` : `${words[ready] || ready} of your ${tested} test buyers ${ready === 1 ? 'is' : 'are'} ready to act.`) : `None of your ${tested} test buyers ${tested === 1 ? 'is' : 'are'} ready to act yet.`,
+    p: said ? `<span class="cr-say"><q class="cr-q">${esc(said)}</q><cite>${esc(who.label)}</cite></span>` : '' });
+}
+if (checks.length && (missing.length || weak.length)) cards.push({ area: 'offer', to: 'copy', v: `<img alt="" src="${art('brain-think')}">`,
+  t: `Your offer is missing ${n(missing.length, 'thing')} buyers look for${weak.length ? `, and ${weak.length} more ${weak.length === 1 ? 'is' : 'are'} easy to miss` : ''}.`,
+  p: esc(missing.slice(0, 2).map(c => dot(c.name)).join(' ')) });
+const objs = P.flatMap(x => (x.p.objections || []).map(o => ({ ...o, who: x.label })));
+if (objs.length) cards.push({ area: 'trust', to: 'buyers', v: `<img alt="" src="${art('obj-proof')}">`,
+  t: `Buyers ask ${n(Math.min(objs.length, 9), 'question')} before they act.`, p: `<q class="cr-q">${esc(objs[0].says)}</q>` });
+if ((CO.head_to_head || []).length) cards.push({ area: 'rivals', to: 'competitors', v: `<img alt="" src="${art('obj-market')}">`,
+  t: `Competitors beat you on ${axes(CO.head_to_head)}.`, p: esc(first(CO.head_to_head[0].their_edge)) });
+if (FO.above_fold_5_second_test || D.shots.laptop) cards.push({ area: 'layout', to: 'copy', v: D.shots.laptop ? `<span class="cr-desk"><img alt="" src="${esc(D.shots.laptop)}"></span>` : `<img alt="" src="${art('brain-think')}">`,
+  t: fiveSec.who_is_it_for_clear === false ? 'The top of your page does not make clear who it is for.' : fiveSec.what_to_do_clear === false ? 'The top of your page does not make clear what to do next.' : fiveSec.what_is_it_clear === false ? 'The top of your page does not make clear what you sell.' : 'The top of your page is clear.', p: esc(first(fiveSec.verdict)) });
+if ((AM.concrete_fixes || []).length && AM.gap_severity && !/^(none|low)$/i.test(AM.gap_severity)) cards.push({ area: 'traffic', to: 'fixes', fill: true, v: `<img alt="" src="${art('obj-search')}">`,
+  t: 'Your page and your ads speak to different buyers.', p: esc(first(AM.what_the_mismatch_costs || '')) });
+if (tech.length || devList.length) cards.push({ area: 'technical', to: 'technical', fill: true, v: D.shots.phone ? `<span class="cr-phone"><img alt="" src="${esc(D.shots.phone)}"></span>` : `<img alt="" src="${art('obj-search')}">`,
+  t: dot(first((tech[0] || {}).t || devList[0], 110)), p: (tech.length + devList.length) > 1 ? `We found ${n(tech.length + devList.length - 1, 'more technical problem')}.` : '' });
+
+// Fill the last row of the 6-column card grid, as the app does.
+{ const units = cards.reduce((a, c) => a + (c.wide ? 4 : 2), 0) % 6; if (units === 4) cards.slice(-2).forEach(c => c.cls = 'kit-half'); else if (units === 2) cards[cards.length - 1].cls = 'kit-full'; }
+
+const band = h2 => `<section class="br-band" aria-labelledby="br-band-h"><img alt="" src="${art('lead-face')}"><h2 id="br-band-h">${esc(h2)}</h2><div class="br-cta"><span class="rp-band-go au-share-go"><button type="button" class="btn" data-copy="Design a new version of this page from the audit."><span>Build a new version</span><span class="go" aria-hidden="true">${ic('go')}</span></button><span class="au-build-quiet">Or tell Claude: “design a new version”</span></span></div></section>`;
+
+const overview = `<section class="view ovv ovv2" data-view="overview">
+  ${biz.length ? `<section class="pp biz" aria-labelledby="pp-h"><div class="pp-head"><h2 class="crs-h" id="pp-h">What we know about your business</h2></div>
+    <ul class="pp-list">${biz.map(([k, v]) => `<li class="pp-r tc" data-key="${({ 'What you sell': 'sells', 'Who you sell to': 'audience', 'Your offer': 'offer', 'Where you sell': 'where', 'What a win is': 'win', 'Where visitors come from': 'traffic', 'Your competitors': 'competitors' })[k]}"><div class="pp-t"><p class="fct-h"><b>${esc(k)}</b></p><p class="pp-v">${esc(v)}</p></div></li>`).join('')}</ul></section>` : ''}
+  ${top3.length ? `<section class="br-peach" aria-labelledby="br-peach-h"><h2 id="br-peach-h" class="br-big">Top fixes we found</h2>
+    <ol class="br-rows">${top3.map((f, i) => `<li><a href="#fixes" data-n="${i}"><span class="br-n">${i + 1}</span><span class="br-t">${esc(f.t)}</span>${f.s === 1 ? '<span class="br-chip">High impact</span>' : ''}<span class="br-go" aria-hidden="true">→</span></a></li>`).join('')}</ol>
+    ${FX.length > 3 ? `<a class="br-all" href="#fixes">See all ${FX.length} fixes <span aria-hidden="true">→</span></a>` : ''}</section>` : ''}
+  ${cards.length ? `<section class="crs" aria-labelledby="crs-h"><h2 class="crs-h" id="crs-h">What else we found</h2><ul>${cards.map(c =>
+    `<li class="cr${c.cls ? ' ' + c.cls : ''}" data-area="${c.area}" data-mood="bad"${c.wide ? ' data-wide=""' : ''}${c.fill ? ' data-fill=""' : ''}><button type="button" data-to="${c.to}"><span class="cr-v" aria-hidden="true">${c.v}</span><span class="cr-t"><b>${esc(c.t)}</b>${c.p ? `<span class="cr-p">${c.p}</span>` : ''}</span><span class="cr-go" aria-hidden="true">${ic('crgo')}</span></button></li>`).join('')}</ul></section>` : ''}
+  ${band('Want the new version of this page?')}
+</section>`;
+
+// ---------- Fixes ----------
+const flow = (now, how, neu, one) => `<div class="ar-flow${one ? ' one' : ''}">${now ? `<p class="ar-flow-now"><span class="sr-only">Your page says </span><q>${esc(now)}</q></p>` : ''}${how ? `<p class="ar-flow-how"><span class="sr-only">The change: </span>${esc(how)}</p>` : ''}${neu ? `<p class="ar-flow-new"><span class="sr-only">The words: </span><span><span class="ar-flow-part">${esc(neu)}</span></span></p>` : ''}</div>`;
+const nextLink = v => { const i = TABS.findIndex(t => t.v === v), t = TABS[i + 1]; return t ? `<a class="tx-next" href="#${t.v}"><span><span>Next</span><b>${esc(t.name)}</b></span><i>${ic('go')}</i></a>` : ''; };
+const fixesV = !FX.length ? '' : `<section class="view vsv tx" data-view="fixes"><div class="split rv vs-split sp-solo"><div class="right"><ol class="vs-list">${FX.map((f, i) =>
+  `<li class="vs-it${i === 0 ? ' on' : ''}" data-n="${i}"><i class="ar-dn">${i + 1}</i><div class="vs-b"><button type="button" class="vs-t">${esc(f.t)}</button>${f.s === 1 ? '<span class="vs-chips"><em class="ar-chip">High impact</em></span>' : ''}${f.why ? `<p class="vs-why">${esc(f.why)}</p>` : ''}${flow(f.now, f.how, f.neu && f.neu.length < 400 ? f.neu : null, !f.now || !f.neu)}</div></li>`).join('')}</ol></div></div>${nextLink('fixes')}</section>`;
+
+// ---------- Buyer journey ----------
+const buyersV = !P.length ? '' : `<section class="view tx" data-view="buyers"><header class="tx-hd"><h2 class="tx-h">${ready ? `${words[ready] || ready} of your ${P.length} buyers <span class="ac">${ready === 1 ? 'is' : 'are'} ready to act.</span>` : `None of your ${P.length} buyers <span class="ac">are ready to act yet.</span>`}</h2><p class="tx-l">We ran ${P.length} likely buyers through your page and wrote down what each one thought.</p></header>
+<div class="bj-walk"><div class="bj-dock"><div class="bj-bar">${P.map((x, i) => `<button type="button" class="bj-p" data-b="${i}" aria-pressed="${i === 0}"><span class="bj-pn">${esc(x.label)}</span><i class="bj-dot ${x.ready ? 'ok' : 'lav'}"></i><span class="tx-sr">${x.ready ? 'Ready' : 'Unsure'}</span></button>`).join('')}</div></div>
+<div class="bj-cast n${Math.min(P.length, 3)} flat">${P.map((x, i) => `<button type="button" class="bj-c" data-b="${i}" aria-pressed="${i === 0}"><span class="bj-tx"><b>${esc(x.label)}</b></span></button>`).join('')}</div>
+${P.map((x, i) => `<div class="bj-one-buyer" data-b="${i}"${i ? ' hidden' : ''}>
+  ${x.j && (x.j.moments || []).length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="tx-gt-t">${esc(x.label)} on your page</span></h3><ol class="tx-tl">${x.j.moments.map((m, k) => `<li><p class="tx-tm"><b>${k + 1}</b><span>${esc(cap(m.section))}</span></p><div class="tx-tb"><span class="tx-q">“${esc(m.thought)}”</span>${m.friction ? `<p class="tx-note">${esc(m.friction)}</p>` : ''}</div></li>`).join('')}</ol></section>` : ''}
+  ${(x.j && (x.j.would_convert_if || [])[0]) || x.p.trigger_message ? `<section class="tx-sec"><h3 class="tx-gt"><span class="tx-gt-t">${esc(x.label)} would act sooner if</span></h3>${x.j && (x.j.would_convert_if || [])[0] ? `<p class="bj-one">${esc(x.j.would_convert_if[0])}</p>` : ''}${x.p.trigger_message ? `<dl class="tx-facts"><div><dt>What wins them</dt><dd>${esc(x.p.trigger_message)}</dd></div></dl>` : ''}</section>` : ''}
+  ${(x.p.objections || []).length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_doubts')}</span><span class="tx-gt-t">Doubts to answer first</span></h3><section class="ar-grp"><ul class="ar-rows">${x.p.objections.map(o => `<li><div><div class="ar-rh"><b>“${esc(o.says)}”</b></div>${o.why ? `<p>${esc(o.why)}</p>` : ''}</div></li>`).join('')}</ul></section></section>` : ''}
+</div>`).join('')}
+</div>${nextLink('buyers')}</section>`;
+
+// ---------- Copy and offer ----------
+const heroNew = (CP.rewrites || []).find(r => /hero|headline|h1/i.test(r.section));
+const ctaNew = ((AC.forms || [])[0] || {}).submit_rewrite;
+const topNew = heroNew ? heroNew.rewrite : null;
+const copyV = !(paste.length || checks.length || vague.length) ? '' : `<section class="view tx" data-view="copy">
+${paste.length ? `<header class="tx-hd"><h2 class="tx-h">New copy for your page, <span class="ac">ready to paste.</span></h2></header>
+<table class="t2-paste"><caption class="sr-only">Words to paste</caption><thead><tr><td></td><th scope="col">Today</th><th scope="col">New</th></tr></thead><tbody>${paste.map(r => `<tr><th scope="row">${esc(r.label)}</th>${r.now ? `<td class="t2-p-now"><q>${esc(r.now)}</q></td><td class="t2-p-new">` : `<td class="t2-p-now t2-p-none"><span class="sr-only">Nothing there today</span></td><td class="t2-p-new t2-p-alone">`}<span>${esc(r.neu)}</span><button type="button" class="cpy" data-copy="${esc(r.neu)}">${ic('cpy')}Copy</button></td></tr>`).join('')}</tbody></table>` : `<header class="tx-hd"><h2 class="tx-h">Your copy <span class="ac">and your offer.</span></h2></header>`}
+${D.shots.phone && topNew ? `<section class="co tx-card"><div class="co-c"><h3 class="tx-ct">The top of your page</h3><div class="t2-fs"><figure class="t2-fs-now"><figcaption>Today</figcaption><span class="t2-fs-ph"><img alt="" src="${esc(D.shots.phone)}"></span></figure><figure class="t2-fs-new"><figcaption>New</figcaption><div class="t2-fs-pg"><p class="t2-fs-h">${esc(topNew || D.h1)}</p><span class="t2-fs-b">${esc(ctaNew || D.button || 'Get a quote')}</span>${OF.top_3_recommendations && OF.top_3_recommendations[0] ? `<p class="t2-fs-t">${ic('tick')}${esc(OF.top_3_recommendations[0].move)}</p>` : ''}</div></figure></div></div></section>` : ''}
+${vague.length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_vague')}</span><span class="tx-gt-t">${n(vague.length, 'line')} promise nothing a buyer can check</span></h3><p class="tx-sl">Swap each one for the line under it.</p><div class="co-vague">${vague.map(v => `<div class="ar-flow"><p class="ar-flow-now"><span class="sr-only">Your page says </span><q>${esc(v.line)}</q></p><p class="ar-flow-new"><span class="sr-only">Change it to </span><span><span class="ar-flow-part">${esc(v.rewrite)}</span></span></p></div>`).join('')}</div></section>` : ''}
+${missing.length || weak.length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_offer')}</span><span class="tx-gt-t">Your offer is missing ${n(missing.length, 'thing')} buyers look for</span></h3><div class="t2-cks"><ol class="t2-ck">${[...missing, ...weak].map(c => `<li><span class="t2-sc ${missing.includes(c) ? 'lo' : 'mid'}">${ic('warn')}</span><div><h4>${esc(c.name)}</h4><p class="t2-ck-v">${missing.includes(c) ? 'Not on your page' : 'On your page, but easy to miss'}</p>${flow(c.evidence, c.why_it_matters, c.suggestion, !c.evidence)}</div></li>`).join('')}</ol>
+${passed.length ? `<div class="t2-ok"><ul>${passed.map(c => `<li>${ic('tick')}${esc(c.name)}</li>`).join('')}</ul></div>` : ''}</div></section>` : ''}
+${nextLink('copy')}</section>`;
+
+// ---------- Competitors ----------
+const rows = [['First line', 'hero_headline', D.h1], ['Button', 'primary_cta', D.button], ['Price', 'pricing', null], ['Proof', 'social_proof', null], ['What they sell', 'offer', OF.current_offer]];
+const axisFor = { 'First line': /head|message|promise|first/i, Button: /button|cta|action/i, Price: /pric|cost/i, Proof: /proof|trust|review|client/i, 'What they sell': /offer|range|service/i };
+const compsV = !comps.length ? '' : `<section class="view tx" data-view="competitors"><header class="tx-hd"><h2 class="tx-h">${(CO.head_to_head || []).length ? `Competitors beat you on <span class="ac">${esc(axes(CO.head_to_head))}.</span>` : `You beside <span class="ac">your competitors.</span>`}</h2></header>
+<div class="tx-cmp t2-mx" style="--n: ${comps.length + 1};"><table><caption class="tx-sr">Your page beside each competitor</caption><thead><tr><th scope="col"><span class="tx-sr">Topic</span></th><th scope="col" class="you"><span class="t2-hd"><span class="t2-mk">${D.shots.laptop ? `<img class="t2-th" alt="" src="${esc(D.shots.laptop)}">` : ''}</span><span class="t2-nm">You</span></span></th>${comps.map(c => `<th scope="col"><a class="t2-hd" href="${esc(c.url || '#')}" target="_blank" rel="noopener"><span class="t2-mk">${c.shot ? `<img class="t2-th" alt="" src="${esc(c.shot)}">` : ''}</span><span class="t2-nm">${esc(c.name)}</span></a></th>`).join('')}</tr></thead>
+<tbody>${rows.map(([lab, key, you]) => `<tr><th scope="row">${lab}</th><td class="you" data-col="You"><span class="t2-cell"><span class="t2-v">${you ? (key === 'hero_headline' ? `“${esc(you)}”` : esc(you)) : '—'}</span></span></td>${comps.map(c => { const v = c[key]; const h = (CO.head_to_head || []).find(h => h.rival === c.name && axisFor[lab].test(h.axis)); return `<td${h ? ' class="lose"' : ''} data-col="${esc(c.name)}"><span class="t2-cell"><span class="t2-v">${v ? (key === 'hero_headline' ? `“${esc(v)}”` : esc(v)) : '—'}</span>${h ? `<span class="t2-why bad"><span class="tx-sr">Beats you: </span>${esc(h.their_edge)}</span>` : ''}</span></td>`; }).join('')}</tr>`).join('')}</tbody></table></div>
+${(CO.head_to_head || []).length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_doubts')}</span><span class="tx-gt-t">Where they beat you</span></h3><section class="ar-grp"><ul class="ar-rows">${CO.head_to_head.map((h, i) => `<li><i class="ar-dn">${i + 1}</i><div><div class="ar-rh"><b>${esc(cap(axis(h.axis)))}: ${esc(h.rival)}</b></div><p>${esc(dot(h.their_edge))}${h.your_move ? ` ${esc(dot(h.your_move))}` : ''}</p></div></li>`).join('')}</ul></section></section>` : ''}
+${(CO.your_strengths_vs_field || []).length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_win')}</span><span class="tx-gt-t">Where you win</span></h3><ul class="rival-advantages">${CO.your_strengths_vs_field.map(s => `<li><span class="rival-advantage-mark">${ic('win')}</span><div><h4>${esc(s.point)}</h4><p>${esc(s.why)}</p></div></li>`).join('')}</ul></section>` : ''}
+${(D.blocked || []).length ? `<p class="tx-sl">We could not open ${esc(D.blocked.join(', '))}. Their sites block page captures.</p>` : ''}
+${nextLink('competitors')}</section>`;
+
+// ---------- Technical ----------
+const techV = !(tech.length || devList.length) ? '' : `<section class="view tx" data-view="technical"><header class="tx-hd"><h2 class="tx-h">${n(tech.length + devList.length, 'technical problem')} <span class="ac">to fix.</span></h2></header>
+${tech.length ? `<section class="ar-grp"><ul class="ar-rows">${tech.map((x, i) => `<li><i class="ar-dn">${i + 1}</i><div><div class="ar-rh"><b>${esc(x.t)}</b></div>${x.p ? `<p>${esc(x.p)}</p>` : ''}</div></li>`).join('')}</ul></section>` : ''}
+${devList.length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_dev')}</span><span class="tx-gt-t">For your web developer</span></h3><section class="ar-grp"><ul class="ar-rows">${devList.map((s, i) => `<li><i class="ar-dn">${tech.length + i + 1}</i><div><div class="ar-rh"><b>${esc(s)}</b></div></div></li>`).join('')}</ul></section></section>` : ''}
+${passedTech.length ? `<section class="tx-sec"><h3 class="tx-gt"><span class="ar-gi">${ic('gi_passed')}</span><span class="tx-gt-t">What passed</span></h3><section class="ar-grp"><ul class="ar-rows">${passedTech.map(s => `<li><div><div class="ar-rh"><b>${esc(s)}</b></div></div></li>`).join('')}</ul></section></section>` : ''}
+${band('Want the new version of this page?')}
+</section>`;
+
+// ---------- Draw and wire ----------
+const scr = document.getElementById('scr');
+scr.innerHTML = nav + hero + `<div class="wrap views">${overview}${fixesV}${buyersV}${copyV}${compsV}${techV}</div>`;
+document.getElementById('foot').textContent = `Audit of ${String(D.url || host).replace(/#.*$/, '')}, ${D.date}.${D.brand && D.brand.name ? ` Prepared by ${D.brand.name}.` : ''}`;
+const show = v => {
+  if (!TABS.some(t => t.v === v)) v = 'overview';
+  scr.dataset.v = v;
+  scr.querySelectorAll('.view').forEach(s => s.hidden = s.dataset.view !== v);
+  scr.querySelectorAll('.tabbar .tabs a').forEach(a => { const on = a.dataset.v === v; a.classList.toggle('on', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
+  scr.querySelector('.tb-pick select').value = v;
+};
+const go = v => { if (location.hash !== '#' + v) location.hash = v; else show(v); window.scrollTo(0, 0); };
+addEventListener('hashchange', () => { show(location.hash.slice(1)); window.scrollTo(0, 0); });
+show(location.hash.slice(1));
+scr.querySelector('.tb-pick select').addEventListener('change', e => go(e.target.value));
+scr.addEventListener('click', e => {
+  const cr = e.target.closest('.cr button[data-to]'); if (cr) return go(cr.dataset.to);
+  const br = e.target.closest('.br-rows a[data-n]');
+  if (br) { e.preventDefault(); go('fixes'); const li = scr.querySelector(`.vs-it[data-n="${br.dataset.n}"]`); scr.querySelectorAll('.vs-it').forEach(x => x.classList.toggle('on', x === li)); setTimeout(() => li && li.scrollIntoView({ block: 'center' }), 30); return; }
+  const vt = e.target.closest('.vs-t'); if (vt) { vt.closest('.vs-it').classList.toggle('on'); return; }
+  const b = e.target.closest('.bj-p, .bj-c');
+  if (b) { const i = b.dataset.b; scr.querySelectorAll('.bj-p, .bj-c').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.b === i))); scr.querySelectorAll('.bj-one-buyer').forEach(x => x.hidden = x.dataset.b !== i); return; }
+  const c = e.target.closest('[data-copy]');
+  if (c) { const t = c.dataset.copy; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => { c.classList.add('done'); setTimeout(() => c.classList.remove('done'), 1500); }).catch(() => {}); }
+});
+</script>
+</body>
+</html>

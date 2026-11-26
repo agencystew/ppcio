@@ -1,0 +1,722 @@
+[
+{
+"niche": "accounting",
+"name": "Accounting / Tax Services",
+"pages": 3
+},
+{
+"niche": "addiction-treatment",
+"name": "Addiction treatment",
+"pages": 3
+},
+{
+"niche": "airline",
+"name": "Airline",
+"pages": 3
+},
+{
+"niche": "animal-sanctuary",
+"name": "Animal sanctuary",
+"pages": 1
+},
+{
+"niche": "appliance-repair",
+"name": "Appliance repair",
+"pages": 2
+},
+{
+"niche": "astrology",
+"name": "Astrology",
+"pages": 1
+},
+{
+"niche": "at-home-beauty",
+"name": "At-home beauty services",
+"pages": 1
+},
+{
+"niche": "auto-body-shop",
+"name": "Auto body shop",
+"pages": 1
+},
+{
+"niche": "auto-insurance",
+"name": "Auto insurance",
+"pages": 3
+},
+{
+"niche": "auto-repair",
+"name": "Auto repair",
+"pages": 1
+},
+{
+"niche": "b2b-software",
+"name": "B2B Enterprise Software",
+"pages": 3
+},
+{
+"niche": "bankruptcy-law",
+"name": "Bankruptcy law",
+"pages": 1
+},
+{
+"niche": "bathroom-remodeling",
+"name": "Bathroom remodeling",
+"pages": 3
+},
+{
+"niche": "bike-insurance",
+"name": "Bike insurance",
+"pages": 1
+},
+{
+"niche": "bike-subscription",
+"name": "E-bike subscription",
+"pages": 1
+},
+{
+"niche": "business-formation",
+"name": "Business formation",
+"pages": 3
+},
+{
+"niche": "business-insurance",
+"name": "Business insurance",
+"pages": 2
+},
+{
+"niche": "car-dealer",
+"name": "Car dealer",
+"pages": 3
+},
+{
+"niche": "car-detailing",
+"name": "Car detailing",
+"pages": 3
+},
+{
+"niche": "car-rental",
+"name": "Car Rental",
+"pages": 3
+},
+{
+"niche": "catering",
+"name": "Catering",
+"pages": 2
+},
+{
+"niche": "cell-phone",
+"name": "Cell phone",
+"pages": 3
+},
+{
+"niche": "charity",
+"name": "Charity",
+"pages": 1
+},
+{
+"niche": "childcare",
+"name": "Childcare",
+"pages": 3
+},
+{
+"niche": "chiropractic",
+"name": "Chiropractic",
+"pages": 3
+},
+{
+"niche": "cleaning-service",
+"name": "Cleaning service",
+"pages": 3
+},
+{
+"niche": "commercial-printing",
+"name": "Commercial printing",
+"pages": 3
+},
+{
+"niche": "consulting",
+"name": "Consulting",
+"pages": 3
+},
+{
+"niche": "coworking",
+"name": "Coworking space",
+"pages": 3
+},
+{
+"niche": "crane-hire",
+"name": "Crane hire",
+"pages": 2
+},
+{
+"niche": "credit-card",
+"name": "Credit card",
+"pages": 3
+},
+{
+"niche": "criminal-defense",
+"name": "Criminal defense",
+"pages": 3
+},
+{
+"niche": "crm",
+"name": "Crm",
+"pages": 3
+},
+{
+"niche": "crypto-exchange",
+"name": "Crypto exchange",
+"pages": 1
+},
+{
+"niche": "cybersecurity",
+"name": "Cybersecurity",
+"pages": 3
+},
+{
+"niche": "dental",
+"name": "Dental Services",
+"pages": 3
+},
+{
+"niche": "dermatology",
+"name": "Dermatology",
+"pages": 3
+},
+{
+"niche": "disability-benefits",
+"name": "Disability benefits help",
+"pages": 1
+},
+{
+"niche": "dna-nutrition-test",
+"name": "DNA nutrition tests",
+"pages": 1
+},
+{
+"niche": "dog-training",
+"name": "Dog training",
+"pages": 1
+},
+{
+"niche": "driving-school",
+"name": "Driving school",
+"pages": 1
+},
+{
+"niche": "dtc-ecommerce",
+"name": "Dtc ecommerce",
+"pages": 3
+},
+{
+"niche": "dumpster-rental",
+"name": "Dumpster rental",
+"pages": 3
+},
+{
+"niche": "earthmoving",
+"name": "Earthmoving and excavation",
+"pages": 1
+},
+{
+"niche": "ecommerce-platform",
+"name": "Ecommerce platform",
+"pages": 3
+},
+{
+"niche": "electrician",
+"name": "Electrician Services",
+"pages": 3
+},
+{
+"niche": "energy",
+"name": "Energy / Utilities",
+"pages": 3
+},
+{
+"niche": "estate-planning",
+"name": "Estate planning",
+"pages": 3
+},
+{
+"niche": "event-agency",
+"name": "Event agency",
+"pages": 1
+},
+{
+"niche": "event-planning",
+"name": "Event planning",
+"pages": 1
+},
+{
+"niche": "executive-search",
+"name": "Executive search",
+"pages": 1
+},
+{
+"niche": "eye-care",
+"name": "Eye care",
+"pages": 3
+},
+{
+"niche": "family-law",
+"name": "Family law",
+"pages": 3
+},
+{
+"niche": "fencing",
+"name": "Fencing",
+"pages": 3
+},
+{
+"niche": "fertility-clinic",
+"name": "Fertility clinic",
+"pages": 2
+},
+{
+"niche": "financial-services",
+"name": "Financial services",
+"pages": 3
+},
+{
+"niche": "fintech-app",
+"name": "Fintech app",
+"pages": 3
+},
+{
+"niche": "flooring",
+"name": "Flooring",
+"pages": 1
+},
+{
+"niche": "florist",
+"name": "Florist",
+"pages": 3
+},
+{
+"niche": "foundation-repair",
+"name": "Foundation repair",
+"pages": 1
+},
+{
+"niche": "freight-logistics",
+"name": "Freight and logistics",
+"pages": 3
+},
+{
+"niche": "funeral-home",
+"name": "Funeral home",
+"pages": 1
+},
+{
+"niche": "furniture",
+"name": "Furniture",
+"pages": 1
+},
+{
+"niche": "garage-door",
+"name": "Garage door",
+"pages": 3
+},
+{
+"niche": "gold-buyer",
+"name": "Gold buyer",
+"pages": 2
+},
+{
+"niche": "gym",
+"name": "Gym",
+"pages": 3
+},
+{
+"niche": "handyman",
+"name": "Handyman",
+"pages": 1
+},
+{
+"niche": "hearing-aids",
+"name": "Hearing aids",
+"pages": 1
+},
+{
+"niche": "help-desk-software",
+"name": "Help desk software",
+"pages": 3
+},
+{
+"niche": "home-care",
+"name": "Home care",
+"pages": 1
+},
+{
+"niche": "home-improvement",
+"name": "Home improvement",
+"pages": 4
+},
+{
+"niche": "home-insurance",
+"name": "Home insurance",
+"pages": 3
+},
+{
+"niche": "home-security",
+"name": "Home security",
+"pages": 3
+},
+{
+"niche": "hormone-therapy",
+"name": "Hormone therapy",
+"pages": 2
+},
+{
+"niche": "hot-tub",
+"name": "Hot tub",
+"pages": 1
+},
+{
+"niche": "hotel",
+"name": "Hotel",
+"pages": 3
+},
+{
+"niche": "hr-software",
+"name": "Hr software",
+"pages": 3
+},
+{
+"niche": "hvac",
+"name": "HVAC Services",
+"pages": 3
+},
+{
+"niche": "immigration-law",
+"name": "Immigration law",
+"pages": 3
+},
+{
+"niche": "insulation",
+"name": "Insulation",
+"pages": 1
+},
+{
+"niche": "interior-design",
+"name": "Interior design",
+"pages": 3
+},
+{
+"niche": "internet-provider",
+"name": "Internet provider",
+"pages": 3
+},
+{
+"niche": "junk-removal",
+"name": "Junk removal",
+"pages": 3
+},
+{
+"niche": "landscaping",
+"name": "Landscaping & Lawn Care",
+"pages": 3
+},
+{
+"niche": "life-insurance",
+"name": "Life insurance",
+"pages": 3
+},
+{
+"niche": "limo-service",
+"name": "Limo service",
+"pages": 3
+},
+{
+"niche": "locksmith",
+"name": "Locksmith",
+"pages": 2
+},
+{
+"niche": "marketing-agency",
+"name": "Marketing / Ad Agency",
+"pages": 3
+},
+{
+"niche": "massage-therapy",
+"name": "Massage therapy",
+"pages": 2
+},
+{
+"niche": "mattress",
+"name": "Mattress",
+"pages": 1
+},
+{
+"niche": "meal-delivery",
+"name": "Meal delivery",
+"pages": 3
+},
+{
+"niche": "med-spa",
+"name": "Med spa",
+"pages": 3
+},
+{
+"niche": "medical-imaging",
+"name": "Medical imaging",
+"pages": 2
+},
+{
+"niche": "mental-health-therapy",
+"name": "Mental health therapy",
+"pages": 2
+},
+{
+"niche": "mortgage",
+"name": "Mortgage / Lending",
+"pages": 3
+},
+{
+"niche": "moving-company",
+"name": "Moving company",
+"pages": 3
+},
+{
+"niche": "nonprofit-donations",
+"name": "Nonprofit donations",
+"pages": 1
+},
+{
+"niche": "online-course",
+"name": "Online course",
+"pages": 3
+},
+{
+"niche": "painting",
+"name": "Painting",
+"pages": 3
+},
+{
+"niche": "paving",
+"name": "Paving",
+"pages": 1
+},
+{
+"niche": "pelvic-floor-therapy",
+"name": "Pelvic floor physical therapy",
+"pages": 1
+},
+{
+"niche": "personal-injury",
+"name": "Personal injury",
+"pages": 3
+},
+{
+"niche": "pest-control",
+"name": "Pest control",
+"pages": 3
+},
+{
+"niche": "pet-grooming",
+"name": "Pet grooming",
+"pages": 3
+},
+{
+"niche": "pet-insurance",
+"name": "Pet insurance",
+"pages": 2
+},
+{
+"niche": "pet-supplies",
+"name": "Pet supplies",
+"pages": 3
+},
+{
+"niche": "plumbing",
+"name": "Plumbing Services",
+"pages": 3
+},
+{
+"niche": "pool-construction",
+"name": "Pool construction",
+"pages": 3
+},
+{
+"niche": "private-school",
+"name": "Private school",
+"pages": 3
+},
+{
+"niche": "project-management",
+"name": "Project management",
+"pages": 3
+},
+{
+"niche": "public-relations",
+"name": "Public relations",
+"pages": 2
+},
+{
+"niche": "quit-smoking",
+"name": "Quit smoking aids",
+"pages": 1
+},
+{
+"niche": "real-estate",
+"name": "Real estate",
+"pages": 3
+},
+{
+"niche": "recycling-service",
+"name": "Recycling service",
+"pages": 1
+},
+{
+"niche": "remodeler-acquisition",
+"name": "Remodeler acquisition",
+"pages": 1
+},
+{
+"niche": "restaurant",
+"name": "Restaurant",
+"pages": 3
+},
+{
+"niche": "restroom-supplies",
+"name": "Restroom supplies",
+"pages": 1
+},
+{
+"niche": "roofing",
+"name": "Roofing",
+"pages": 2
+},
+{
+"niche": "self-storage",
+"name": "Self storage",
+"pages": 1
+},
+{
+"niche": "senior-living",
+"name": "Senior living",
+"pages": 3
+},
+{
+"niche": "seo-agency",
+"name": "SEO agency",
+"pages": 2
+},
+{
+"niche": "septic-service",
+"name": "Septic service",
+"pages": 1
+},
+{
+"niche": "sign-company",
+"name": "Sign company",
+"pages": 1
+},
+{
+"niche": "sleep-apnea",
+"name": "Sleep apnea",
+"pages": 1
+},
+{
+"niche": "social-media-agency",
+"name": "Social media agency",
+"pages": 1
+},
+{
+"niche": "solar",
+"name": "Solar Installation",
+"pages": 3
+},
+{
+"niche": "sports-surfacing",
+"name": "Sports surfacing",
+"pages": 1
+},
+{
+"niche": "staffing",
+"name": "Staffing / Recruitment",
+"pages": 3
+},
+{
+"niche": "summer-school",
+"name": "Summer school",
+"pages": 1
+},
+{
+"niche": "supplements",
+"name": "Supplements",
+"pages": 2
+},
+{
+"niche": "telehealth",
+"name": "Online health clinic",
+"pages": 3
+},
+{
+"niche": "towing-service",
+"name": "Towing service",
+"pages": 2
+},
+{
+"niche": "trades-insurance",
+"name": "Trades insurance",
+"pages": 1
+},
+{
+"niche": "travel",
+"name": "Travel / Vacation Packages",
+"pages": 3
+},
+{
+"niche": "veterinary",
+"name": "Veterinary Services",
+"pages": 3
+},
+{
+"niche": "video-production",
+"name": "Video production",
+"pages": 1
+},
+{
+"niche": "water-damage",
+"name": "Water damage",
+"pages": 3
+},
+{
+"niche": "web-design-agency",
+"name": "Web design agency",
+"pages": 3
+},
+{
+"niche": "web-hosting",
+"name": "Web hosting",
+"pages": 3
+},
+{
+"niche": "wedding",
+"name": "Wedding Services",
+"pages": 3
+},
+{
+"niche": "wedding-venue",
+"name": "Wedding venue",
+"pages": 1
+},
+{
+"niche": "weight-loss",
+"name": "Weight loss",
+"pages": 3
+},
+{
+"niche": "window-replacement",
+"name": "Window replacement",
+"pages": 1
+},
+{
+"niche": "windshield-repair",
+"name": "Windshield repair",
+"pages": 1
+}
+]

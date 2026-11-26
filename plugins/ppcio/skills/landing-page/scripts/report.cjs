@@ -1,0 +1,105 @@
+// node report.cjs <work folder>
+// Draws the audit screen: audit.html in the work folder, in the postclick
+// app's audit look (look-v26). Claude never writes this page by hand. The audit
+// agents write audit/*.json, this script puts that data, the app's own CSS,
+// icons and art (report/, copied from the app by dev/sync_report_style.py)
+// into report-template.html, and the template draws it. One file, no server.
+//
+// Reads (each one is optional, a missing file hides its part of the page):
+//   audit/leaks.json, actions.json, offer.json, ad-match.json, competitive.json,
+//   forensics.json, copy.json, buyers.json, journey-*.json
+//   context.md, inputs/site-facts.json, inputs/live-*.png, competitors/*/, brand.json
+// brand.json (optional, for an agency): {"name": "Acme Digital", "logo": "brand/logo.png"}
+const fs = require('fs'); const path = require('path');
+const work = path.resolve(process.argv[2] || '.');
+const site = path.basename(work);
+const R = path.join(__dirname, 'report');
+const read = f => { try { return JSON.parse(fs.readFileSync(path.join(work, f), 'utf8')); } catch (e) { return null; } };
+const text = f => { try { return fs.readFileSync(path.join(work, f), 'utf8'); } catch (e) { return ''; } };
+
+// The app's credibility guards run first: false 'missing' claims, quotes not on the page, repeats.
+const dropped = require('./audit-guard.cjs')(work);
+if (dropped.length) console.log(`Audit guard: ${dropped.length} findings removed or merged (see audit/guard-log.md).`);
+// A rewrite with a blank for the owner to fill ([year], {fee}, XX, TBD) must never reach the audit screen.
+// Also a note to the owner inside a line to paste ("If you know your call-out fee, put it on this line", Johnny Rooter, 26 Nov).
+const BLANK = /\[[^\]]{2,40}\]|\{[^}]{2,40}\}|\bX{2,}\b|\bTBD\b|\bTK\b|<insert|\$X\b|\bif you (know|have)\b[^.]{0,60}\b(put|add|use)\b|\bput (it|that|them) (on|in) this\b|\bfill (it |this )?in\b/i;
+const blanks = [];
+// Only lines we tell the owner to use. A quote of their page (evidence, original) may hold [notes].
+const NEW = /rewrite|fix|suggest|new_|after|replacement|move|counter/i; const OLD = /evidence|original|quote|before|current|detail|mechanism|why/i;
+for (const f of ['leaks', 'copy', 'offer', 'actions', 'competitive', 'ad-match']) {
+  const found = new Set(); const walk = (v, k = '') => { if (typeof v === 'string') { if (NEW.test(k) && !OLD.test(k)) (v.match(new RegExp(BLANK.source, 'g')) || []).forEach(x => found.add(x)); }
+    else if (Array.isArray(v)) v.forEach(x => walk(x, k)); else if (v && typeof v === 'object') Object.entries(v).forEach(([k2, x]) => walk(x, k2)); };
+  walk(read(`audit/${f}.json`)); if (found.size) blanks.push(`audit/${f}.json: ${[...found].slice(0, 4).join(', ')}`);
+}
+// The owner reads this page. A file name or a word for how we worked ("Seen in live-phone-today.png",
+// "structural inference", "the craft notes") must never reach it (buyer test, 26 Nov). Notes the page never
+// draws (what held the agent back, its self check) may name files.
+const INTERNAL = /\b[\w-]+\.(png|jpe?g|webp|json|md|html|cjs|txt)\b|structural inference|\bcraft notes\b|\b(the|a|this) (scrape|capture|inventory)\b|site-facts|\bfacts\.md\b/i;
+const NOT_DRAWN = /held_back|uncertainty|self_check|evidence_for|source|^url$|shot/i;
+for (const f of ['leaks', 'copy', 'offer', 'actions', 'competitive', 'ad-match', 'forensics', 'buyers'].concat(fs.existsSync(path.join(work, 'audit')) ? fs.readdirSync(path.join(work, 'audit')).filter(x => /^journey-\d+\.json$/.test(x)).map(x => x.replace(/\.json$/, '')) : [])) {
+  const found = new Set(); const walk = (v, k = '') => { if (NOT_DRAWN.test(k)) return; if (typeof v === 'string') { const m = v.match(INTERNAL); if (m) found.add(`${k}: "${m[0]}"`); }
+    else if (Array.isArray(v)) v.forEach(x => walk(x, k)); else if (v && typeof v === 'object') Object.entries(v).forEach(([k2, x]) => walk(x, k2)); };
+  walk(read(`audit/${f}.json`)); if (found.size) blanks.push(`audit/${f}.json names a file or how we worked, which the owner would see (${[...found].slice(0, 3).join('; ')}). Say what is on their page in plain words instead`);
+}
+if (blanks.length) { console.log(`NOT DRAWN: these audit files hold lines the owner must not see. Fix each line (a blank: use a fact from facts.md or site-page-text.md, or rewrite the line without it), then run report again:\n- ${blanks.join('\n- ')}`); process.exit(3); }
+const A = {};
+for (const k of ['leaks', 'actions', 'offer', 'ad-match', 'competitive', 'forensics', 'copy', 'buyers']) {
+  const d = read(`audit/${k}.json`);
+  if (d && !d.error) A[k.replace('-', '_')] = d;
+}
+const AD = path.join(work, 'audit');
+A.journeys = (fs.existsSync(AD) ? fs.readdirSync(AD) : []).filter(f => /^journey-\d+\.json$/.test(f)).sort()
+  .map(f => read(`audit/${f}`)).filter(j => j && !j.error && Array.isArray(j.moments));
+if (!A.leaks && !A.actions) { console.log('No audit/leaks.json or audit/actions.json yet. Run the audit team first.'); process.exit(2); }
+
+// What we know about the business: the parts of context.md, by heading.
+const ctx = {}; let cur = null;
+for (const line of text('context.md').split('\n')) {
+  const h = line.match(/^#{2,3}\s+(.+?)\s*$/);
+  if (h) { cur = h[1].toLowerCase(); ctx[cur] = ''; continue; }
+  // A "- Label: value" line counts as its own part too, so a context.md without the headings still reads.
+  const kv = line.match(/^[-*]\s+([A-Za-z][^:]{1,40}):\s+(.+)$/);
+  if (kv && !(kv[1].toLowerCase() in ctx)) ctx[kv[1].toLowerCase()] = kv[2].trim();
+  if (cur && line.trim()) ctx[cur] += (ctx[cur] ? ' ' : '') + line.replace(/^[-*]\s+/, '').trim();
+}
+const pick = re => { const k = Object.keys(ctx).find(k => re.test(k)); return k ? ctx[k].replace(/\s*\(from (their|the) page\)/gi, '').replace(/^./, c => c.toUpperCase()).trim() : ''; };
+
+const facts = read('inputs/site-facts.json') || {};
+const parts = (facts.title || '').split(/\s[|\-–—:·]\s/).map(s => s.trim()).filter(Boolean);
+const name = parts.find(p => p.toLowerCase().replace(/[^a-z0-9]/g, '').includes(site.toLowerCase().replace(/[^a-z0-9]/g, '')))
+  || site.charAt(0).toUpperCase() + site.slice(1);
+const CD = path.join(work, 'competitors');
+const blocked = (fs.existsSync(CD) ? fs.readdirSync(CD) : []).filter(d => fs.existsSync(path.join(CD, d, 'NOT-CAPTURED.txt')));
+const has = f => fs.existsSync(path.join(work, f));
+const data = {
+  name, site, url: String(facts.final_url || facts.url || '').replace(/#.*$/, ''), date: new Date().toISOString().slice(0, 10),
+  h1: (facts.headings || []).find(h => h.tag === 'h1')?.text || '', button: (() => { const bs = (facts.buttons || []).filter(b => b.top > 100 && b.top < 900);
+    return (bs.find(b => /^tel:/.test(b.href)) || bs.find(b => /call|book|quote|schedule|estimate|appointment|get started|free|contact|order|buy|start/i.test(b.text)) || bs.find(b => !/^#|^https?:\/\/[^/]+\/?$/.test(b.href)))?.text || ''; })(),
+  forms: facts.forms || [], lcp_ms: facts.lcp_ms ?? null, tags: facts.tags || [],
+  shots: { laptop: has('inputs/live-page-today.png') ? 'inputs/live-page-today.png' : null, phone: has('inputs/live-phone-today.png') ? 'inputs/live-phone-today.png' : null },
+  biz: { sell: pick(/what they sell|what they do|^business$|^sells?$/), who: pick(/who buys|buyers?$|customers?$|sell to/), where: pick(/^where( they (work|sell))?$|area|location/), win: (() => { const w = pick(/win/); const plain = { purchase: 'A sale', quote_request: 'A quote request', lead_form: 'A form enquiry', call: 'A phone call', appointment_booking: 'A booking', demo_request: 'A demo request', trial_signup: 'A trial sign-up', signup: 'A sign-up', application: 'An application', download: 'A download', donation: 'A donation' };
+      const m = w.match(/^([A-Za-z_]+)\b\s*(.*)$/); if (!m || !plain[m[1].toLowerCase()]) return w; return m[2] ? m[2].replace(/^./, c => c.toUpperCase()) : plain[m[1].toLowerCase()]; })(),
+    from: pick(/visitors|come from|traffic/) },
+  blocked, brand: read('brand.json'), ...A,
+};
+// A thumbnail for each competitor: its own laptop screenshot, when the capture saved one.
+if (data.competitive && Array.isArray(data.competitive.competitors)) for (const c of data.competitive.competitors) {
+  const host = String(c.url || '').replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[./]/)[0].toLowerCase();
+  const flat = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const dir = (fs.existsSync(CD) ? fs.readdirSync(CD) : []).find(d => host && (flat(d).startsWith(flat(host)) || flat(host).startsWith(flat(d))));
+  const shot = dir && ['inputs/live-page-today.png', 'live-page-today.png'].map(f => `competitors/${dir}/${f}`).find(has);
+  if (shot) c.shot = shot;
+}
+
+const art = {};
+for (const f of fs.readdirSync(path.join(R, 'art'))) art[f.replace(/\.webp$/, '')] = 'data:image/webp;base64,' + fs.readFileSync(path.join(R, 'art', f)).toString('base64');
+const safe = o => JSON.stringify(o).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+const out = fs.readFileSync(path.join(__dirname, 'report-template.html'), 'utf8')
+  .replace('/*__CSS__*/', () => fs.readFileSync(path.join(R, 'v26.css'), 'utf8').replace(/<\/style/gi, '<\\/style'))
+  .replace('/*__DATA__*/null', () => safe(data))
+  .replace('/*__ICONS__*/null', () => safe(JSON.parse(fs.readFileSync(path.join(R, 'icons.json'), 'utf8'))))
+  .replace('/*__ART__*/null', () => safe(art))
+  .replace(/__TITLE__/g, `${name} audit`.replace(/[<>&"]/g, ''));
+fs.writeFileSync(path.join(work, 'audit.html'), out);
+const got = Object.keys(A).filter(k => k !== 'journeys' && A[k]).concat(A.journeys.length ? [`${A.journeys.length} journeys`] : []);
+console.log(`Wrote ${path.join(work, 'audit.html')}\nFrom: ${got.join(', ')}`);

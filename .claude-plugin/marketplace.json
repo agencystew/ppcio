@@ -1,0 +1,15 @@
+{
+  "name": "ppcio",
+  "owner": {
+    "name": "PPC.io",
+    "url": "https://ppc.io"
+  },
+  "plugins": [
+    {
+      "name": "ppcio",
+      "source": "./plugins/ppcio",
+      "description": "Everything PPC.io in your own Claude: landing page audit and build, 25 Google Ads skills and the style library."
+    }
+  ],
+  "description": "PPC.io for your own Claude."
+}
