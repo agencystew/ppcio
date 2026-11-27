@@ -8,6 +8,7 @@
 - **Build a new page from scratch**: Launch a dedicated Google Ads landing page for a new campaign or offer even when no landing page exists yet.
 - **A/B test variants**: Fork your finished page into 3 to 5 clean, single-lever split-test variations with a side-by-side comparison board.
 - **Quick CRO consulting**: Ask any fast paid-search CRO question (critique a headline, review a form, sharpen an offer, remove AI slop, plan a vertical page structure) backed by 6 built-in paid-search CRO playbooks.
+- **Connect your analytics & ad data**: Walk step by step through connecting Google Ads, GA4, Microsoft Clarity, Meta Ads, or Google Search Console (live read-only connection or 30-second CSV export) so audits, landing pages, and dashboards use real search terms, scroll drop-offs, rage-clicks, and conversion rates.
 - **Many clients at once**: Agency mode audits and builds a list of client landing pages side by side with one summary board.
 
 ## Quick-CRO Tools (Standalone or On Your Audits)

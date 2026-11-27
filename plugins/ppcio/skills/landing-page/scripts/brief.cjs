@@ -16,7 +16,9 @@ const read = f => { try { return fs.readFileSync(path.join(dir, f), 'utf8').trim
 const cap = (s, n) => s.length > n ? s.slice(0, n) + `\n[... ${s.length - n} more characters in the file]` : s;
 const parts = [];
 const add = (f, n = 40000, note = '') => { const s = read(f); if (s) parts.push(`## ${f}${note ? ` (${note})` : ''}\n\n${cap(s, n)}`); };
-add('context.md'); add('ads.md'); add('first-look.md', 4000, 'the first look already sent to the owner');
+add('context.md'); add('ads.md'); add('data/analytics-summary.md', 8000, 'real analytics, ad-platform, or behaviour data connected by the owner'); add('first-look.md', 4000, 'the first look already sent to the owner');
+let dataFiles = []; try { dataFiles = fs.readdirSync(path.join(dir, 'data')).filter(f => /\.(md|txt)$/i.test(f) && f !== 'analytics-summary.md'); } catch (e) {}
+for (const df of dataFiles) add(`data/${df}`, 5000, 'owner-supplied analytics or ad data');
 add('inputs/site-page-text.md'); add('inputs/site-page-text-phone.md');
 add('inputs/site-facts.json'); add('live-parts.json'); add('craft.md'); add('inputs/photos.md');
 add('audit/buyers.json'); add('audit/competitive.json'); add('audit/leaks.json');

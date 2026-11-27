@@ -38,7 +38,7 @@ The audit screen shows every line under these headings to the owner, word for wo
 
 Then run `bash KIT/scripts/kit.sh checkfacts landing-pages/<site> context.md`. When it prints CONFLICTING CLAIMS (their site gives two ages for the business, say), do not stop to ask. Add both versions to context.md under `## To confirm`, with the line "Use neither until the owner confirms." The team reads context.md, so no fix uses either claim. When the owner already answered, write their answer under `## The owner settled` instead.
 
-Under "What a win is", write one of: purchase, quote_request, lead_form, call, appointment_booking, demo_request, trial_signup, signup, application, download, donation. Write only what they said or the page shows. When they gave search terms or ads, write them word for word in `ads.md`.
+Under "What a win is", write one of: purchase, quote_request, lead_form, call, appointment_booking, demo_request, trial_signup, signup, application, download, donation. Write only what they said or the page shows. When they gave search terms or ads, write them word for word in `ads.md`. When they also shared or connected GA4, Google Ads, Microsoft Clarity, or Meta Ads data (via `connect-data-sources` or a dropped CSV/MCP pull), save the verified numbers in `data/analytics-summary.md` — `kit.sh brief` automatically passes both `ads.md` and `data/` to the entire audit team so every finding uses real conversion and behaviour data.
 
 ## 4. The audit team
 

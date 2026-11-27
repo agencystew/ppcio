@@ -11,7 +11,7 @@ Turn Google Ads exports (or live API/MCP data) into a single, self-contained HTM
 
 - Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first for business context.
-- **Data:** Ask for a Campaigns CSV (and optionally Daily performance + Search Terms CSVs) if not provided. One-line export instruction: *"In Google Ads, open Campaigns, set the date range with Compare to previous period enabled, include Budget, Cost, Clicks, Impressions, Conversions, Conv. value and Cost / conv., then Download .csv and drop it here."*
+- **Data:** Ask for a Campaigns CSV (and optionally Daily performance + Search Terms CSVs) if not provided. One-line export instruction: *"In Google Ads, open Campaigns, set the date range with Compare to previous period enabled, include Budget, Cost, Clicks, Impressions, Conversions, Conv. value and Cost / conv., then Download .csv and drop it here — or tell me if you'd like me to help connect Google Ads, GA4, Meta Ads, or Microsoft Clarity directly so we can pull live data going forward."* (If they want a live connection, use the `connect-data-sources` skill.)
 - **Brand & theme (never hardcoded):** Ask once (or read from their agency brand file / website):
   1. Agency name, optional logo URL/path, and brand accent hex colour.
   2. Preferred visual style from `references/themes.md` (`executive-clean`, `editorial-warm`, `modern-dark`, or `bold-contrast` — default to `executive-clean` adapted to their brand accent if they don't specify).

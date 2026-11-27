@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1 (27 Nov 2026)
+- **Connect Your Analytics & Ad Platforms on the Fly (`connect-data-sources`):** Added a guided, read-only data connector skill for **Google Ads, GA4, Microsoft Clarity, Meta Ads, and Google Search Console** (offering both a 30-second zero-setup CSV export path and a live MCP/API/Script connection path), plus natural non-blocking offers across Landing Page Studio and Client Report Dashboards.
+- **Real Data Piped Automatically into Every Audit Expert:** `kit.sh brief` now automatically includes `data/analytics-summary.md` (and any `data/*.md` / `data/*.txt` files) inside `audit/brief.md`, so all 14 Landing Page Studio specialists use actual search terms, mobile vs. desktop conversion gaps, scroll drop-offs, and rage-clicks whenever provided.
+
 ## 0.8.0 (26 Nov 2026)
 - **All 4 Postclick build modes & brand-adaptive HTML client reporting:** Added full support for Redesign, Improve Existing Page (`steps/improve.md`), Build New Campaign Page From Scratch (`steps/new-page.md`), and A/B Test Variants (`steps/variants.md`), plus the brand-adaptive `client-report-dashboard` HTML reporting & multi-client portal suite (4 selectable themes, zero hardcoded agency branding) and de-hardcoded brand-adaptive audit sales decks.
 - **Built-in paid-search CRO knowledge base & Quick CRO mode:** 6 battle-tested reference playbooks inside the Landing Page Studio (CRO doctrine, above-the-fold & message match, anti-AI-slop voice & design, offer & risk reversal, forms/mobile/tracking, and 6 vertical playbooks) so your agent gives sharp paid-search CRO answers immediately on quick questions as well as full page builds.

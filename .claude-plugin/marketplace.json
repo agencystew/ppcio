@@ -8,7 +8,7 @@
     {
       "name": "ppcio",
       "source": "./plugins/ppcio",
-      "description": "Everything PPC.io inside your AI agent: the Landing Page Studio, 6 CRO playbooks, 4 quick-CRO skills, 32 Google Ads skills, 21 production Google Ads scripts, 24 PPC playbooks, and the 322-page style library."
+      "description": "Everything PPC.io inside your AI agent: the Landing Page Studio, 6 CRO playbooks, on-the-fly Google Ads / GA4 / Clarity / Meta data connectors, 4 quick-CRO skills, brand-adaptive HTML client dashboards, 33 Google Ads skills, 21 production Google Ads scripts, 24 PPC playbooks, and the 322-page style library."
     }
   ],
   "description": "PPC.io for Claude Code, Cursor, Codex, Antigravity, Windsurf and Gemini CLI."
