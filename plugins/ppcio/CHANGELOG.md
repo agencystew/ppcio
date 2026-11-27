@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.10 (27 Nov 2026)
+
+- Run 14 fixes: the AI can no longer switch off the sent-message check; update lines name the step; the page must use its proof
+
 ## 0.8.9 (27 Nov 2026)
 
 - Added 7 deterministic Python engines (90-day causal audit, PMax incremental ROAS, active-days budget pacing, spend-weighted QS, P50/P90 CPC forensics, weekly triage, and white-label HTML pitch deck renderer), 7 adversarial behavioral evals, unified plug-and-play workflow wording, and em-dash-free CRO playbooks.

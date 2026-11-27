@@ -49,7 +49,6 @@ const LIVE = process.env.PPCIO_STUDIO ? ` Watch it live: ${process.env.PPCIO_STU
 // (Claude Code keeps one per folder) and goes on only when the message is in the chat as real text.
 const chatText = (() => { let memo = null; return () => {
   if (memo !== null) return memo; memo = '';
-  if (process.env.PPCIO_NO_CHAT_CHECK) return memo;
   const home = process.env.CLAUDE_CONFIG_DIR || path.join(require('os').homedir(), '.claude');
   const P = path.join(home, 'projects', process.cwd().replace(/[^A-Za-z0-9]/g, '-'));
   let files = []; try { files = fs.readdirSync(P).filter(f => f.endsWith('.jsonl')).map(f => path.join(P, f)).filter(f => Date.now() - fs.statSync(f).mtimeMs < 12 * 3600e3); } catch (e) { return memo; }
