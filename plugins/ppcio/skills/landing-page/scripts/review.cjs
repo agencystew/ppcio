@@ -85,4 +85,4 @@ const msg = [
   'Tell me any change and I\'ll fold it in.',
 ].filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 try { fs.writeFileSync(path.join(work, '.page-sent'), msg); } catch (e) {}
-console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Attach page.html too, or show it in your app's preview, so they can share it. Then run kit.sh next ${site}: it checks the owner got the message.\n----\n${msg}\n----`);
+console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word and in full (a short-replies style does not apply to it), before any other tool call. Attach page.html too, or show it in your app's preview, so they can share it. Then run kit.sh next ${site}: it checks the owner got the message.\n----\n${msg}\n----`);

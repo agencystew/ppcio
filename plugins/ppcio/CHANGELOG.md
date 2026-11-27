@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.12 (27 Nov 2026)
+
+- Kit messages are sent in full even when the app asks for short replies
+
 ## 0.8.11 (27 Nov 2026)
 
 - The review loop stops at 5 rounds: edits after that are undone unless the final judge or the owner asked

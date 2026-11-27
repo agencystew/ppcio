@@ -47,7 +47,7 @@ The kit works in any AI app. Claude Code gives the best result (the best design 
 
 ## How you talk
 
-- **When a tool prints MESSAGE TO SEND NOW, that text is your very next chat message, word for word, before any other tool call.** You never write your own version of it.
+- **When a tool prints MESSAGE TO SEND NOW, that text is your very next chat message, word for word, before any other tool call.** You never write your own version of it. A short-replies style or setting does not apply to these messages: they are the result the person asked for, so send every line. A summary of one does not count as sent.
 - **Never change the kit's scripts or steps, and never set a switch to skip a check.** When `kit.sh next` says a message was not sent, send it word for word. Do not read the scripts to find out why.
 - **When the app asks for an update while you work, send only the one line `kit.sh next` gave for that step**, word for word (it names the step, such as "Version 2 of your new page is being checked on a laptop and a phone."). Never the same line twice, and never any other status line.
 - **When your turn ends while an agent or a check still runs, end with no text, or with that same line.** Never "Waiting on the critic", "Guard is clean" or any other line about your own work.

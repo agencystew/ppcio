@@ -151,7 +151,7 @@ if (verdict && (top.length || plan.length)) {
   let free = false; try { free = /FREE/.test(require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'licence.cjs'), 'status'], { encoding: 'utf8' })); } catch (e) {}
   lines.push('', free ? 'The new page comes with the PPC.io licence. Paste your key here any time and I\'ll build it.' : 'Next I\'m drawing your new page in the style that fits your buyers best. You\'ll see its first screen in about 10 minutes, then the whole page.');
   try { fs.writeFileSync(path.join(work, '.audit-sent'), lines.join('\n')); } catch (e) {}
-  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Add nothing to it: no offer, no question, no extra advice. Do not end your turn after it: in this same turn, run kit.sh next <site> and do the step it prints. The owner does not need to reply.\n----\n${lines.join('\n')}\n----`);
+  console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word and in full (a short-replies style does not apply to it), before any other tool call. Add nothing to it: no offer, no question, no extra advice. Do not end your turn after it: in this same turn, run kit.sh next <site> and do the step it prints. The owner does not need to reply.\n----\n${lines.join('\n')}\n----`);
 } else {
   console.log('NEXT: audit.md has no verdict or no "What to fix first" list in the Now / Change to form. Fix audit.md, then run report again.');
 }
