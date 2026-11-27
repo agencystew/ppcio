@@ -1,3 +1,11 @@
+# What changed in PPC.io
+
+Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
+
+## 0.8.2 (27 Nov 2026)
+
+- Fixes from blind run 12: the review loop stops at the best page, renders load every photo, the critic trusts the business's own facts. Updates now reach every buyer.
+
 # Changelog
 
 ## 0.8.1 (27 Nov 2026)

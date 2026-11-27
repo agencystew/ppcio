@@ -88,6 +88,8 @@ Re-run the same command any time to pull updates.
 
 ## Updates
 
+Every update raises the version number and adds a line to `plugins/ppcio/CHANGELOG.md` that says what changed.
+
 - **Claude Code:** Type `/plugin`, open **Marketplaces**, select `ppcio`, and enable auto-update (or ask *"update PPC.io"*).
 - **Other AI tools:** Re-run `curl -fsSL https://raw.githubusercontent.com/agencystew/ppcio/main/install.sh | sh`.
 
