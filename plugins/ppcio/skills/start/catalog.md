@@ -11,6 +11,11 @@
 - **Connect your analytics & ad data**: Walk step by step through connecting Google Ads, GA4, Microsoft Clarity, Meta Ads, or Google Search Console (live read-only connection or 30-second CSV export) so audits, landing pages, and dashboards use real search terms, scroll drop-offs, rage-clicks, and conversion rates.
 - **Many clients at once**: Agency mode audits and builds a list of client landing pages side by side with one summary board.
 
+## Client Reporting Studio & Agency/In-House Operations OS (Flagship Systems)
+
+- **Client Reporting Studio** *(replaces TapClicks, Swydo & Looker PDFs)*: Interviews you about your current reporting setup (or critiques your current PDF/CSV), builds one `_week`-locked `facts.json` (fuzzy Brand stripping, 12-week own-normal, scale elasticity, MTD pacing verdict, Safety Hold), generates **3 live clickable white-label HTML prototypes straight off the bat** (Executive Dashboard, 390px Mobile Plain-English Brief, Dual-View Call Prep + Client Email), and builds a `$0/mo` token-gated multi-client static portal.
+- **Agency & In-House PPC Operations / Audit OS Studio** *(internal audit & management system)*: Ingests single-account or MCC exports, runs statistical quiet-gap break checks and 8-step causal diagnosis, generates **3 live clickable HTML Ops & Audit prototypes straight off the bat** (Morning Risk Triage + Dependency-Gated Team Batches + Google Ads Editor CSV exports, 6-Tab Causal Account Audit Workbench with persistent "Not right?" rejection memory, and Revenue Opportunity Pitch Board), verified through a 6-gate audit compiler.
+
 ## Quick-CRO Tools (Standalone or On Your Audits)
 
 - **Rewrite Landing Page Copy**: Exact **Now → Change to** founder-voice rewrites for weak headlines, hero blocks, proof lines, and buttons: zero invented claims.

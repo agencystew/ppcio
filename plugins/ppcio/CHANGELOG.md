@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.14 (27 Nov 2026)
+
+- Added two new flagship plug-and-play studios: Client Reporting Studio (replaces TapClicks/Looker PDFs with 3 instant live white-label HTML prototypes + free token-gated multi-client portal + zero-drift compiler) and Agency & In-House PPC Operations / Audit OS Studio (Morning Risk Triage, Dependency-Gated Team Batches + Google Ads Editor CSVs, 6-Tab Causal Audit Workbench, Revenue Opportunity Board + 6-gate audit compiler). Verified 43/43 >= 95/100 + 11/11 behavioral trap evals.
+
 ## 0.8.13 (27 Nov 2026)
 
 - Kit messages are written as visible text, never inside thinking
