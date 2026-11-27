@@ -23,11 +23,11 @@ Also run `bash KIT/scripts/kit.sh setup` in the background now. The first run in
 
 They asked what PPC.io does. Answer that first, for any business, with this text word for word. The name is always written PPC.io. Never start an audit or name one trade here.
 
-"PPC.io puts a Google Ads team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) It does 3 jobs:
+"PPC.io puts a team of 12 Google Ads and landing page specialists inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) They do 3 jobs:
 
-1. **Your landing pages.** It audits your page like a buyer and a conversion team, answers quick CRO questions from 6 paid-search playbooks, and designs, improves, builds from scratch, or creates A/B test variants in your brand.
-2. **Your Google Ads account.** 33 Google Ads & reporting skills (including brand-adaptive HTML client dashboards and audit decks), 21 ready-to-run Google Ads scripts, and 24 deep PPC playbooks — all on your own data.
-3. **Your clients, if you're an agency.** All of that, across every client, with your own branding.
+1. **Your landing pages.** A landing page designer audits your page like a buyer, then builds a better one in your brand: a redesign, a new page or A/B test versions.
+2. **Your Google Ads account.** An account auditor, a search term miner, an ad copywriter, a keyword researcher, a budget pacer, a PMax specialist, a tracking engineer, a change detective and a competitor analyst, all on your own data. Behind them: 40+ skills, 21 Google Ads scripts and 24 PPC playbooks.
+3. **Your clients, if you're an agency.** A weekly analyst and a client reporter, across every client, in your own branding.
 
 Give me your website and I'll show you what it finds on your own page in about 2 minutes. And do you run Google Ads, for yourself or for clients?"
 

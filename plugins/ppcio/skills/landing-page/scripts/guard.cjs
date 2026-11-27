@@ -44,6 +44,12 @@ const META_LINES = [
       document.querySelectorAll('img').forEach(im => { if (!vis(im)) return; const rc = im.getBoundingClientRect(); if (im.complete && im.naturalWidth === 0) out.broken.push(im.src.slice(-60)); else if (rc.width > 700 && rc.width / rc.height > 3.4) out.strips.push(`${Math.round(rc.width)}x${Math.round(rc.height)} ${im.src.slice(-40)}`); });
       const hs = {}; document.querySelectorAll('h1,h2,h3').forEach(h => { const t = h.innerText.trim().toLowerCase(); if (t) hs[t] = (hs[t] || 0) + 1; }); out.dupes = Object.entries(hs).filter(([, n]) => n > 1).map(([t]) => t.slice(0, 50));
       out.overflow = document.documentElement.scrollWidth - window.innerWidth;
+      // Blind runs 6 and 10: the same button twice in the first screen ("Book Now" in the header and the hero), and a logo too small to read.
+      const vh = window.innerHeight; const firstActs = {};
+      document.querySelectorAll('a,button,input[type=submit]').forEach(el => { if (!vis(el)) return; const rc = el.getBoundingClientRect(); const pos = getComputedStyle(el.closest('[style*=fixed],[style*=sticky]') || el).position; const top = rc.top + window.scrollY; if (top + rc.height / 2 < 0 || top + rc.height / 2 > vh || /fixed|sticky/.test(pos) && rc.top > vh * 0.6) return; const t = (el.innerText || el.value || '').trim().toLowerCase().replace(/\s+/g, ' '); if (t && t.length < 40 && !/^[\d()+\-\s.]+$/.test(t)) firstActs[t] = (firstActs[t] || 0) + 1; });
+      out.twice = Object.entries(firstActs).filter(([, n]) => n > 1).map(([t]) => `"${t}"`);
+      const logo = [...document.querySelectorAll('header img, nav img, header svg, [class*=logo] img, img[alt*=logo i], img[src*=logo i]')].filter(vis)[0];
+      out.logoH = logo ? Math.round(logo.getBoundingClientRect().height) : null;
       const heads = [...document.querySelectorAll('h1,h2,h3')].filter(vis);
       out.italicHeads = heads.filter(h => h.querySelector('em,i') || [...h.querySelectorAll('*')].some(x => getComputedStyle(x).fontStyle === 'italic') || getComputedStyle(h).fontStyle === 'italic').map(h => h.innerText.trim().slice(0, 50));
       out.fragments = heads.map(h => h.innerText.trim()).filter(t => { const parts = t.split(/[.!?]\s+/).map(x => x.replace(/[.!?]$/, '').trim()).filter(Boolean); return parts.length >= 2 && parts.every(p => p.split(/\s+/).length <= 4); }).map(t => t.slice(0, 50));
@@ -145,7 +151,7 @@ const META_LINES = [
     r3.sets.slice(0, 3).forEach(x => faults.push(`${name}: cards mix photos: ${x}`));
     facts[name] = { h1: r.h1, bodyMedian: r.body };
     const add = (k, list) => list.slice(0, 8).forEach(x => faults.push(`${name}: ${k}: ${x}`));
-    add('text under 14px', r.small); add('em dash', r.dash); add('button', r.buttons); add('font not loaded or fallback', r.fonts.slice(0, 3)); add('photo cut to a strip', r.strips); add('broken image', r.broken); add('repeated heading', r.dupes);
+    add('text under 14px', r.small); add('em dash', r.dash); add('button', r.buttons); add('font not loaded or fallback', r.fonts.slice(0, 3)); add('photo cut to a strip', r.strips); add('broken image', r.broken); add('repeated heading', r.dupes); add('same button twice in the first screen', r.twice); if (r.logoH !== null && r.logoH < (name === 'phone' ? 22 : 30)) faults.push(`${name}: logo is ${r.logoH}px tall; make it at least ${name === 'phone' ? 22 : 30}px so the brand reads`);
     if (name === 'laptop') { if (r.italicHeads.length > 1) notes.push(`laptop: ${r.italicHeads.length} headings use italic accent words (the look the owner said grates): ${r.italicHeads.slice(0, 3).join(' | ')}`);
       if (r.fragments.length >= 2) notes.push(`laptop: ${r.fragments.length} headings are paired or tripled fragments (AI copy rhythm): ${r.fragments.slice(0, 4).join(' | ')}`);
       if (r.deck.length) notes.push(`laptop: deck words: ${r.deck.join(', ')}`);

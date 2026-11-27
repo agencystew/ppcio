@@ -41,7 +41,10 @@ const remember = (gate, faults) => {
 };
 const often = gate => Object.entries(mem[gate] || {}).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k);
 
-const QUIET = 'Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat.';
+// Every blind run (1-12) wrote status lines between the moments ("Critic is reviewing...", "I am waiting for 9 agents").
+// A ban alone failed 6 times: apps ask the model to say what it is doing. So the harness gives it the one line to say.
+const LIVE = process.env.PPCIO_STUDIO ? ` Watch it live: ${process.env.PPCIO_STUDIO}/s/${site}/` : '';
+const QUIET = `Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat. If your app asks you to say what you are doing, write only this, word for word, once: "Still working on it.${LIVE}"`;
 const AGAIN = `When it is done, run ${kit} next ${site}.`;
 const say = (stage, key, step, how, opts = {}) => {
   const n = streak(key) + 1;
@@ -104,7 +107,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   if (!has('directions/.look-sent') && !agency) say('look', 'send:look', `Run ${kit} look ${site}. Send what it prints under MESSAGE TO SEND NOW as your very next chat message, word for word.`);
 
   // Stage 4: the build. Blind-4 skipped 3 of the audit's fixes, so plan.md must carry out the 3 moves.
-  if (!has('plan.md')) say('build', 'write:plan', `Write plan.md. Then test it with the case check: a fresh subagent with the prompt in KIT/steps/4-review.md "The case check prompt", in the foreground. Fix plan.md for each point you agree with, and add the line "Case check: READY".`, `KIT/steps/3-build.md, steps 3 and 4.`, { gate: 'plan' });
+  if (!has('plan.md')) say('build', 'write:plan', `Write plan.md. Then test it with the case check: start a fresh subagent with the prompt in KIT/steps/4-review.md "The case check prompt", and tell it to write its reply to ${W}/case-check.md in one Write call. In the same message run ${kit} await landing-pages/${site} case-check.md (timeout 600000 ms), so you wait in a tool call, never in chat. Fix plan.md for each point you agree with, and add the line "Case check: READY".`, `KIT/steps/3-build.md, steps 3 and 4.`, { gate: 'plan' });
   await check('plan', 'plan.md', 'build', 'KIT/steps/3-build.md, steps 3 and 4.');
   if (!has('page.html')) say('build', 'write:page', `Write page.html in the look of directions/a.html, carrying out the 3 moves of the audit's plan and every section of plan.md.`, `KIT/steps/3-build.md, step 5.`, { gate: 'page' });
 
@@ -140,7 +143,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   // no rollback, so their change always stays.
   const ownerRound = has('.page-sent');
   if (!ownerRound) {
-  if (!has(`r${n}/scores.json`)) say(`review, round ${n}`, `critic:${n}`, `Run the critic on round ${n}: a FRESH subagent (never one that saw an earlier round) on your strongest model, never a small one such as Haiku (run 12: the prompt overflowed it), in the foreground, with the prompt in KIT/steps/4-review.md "The critic prompt" and the r${n}/ and r${n}-phone/ images. Write its scores to r${n}/scores.json and its faults to r${n}/verdict.md.`, `KIT/steps/4-review.md, part 2.${n > 1 ? ` Give it round ${n}'s images only. It must not know there was an earlier round.` : ''}`, { gate: 'scores' });
+  if (!has(`r${n}/scores.json`)) say(`review, round ${n}`, `critic:${n}`, `Run the critic on round ${n}: a FRESH subagent (never one that saw an earlier round) on your strongest model, never a small one such as Haiku (run 12: the prompt overflowed it), with the prompt in KIT/steps/4-review.md "The critic prompt" and the r${n}/ and r${n}-phone/ images. Tell it to write its whole reply to ${W}/r${n}/critic.md in one Write call. In the same message run ${kit} await landing-pages/${site} r${n}/critic.md (timeout 600000 ms), so you wait in a tool call, never in chat. Then write its scores to r${n}/scores.json and the faults to r${n}/verdict.md.`, `KIT/steps/4-review.md, part 2.${n > 1 ? ` Give it round ${n}'s images only. It must not know there was an earlier round.` : ''}`, { gate: 'scores' });
   await check('scores', `r${n}/scores.json`, `review, round ${n}`, 'KIT/steps/4-review.md, part 2.', true, n);
 
   const rounds = []; for (let i = 1; i <= n; i++) { const s = json(`r${i}/scores.json`); if (s && s.new) rounds.push({ i, s, a: avg(s) }); }

@@ -13,7 +13,7 @@ Open every image the shot commands list, the phone first. Every quote checkfacts
 
 ## 2. The critic
 
-Start a subagent (the Agent tool) as the critic. Run it in the foreground and wait for its answer in this turn. Write nothing in chat while it works. It has not seen your reasoning, so it judges what is on the page. Give it the prompt under "The critic prompt" below, with the full paths of: the round's laptop slices (`r1/first.png`, `r1/s1.png` and on), the phone first screen and tiles (`r1-phone/first.png`, `r1-phone/t1.png` and on, which cover the whole page), `inputs/live-page-today.png`, `inputs/live-full.jpg`, `inputs/site-page-text.md`, `page.html`, `brand.md`, `case.md`, `plan.md`, `facts.md` and `KIT/TASTE.md`.
+Start a subagent (the Agent tool) as the critic. Tell it to write its whole reply to `rN/critic.md` in one Write call, and in the same message run `kit.sh await landing-pages/<site> rN/critic.md`, so you wait in a tool call. Write nothing in chat while it works. It has not seen your reasoning, so it judges what is on the page. Give it the prompt under "The critic prompt" below, with the full paths of: the round's laptop slices (`r1/first.png`, `r1/s1.png` and on), the phone first screen and tiles (`r1-phone/first.png`, `r1-phone/t1.png` and on, which cover the whole page), `inputs/live-page-today.png`, `inputs/live-full.jpg`, `inputs/site-page-text.md`, `page.html`, `brand.md`, `case.md`, `plan.md`, `facts.md` and `KIT/TASTE.md`.
 
 It can be wrong. Weigh it.
 

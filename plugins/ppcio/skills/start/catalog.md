@@ -13,14 +13,14 @@
 
 ## Quick-CRO Tools (Standalone or On Your Audits)
 
-- **Rewrite Landing Page Copy**: Exact **Now → Change to** founder-voice rewrites for weak headlines, hero blocks, proof lines, and buttons — zero invented claims.
+- **Rewrite Landing Page Copy**: Exact **Now → Change to** founder-voice rewrites for weak headlines, hero blocks, proof lines, and buttons: zero invented claims.
 - **Ad-to-Page Message Match**: Compares your Google Ads or Meta ad promise against the landing page's first screen, quotes every mismatch, and rewrites the opening so ad and page agree.
 - **Buyer Objections & Hesitation Fix**: Pinpoints the exact unanswered buyer question (price, risk, suitability, effort, credibility, next step) and places the smallest real proof fix right beside the button.
 - **Landing Page Experiment Brief**: Turns an audit finding into a tight, single-variable designer/developer handoff brief (`Change, Why, Keep, Check`) with honest traffic sizing.
 
 ## First-Principles PPC Knowledge (24 Deep Playbooks)
 
-- **PPC Playbooks**: On-demand access to 24 deep paid-search foundations — Unit Economics (LTV/CAC, break-even ROAS), Measurement & Attribution, Shopping & Merchant Center Feeds, Bidding Strategy, Broad Match Governance, Quality Score, Account Structure, Alignment Chain, Audience Strategy, PMax, Scaling, Business-Model PPC, and the 8-layer Paid Media Performance System.
+- **PPC Playbooks**: On-demand access to 24 deep paid-search foundations: Unit Economics (LTV/CAC, break-even ROAS), Measurement & Attribution, Shopping & Merchant Center Feeds, Bidding Strategy, Broad Match Governance, Quality Score, Account Structure, Alignment Chain, Audience Strategy, PMax, Scaling, Business-Model PPC, and the 8-layer Paid Media Performance System.
 
 ## Search Terms & Negative Keywords
 
@@ -54,7 +54,7 @@
 
 ## Google Ads Reports, Dashboards, Changes & Budgets
 
-- **Client Report Dashboard & Portal** *(interactive HTML dashboard)*: Builds a self-contained, brand-adaptive HTML client performance dashboard (KPI sparklines, brand vs. non-brand split, budget pacing bar, sortable campaign table, bad-news-first executive narrative) in your own agency colours and 4 selectable themes — plus an optional multi-client static portal hub.
+- **Client Report Dashboard & Portal** *(interactive HTML dashboard)*: Builds a self-contained, brand-adaptive HTML client performance dashboard (KPI sparklines, brand vs. non-brand split, budget pacing bar, sortable campaign table, bad-news-first executive narrative) in your own agency colours and 4 selectable themes - plus an optional multi-client static portal hub.
 - **Weekly Client Report** *(Monday client email)*: Lag-adjusted weekly email with bad news first, verified against your CSV numbers by script.
 - **Weekly Pulse** *(internal PPC manager triage)*: Compares this week vs. last week vs. 4-week rolling baseline, flagging >20% swings and tracking open actions.
 - **PPC Report Narrator** *(monthly / QBR summaries)*: Turns monthly or quarterly campaign tables into a plain-English executive narrative.
