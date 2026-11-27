@@ -29,6 +29,8 @@ The kit folder is `${CLAUDE_SKILL_DIR}`. In the step files, `KIT` means this fol
 7. **A thank-you page or a quiz funnel:** Read `KIT/steps/thankyou-funnel.md`.
 8. **A plan for a whole site or account (which pages to fix or add first):** Read `KIT/postclick/audit/suite-planner.md` and `KIT/postclick/audit/opportunity-planner.md`, after an audit of each page.
 
+When they say "carry on" or "continue" after a stop (a usage limit, a new chat), find the site in `landing-pages/` and run `bash KIT/scripts/kit.sh next <site>`: it starts at the step that is not done yet.
+
 Every prompt postclick ran is in `KIT/postclick/` (see its README). Read them when a step points to them.
 
 ## Your app

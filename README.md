@@ -83,6 +83,8 @@ Re-run the same command any time to pull updates.
 
 - **Platform:** macOS or Linux (Windows via WSL). Node.js and the headless Chromium page checker install automatically on first run (about 1 minute) — nothing to configure manually.
 - **Privacy:** Everything runs locally on your computer inside your own AI tool. Your client pages, copy, and Google Ads CSV exports are never sent to PPC.io servers. With a Pro licence key, the 322-page style library downloads once from PPC.io; that request sends only your licence key.
+- **If your AI app stops mid-run** (a usage limit, a closed laptop): open a new chat in the same folder and say *"carry on with my landing page"*. The kit reads the files it already wrote and starts at the step it stopped on.
+- **The style library** holds screenshots of public landing pages, graded for study and inspiration. PPC.io does not copy their words, logos or photos into your page. If you own a page in the library and want it removed, email support@ppc.io and we take it out in the next update.
 
 ## Updates
 
