@@ -146,13 +146,19 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   const rounds = []; for (let i = 1; i <= n; i++) { const s = json(`r${i}/scores.json`); if (s && s.new) rounds.push({ i, s, a: avg(s) }); }
   const best = rounds.reduce((b, r) => (!b || r.a > b.a || (r.a === b.a && r.i > b.i) ? r : b), null);
   const cur = rounds[rounds.length - 1];
-  // Rollback: a round that scores lower than the best one goes back to the best page (postclick rule: "never drop the visuals he liked").
-  if (best && cur.i !== best.i && cur.a < best.a - 0.1 && has(`r${best.i}/page.html`) && !has(`r${cur.i}/.rolled-back`)) {
-    fs.copyFileSync(path.join(W, `r${best.i}/page.html`), path.join(W, 'page.html')); fs.writeFileSync(path.join(W, `r${cur.i}/.rolled-back`), String(best.i));
-    say(`review, round ${cur.i + 1}`, `rollback:${cur.i}`, `Round ${cur.i} scored ${cur.a.toFixed(1)}, below round ${best.i} (${best.a.toFixed(1)}), so page.html is back to round ${best.i}. Fix the faults in r${best.i}/verdict.md that round ${cur.i} did not fix, one small edit at a time, keeping everything round ${best.i} did well.`, `KIT/steps/4-review.md, part 3.`);
-  }
+  // The loop goes on only while a round can still help: not at the bar, under MAX rounds, not stalled.
+  // Run 12 (27 Nov): the rollback ran first and rewrote page.html, which counted as a new round, so the loop
+  // went to round 7 and the stall rule never ran. Now the stop rules come first, and a rollback only happens
+  // when another round follows. The restored page keeps an old time, so it is not a new round until edited.
   const stalled = rounds.length >= 3 && rounds.slice(-2).every(r => r.a <= rounds[rounds.length - 3].a + 0.1);
-  if (!atBar(cur.s) && n < MAX && !stalled) {
+  const goOn = !atBar(cur.s) && n < MAX && !stalled;
+  // Rollback: a round that scores lower than the best one goes back to the best page (postclick rule: "never drop the visuals he liked").
+  if (goOn && best && cur.i !== best.i && cur.a < best.a - 0.1 && has(`r${best.i}/page.html`) && !has(`r${cur.i}/.rolled-back`)) {
+    const P = path.join(W, 'page.html'); fs.copyFileSync(path.join(W, `r${best.i}/page.html`), P); fs.writeFileSync(path.join(W, `r${cur.i}/.rolled-back`), String(best.i));
+    const t = (fs.statSync(path.join(W, `r${cur.i}/page.html`)).mtimeMs - 1000) / 1000; fs.utimesSync(P, t, t);
+    say(`review, round ${cur.i + 1}`, `rollback:${cur.i}`, `Round ${cur.i} scored ${cur.a.toFixed(1)}, below round ${best.i} (${best.a.toFixed(1)}), so page.html is back to round ${best.i}. Fix the faults in r${best.i}/verdict.md that round ${cur.i} did not fix, one small edit at a time, keeping everything round ${best.i} did well. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, part 3.`);
+  }
+  if (goOn) {
     const low = KEYS.filter((k, i) => !(cur.s.new[i] >= 8 && cur.s.new[i] >= ((cur.s.live || [])[i] || 0)));
     say(`review, round ${n + 1} of up to ${MAX}`, `improve:${n}`, `The page is not at the bar yet: a fresh critic must score it 8 or more out of 10, and at least their page today, on each of first screen, case, proof, offer and action. Round ${n} is below on: ${low.join(', ')}. Fix every fault in r${n}/verdict.md, strongest first, as small edits to page.html. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, parts 2 and 3. Never start a new layout.`);
   }
