@@ -140,7 +140,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   // no rollback, so their change always stays.
   const ownerRound = has('.page-sent');
   if (!ownerRound) {
-  if (!has(`r${n}/scores.json`)) say(`review, round ${n}`, `critic:${n}`, `Run the critic on round ${n}: a FRESH subagent (never one that saw an earlier round), in the foreground, with the prompt in KIT/steps/4-review.md "The critic prompt" and the r${n}/ and r${n}-phone/ images. Write its scores to r${n}/scores.json and its faults to r${n}/verdict.md.`, `KIT/steps/4-review.md, part 2.${n > 1 ? ` Give it round ${n}'s images only. It must not know there was an earlier round.` : ''}`, { gate: 'scores' });
+  if (!has(`r${n}/scores.json`)) say(`review, round ${n}`, `critic:${n}`, `Run the critic on round ${n}: a FRESH subagent (never one that saw an earlier round) on your strongest model, never a small one such as Haiku (run 12: the prompt overflowed it), in the foreground, with the prompt in KIT/steps/4-review.md "The critic prompt" and the r${n}/ and r${n}-phone/ images. Write its scores to r${n}/scores.json and its faults to r${n}/verdict.md.`, `KIT/steps/4-review.md, part 2.${n > 1 ? ` Give it round ${n}'s images only. It must not know there was an earlier round.` : ''}`, { gate: 'scores' });
   await check('scores', `r${n}/scores.json`, `review, round ${n}`, 'KIT/steps/4-review.md, part 2.', true, n);
 
   const rounds = []; for (let i = 1; i <= n; i++) { const s = json(`r${i}/scores.json`); if (s && s.new) rounds.push({ i, s, a: avg(s) }); }
@@ -153,7 +153,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   const stalled = rounds.length >= 3 && rounds.slice(-2).every(r => r.a <= rounds[rounds.length - 3].a + 0.1);
   const goOn = !atBar(cur.s) && n < MAX && !stalled;
   // Rollback: a round that scores lower than the best one goes back to the best page (postclick rule: "never drop the visuals he liked").
-  if (goOn && best && cur.i !== best.i && cur.a < best.a - 0.1 && has(`r${best.i}/page.html`) && !has(`r${cur.i}/.rolled-back`)) {
+  if (goOn && best && cur.i !== best.i && cur.a < best.a - 0.3 && has(`r${best.i}/page.html`) && !has(`r${cur.i}/.rolled-back`)) {
     const P = path.join(W, 'page.html'); fs.copyFileSync(path.join(W, `r${best.i}/page.html`), P); fs.writeFileSync(path.join(W, `r${cur.i}/.rolled-back`), String(best.i));
     const t = (fs.statSync(path.join(W, `r${cur.i}/page.html`)).mtimeMs - 1000) / 1000; fs.utimesSync(P, t, t);
     say(`review, round ${cur.i + 1}`, `rollback:${cur.i}`, `Round ${cur.i} scored ${cur.a.toFixed(1)}, below round ${best.i} (${best.a.toFixed(1)}), so page.html is back to round ${best.i}. Fix the faults in r${best.i}/verdict.md that round ${cur.i} did not fix, one small edit at a time, keeping everything round ${best.i} did well. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, part 3.`);

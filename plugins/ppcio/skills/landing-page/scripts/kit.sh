@@ -131,6 +131,8 @@ case "$cmd" in
   firstlook) DIR="$(resolve_site_dir "${1:-}")"; LINK="${2:-}"; [ -z "$LINK" ] && { SURL="$(find_studio_url)"; [ -n "$SURL" ] && LINK="$SURL/s/$(basename "$DIR")/"; }; node "$K/firstlook.cjs" "$DIR" ${LINK:+"$LINK"} ;;
   agents-dir) (cd "$K/../../../agents" && pwd -P) ;;
   next) # The harness: reads the work folder and prints the one next step. Run it after every step.
+    # Run 12: next worked only from the project folder. Walk up to the folder that holds landing-pages.
+    while [ ! -d landing-pages ] && [ "$(pwd)" != / ] && [ "$(pwd)" != "$HOME" ]; do cd ..; done
     N1="$(resolve_site_name "${1:-}")"; shift 2>/dev/null || true; node "$K/next.cjs" "$N1" "$@" | sed "s#KIT/#$(cd "$K/.." && pwd)/#g" ;;
   cost) node "$K/cost.cjs" "$@" ;;
   await) node "$K/await.cjs" "$@" ;;

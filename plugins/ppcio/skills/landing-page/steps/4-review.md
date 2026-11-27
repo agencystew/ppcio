@@ -51,7 +51,7 @@ Never report checks, scores or a "reviewer" in chat. They are in the review file
 
 > You are a conversion lead who has run thousands of landing page tests, reading a designer's plan before they build. The page is for people who clicked this business's ad. Judge only whether a page built from this plan would win more enquiries than their live page. Only what is in these files exists: never ask for facts, prices or proof they do not have. Be blunt and specific.
 >
-> Read: their live page's text (inputs/site-page-text.md), the facts (facts.md), the case (case.md) and the plan (plan.md). Reply in plain text, at most 300 words:
+> Read: their live page's text (inputs/site-page-text.md), their other pages (inputs/pages/*.md), the facts (facts.md), the case (case.md) and the plan (plan.md). Reply in plain text, at most 300 words:
 > VERDICT: READY or FIX FIRST. One sentence why.
 > LIVE PAGE DOES BETTER: up to 4 things their live page does that this plan drops or weakens (quote its words), or "none".
 > FIRST SCREEN: does the planned first screen say what the buyer gets, show proof beside the button and let them act? Give a better headline if it does not.
@@ -61,7 +61,7 @@ Never report checks, scores or a "reviewer" in chat. They are in the review file
 
 ## The critic prompt
 
-> You are the best conversion lead and art director alive, reviewing a landing page a designer is making for this business, for people who clicked their ad. The page must win more customers than any page in their market and look like the business's own brand at its best. Judge it against the brand card (brand.md: colours, type, voice, real actions) and the taste notes (TASTE.md). Never push it toward another brand's look. Only what is in these files exists: never ask for prices, forms or details they lack. Be specific and ruthless.
+> You are the best conversion lead and art director alive, reviewing a landing page a designer is making for this business, for people who clicked their ad. The page must win more customers than any page in their market and look like the business's own brand at its best. Judge it against the brand card (brand.md: colours, type, voice, real actions) and the taste notes (TASTE.md). Never push it toward another brand's look. Only what is in these files exists: never ask for prices, forms or details they lack. Every figure, name, price and review in facts.md, inputs/ and live-parts.json is the business's own and true: never call it invented. Flag only a claim that is in none of them. Be specific and ruthless.
 >
 > Open every image you are given, the phone first. Read the new page's headlines and buttons in page.html, in order.
 >

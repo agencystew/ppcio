@@ -34,7 +34,7 @@ const META_LINES = [
       const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const seenEl = new Set();
       while (tw.nextNode()) { const t = tw.currentNode.textContent.trim(); if (!t) continue; const el = tw.currentNode.parentElement; if (!el || seenEl.has(el) || !vis(el)) continue; seenEl.add(el); const s = getComputedStyle(el); const fs = parseFloat(s.fontSize);
         if (fs < 14 && t.length > 1) out.small.push(`${fs}px "${t.slice(0, 40)}"`);
-        if (/—/.test(t)) out.dash.push(t.slice(0, 60));
+        if (/—/.test(t) && !el.closest('blockquote,q,cite') && !/[“"][^”"]*—[^”"]*[”"]/.test(t)) out.dash.push(t.slice(0, 60)); // run 12: a quoted review keeps its own dash
         const fam = s.fontFamily.split(',')[0].replace(/["']/g, '').trim();
         if (/^(times|times new roman|serif)$/i.test(fam) || (fam && ![...document.fonts].some(f => f.family.replace(/["']/g, '') === fam && f.status === 'loaded') && !document.fonts.check(`${s.fontWeight} 16px "${fam}"`) && !/^(system-ui|-apple-system|sans-serif|serif|arial|helvetica|georgia|inherit)$/i.test(fam))) out.fonts.push(`${fam} on "${t.slice(0, 30)}"`); }
       document.querySelectorAll('a,button,[role=button],input[type=submit]').forEach(el => { if (!vis(el)) return; const s = getComputedStyle(el); const t = (el.innerText || el.value || '').trim(); const cls = (el.className || '') + '';

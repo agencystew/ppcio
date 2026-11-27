@@ -58,10 +58,12 @@ if (!ready.trim()) {
   process.exit(0);
 }
 if (!handover) { console.log(`\nNEXT: run kit.sh pack landing-pages/${site} first, so the message carries the file to hand over. Then run kit.sh review again.`); process.exit(0); }
-const line = re => (ready.match(re) || [])[1];
+// Run 12: the Ask line lost its capital. Every line we print starts with one.
+const cap = t => t && t[0].toUpperCase() + t.slice(1);
+const line = re => cap((ready.match(re) || [])[1]);
 const today = line(/^\s*\**today:?\**:?\s*(.+)$/im);
 const ask = line(/^\s*\**ask:?\**:?\s*(.+)$/im);
-const says = ready.split('\n').map(l => l.match(/^\s*\d+\.\s+(.+)$/)).filter(Boolean).map(m => m[1].trim()).slice(0, 3);
+const says = ready.split('\n').map(l => l.match(/^\s*\d+\.\s+(.+)$/)).filter(Boolean).map(m => cap(m[1].trim())).slice(0, 3);
 let sf = {}; try { sf = JSON.parse(read('inputs/site-facts.json')); } catch (e) {}
 const platform = String(sf.platform || 'unknown').toLowerCase();
 const GO = {

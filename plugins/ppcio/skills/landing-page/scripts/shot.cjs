@@ -17,6 +17,8 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   // 22 Nov: 500 px steps (under one screen, so every reveal still fires), then
   // wait for the pictures themselves, at most 4 s. The old 250 px steps took
   // 4-9 s of each 10-13 s render.
+  // Run 12: phone renders showed lazy photos as blank bands. Load every picture now, whatever its lazy-load trick.
+  await p.evaluate(() => document.querySelectorAll('img').forEach(i => { i.loading = 'eager'; for (const k of ['src', 'srcset']) { const v = i.dataset[k] || i.getAttribute('data-lazy-' + k); if (v && !i.getAttribute(k)) i.setAttribute(k, v); } })).catch(() => {});
   await p.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 90)); } window.scrollTo(0, 0); });
   // The 1.5 s settle stays (a header that moves on scroll needs it); the wait
   // for the pictures runs inside it, so it only adds time when photos are slow.
