@@ -17,10 +17,10 @@ const sentence = rest.find(l => !/^[-*]\s/.test(l) && !/^their words/i.test(l)) 
 const points = rest.filter(l => /^[-*]\s+\S/.test(l)).slice(0, 3).map(l => `- ${l.replace(/^[-*]\s+/, '')}`);
 const base = process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/data/files/directions/` : dir + path.sep;
 const msg = [
-  `**Your page in its new look:** ${base}a.html`,
+  `**Your page in its new look:** ${process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/look` : base + 'a.html'}`,
   `${domain ? `It takes its style from ${domain}. ` : ''}${sentence}`.trim(),
   points.join('\n'),
-  fs.existsSync(path.join(dir, 'styles.html')) ? `The other styles are here: ${base}styles.html. Tell me the one you like better and I'll switch.` : '',
+  fs.existsSync(path.join(dir, 'styles.html')) ? `The other styles are here: ${process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/styles` : base + 'styles.html'}. Tell me the one you like better and I'll switch.` : '',
   'I\'m building the whole page in this look now. About 10 minutes.',
 ].filter(Boolean).join('\n\n');
 fs.writeFileSync(path.join(dir, '.look-sent'), new Date().toISOString());

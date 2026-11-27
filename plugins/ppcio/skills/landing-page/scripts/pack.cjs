@@ -5,6 +5,7 @@
 const fs = require('fs'); const path = require('path'); const crypto = require('crypto');
 const work = path.resolve(process.argv[2] || '.');
 const file = path.join(work, process.argv[3] || 'page.html');
+const origStat = fs.statSync(file);
 let html = fs.readFileSync(file, 'utf8');
 const urls = new Set();
 for (const re of [/\s(?:src|poster|data-src)\s*=\s*["'](https?:\/\/[^"']+)["']/gi, /url\(\s*["']?(https?:\/\/[^"')]+)["']?\s*\)/gi, /\ssrcset\s*=\s*["']([^"']+)["']/gi, /["'](https?:\/\/[^"'\s]+\.(?:png|jpe?g|webp|gif|svg|avif|mp4)(?:\?[^"'\s]*)?)["']/gi]) {
@@ -31,7 +32,27 @@ const EXT = { 'font/woff2': '.woff2', 'font/woff': '.woff', 'application/font-wo
       html = html.split(u).join(`assets/${name}`); ok++;
     } catch (e) { failed.push(`${u} (${e.name === 'TimeoutError' ? 'timed out' : e.message})`); }
   }
+  // Also copy local relative assets (such as inputs/logo.webp or inputs/photos/03.jpg) into assets/
+  // so live/ and <site>-page.zip stay 100% standalone even when page.html uses saved inputs/ files.
+  const localRefs = new Set();
+  for (const re of [
+    /\s(?:src|poster|data-src)\s*=\s*["']((?:\.\.?\/)*inputs\/[^"'?#]+)["']/gi,
+    /url\(\s*["']?((?:\.\.?\/)*inputs\/[^"')?#]+)["']?\s*\)/gi,
+  ]) {
+    let m; while ((m = re.exec(html))) localRefs.add(m[1]);
+  }
+  for (const ref of [...localRefs].sort((a, b) => b.length - a.length)) {
+    const abs = path.resolve(path.dirname(file), ref);
+    if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) { failed.push(`${ref} (local file not found)`); continue; }
+    const ext = path.extname(abs).toLowerCase() || '.bin';
+    const base = path.basename(abs, ext).replace(/[^a-z0-9-]+/gi, '-').slice(0, 40) || 'file';
+    const name = `${base}-${crypto.createHash('md5').update(ref).digest('hex').slice(0, 6)}${ext}`;
+    fs.copyFileSync(abs, path.join(dir, name));
+    html = html.split(ref).join(`assets/${name}`); ok++;
+  }
   fs.writeFileSync(file, html);
+  // Keep page.html's mtime intact so packing local assets does not trigger a phantom extra review round in next.cjs.
+  try { fs.utimesSync(file, origStat.atime, origStat.mtime); } catch (e) {}
   console.log(`Copied ${ok} files into ${dir} and pointed ${path.basename(file)} at them.`);
   if (failed.length) console.log(`Could not copy ${failed.length} (the page still loads these from the old site):\n- ${failed.join('\n- ')}`);
   // The live copy (buyer test, 26 Nov). Their tracking tags go only here, so drafts and renders never send

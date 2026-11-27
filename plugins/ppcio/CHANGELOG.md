@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.6 (27 Nov 2026)
+
+- Fix standalone zip packaging for local captured photos/logos, fix shot.cjs path handling, and verified full non-Claude harness run.
+
 ## 0.8.5 (27 Nov 2026)
 
 - Sharper, normal human conversion copy rules (no poetic/verbose AI phrasing), cleaner first-answer & README copy, and fixed chat-check wording.

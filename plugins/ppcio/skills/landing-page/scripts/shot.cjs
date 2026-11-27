@@ -4,7 +4,7 @@
 const { chromium } = require('playwright'); const fs = require('fs'); const path = require('path');
 (async () => {
   const SITE = process.env.SITE_DIR || (fs.existsSync('/workspace/site/prompt.md') ? '/workspace/site' : process.cwd());
-  const src = path.resolve(SITE, process.argv[2] || 'page.html'); const round = process.argv[3] || 'x'; const phone = process.argv[4] === 'phone';
+  const src = path.resolve(SITE, process.argv[2] || 'page.html'); const rawRound = process.argv[3] || 'x'; const round = path.basename(rawRound).replace(/[^a-zA-Z0-9._-]+/g, '-') || 'x'; const phone = process.argv[4] === 'phone';
   const dir = path.dirname(src); const out = path.join(dir, 'r' + round + (phone ? '-phone' : '')); fs.mkdirSync(out, { recursive: true });
   let html = fs.readFileSync(src, 'utf8'); const kit = path.join(dir, 'kit.css');
   if (fs.existsSync(kit) && !/id=["']?brand-kit/.test(html)) { const blk = '<style id="brand-kit">\n' + fs.readFileSync(kit, 'utf8') + '\n</style>'; html = /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + blk) : blk + html; }

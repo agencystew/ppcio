@@ -323,6 +323,9 @@ const server = http.createServer((req, res) => {
     req.on('end', () => { let j = {}; try { j = JSON.parse(body); } catch {} send(res, addAsk(name, j) ? 200 : 400, 'ok'); });
     return;
   }
+  // Short links for the chat (run 11 sent /s/<site>/data/files/directions/a.html to the owner).
+  const short = { look: 'directions/a.html', styles: 'directions/styles.html' }[rest.replace(/\/$/, '')];
+  if (short) { res.writeHead(302, { location: `/s/${name}/data/files/${short}` }); return res.end(); }
   if (rest.startsWith('data/files/')) {
     const f = path.resolve(dir, rest.slice('data/files/'.length));
     if (!f.startsWith(dir + path.sep)) return send(res, 403, 'No');
