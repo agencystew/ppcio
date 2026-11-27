@@ -1,9 +1,16 @@
 #!/bin/sh
-# PPC.io for any AI tool: curl -fsSL https://ppc.io/install | sh
+# PPC.io for any AI tool: curl -fsSL https://raw.githubusercontent.com/agencystew/ppcio/main/install.sh | sh
 # It puts the kit in ~/.ppcio/kit and links its skills into each AI tool it finds on this computer.
 # Claude Code gets its 2 plugin lines instead, because the plugin also brings the agents and the updates.
 # Run it again to update. PPCIO_SRC=<folder> installs from a local copy (tests).
 set -e
+# Windows: the kit's scripts need a Unix shell. Git Bash and Cygwin break the page checker, so send them to WSL.
+case "${PPCIO_OS:-$(uname -s)}" in MINGW*|MSYS*|CYGWIN*|Windows*)
+  echo "PPC.io runs on Windows through WSL (Windows Subsystem for Linux)."
+  echo "1. Open PowerShell as administrator and run: wsl --install"
+  echo "2. Restart, open the Ubuntu app, and run this install line again inside it."
+  echo "3. Open your AI tool from Ubuntu (for Claude Code: type claude there)."
+  exit 1;; esac
 REPO="https://github.com/agencystew/ppcio"
 KIT="$HOME/.ppcio/kit"
 mkdir -p "$HOME/.ppcio"
