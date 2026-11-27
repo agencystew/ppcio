@@ -33,7 +33,7 @@ How you work:
    Then write case.md, the case the page makes, in six short parts, each from facts.md or site-page-text.md only:
    1. The problem: what goes wrong for this buyer today, in their words (facts.md problems, their reviews, the live page). When there is none, write that, and the page leads with the outcome and the offer.
    2. The outcome: what they get when it is fixed, in the owner's or their customers' words.
-   3. Why this business: the two or three strongest proofs.
+   3. Why this business: the two or three strongest proofs, taken from the top of facts.md "## Proof". A named review or a rating with its count sits in the first screen or right beside the main action. Every item in "## Proof" appears on the page, or plan.md says why it is weaker than what replaced it.
    4. The offer: what the buyer gets now, on what terms, and what it takes away: waiting, effort or risk.
    5. The doubts: the buyer's questions from buyer.md, in order.
    6. The action: the one thing to do, and what happens next.

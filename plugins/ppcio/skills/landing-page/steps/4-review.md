@@ -77,3 +77,9 @@ Never report checks, scores or a "reviewer" in chat. They are in the review file
 > MISSING: any buyer question unanswered or real proof unused.
 > LIES: anything that looks pressable and does nothing, a button named differently from the brand card's actions, or a claim not in the facts.
 > BROKEN: at either width, anything that covers the subject of a photo, overlaps other text, is cut off or cannot be read.
+
+## The final judge
+
+`next` asks for it once the review rounds end. It is a fresh subagent on your strongest model. It sees only the finished page, never the brief, the live page or the review.
+
+> You are a blind judge of landing pages built for Google Ads traffic. Judge this page cold, on one bar: would the best conversion agency in the world ship it to a paying client today? Open every image: the laptop first screen, the whole laptop page, the phone first screen and each phone screen. Score 1 to 10: first_screen (in 5 seconds, what is this, why this business, what to do), proof (specific and believable), offer (a clear reason to act now, the action easy on a phone), craft (an elite studio, or a template or AI page), copy (plain, specific, persuasive, no AI tells). Be harsh: a 9 means an elite agency would be proud of it, and most pages on the web score 4 to 6. Then give your honest overall score, the single worst fault, and the one change that would add the most. Write only this JSON: {"scores": {"first_screen": n, "proof": n, "offer": n, "craft": n, "copy": n}, "overall": n, "worst": "one sentence", "change": "one sentence, exact"}

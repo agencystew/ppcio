@@ -178,6 +178,50 @@ function looksOf(dir) {
   return out;
 }
 
+// The build as the app's build screen reads it (BuildSnapshot rows): one row per
+// step the kit's files show, each at the time its file landed. The rows only
+// grow, so the screen never jumps back.
+function buildSnaps(dir) {
+  const f = (...p) => path.join(dir, ...p), iso = (ms) => new Date(ms).toISOString();
+  const t0 = mtime(f('directions', '.look-sent'));
+  if (!t0) return [];
+  const labels = (md) => [...(md || '').matchAll(/^\d+\.\s+\*\*(.+?)\*\*/gm)].map((m) => m[1].replace(/\.$/, ''));
+  const mean = (a) => (Array.isArray(a) && a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length * 10) : null);
+  const words = (h) => (h || '').replace(/<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  const rows = []; let draft = null, renders = [], score = { live: null, page: null, history: [] }, compare = null;
+  const moments = [{ kind: 'started', at: iso(t0), label: 'You saw the new look. The build started.', agent: 'researcher' }];
+  const iterations = [];
+  const push = (at, phase, activity, extra = {}) => rows.push({ v: 1, seq: rows.length + 1, at: iso(at), phase, phase_started_at: iso(at), activity, detail: null, design: null, sections: [], draft, renders, score, compare, claims: null, seconds_left: null, moments: moments.slice(), iterations: iterations.slice(), ...extra });
+  push(t0, 'planning', 'Planning your page from the audit');
+  for (let n = 1; n <= 9; n++) {
+    const page = f(`r${n}`, 'page.html'), shot = f(`r${n}`, 'first.png'), sc = f(`r${n}`, 'scores.json');
+    const tp = mtime(page) || (n === 1 ? mtime(f('page.html')) : 0);
+    if (!tp) break;
+    const html = read(page) || read(f('page.html'));
+    const fixes = n > 1 ? labels(read(f(`r${n - 1}`, 'verdict.md'))) : [];
+    draft = { round: n, words: words(html), phone_screens: 0, section_count: ((html || '').match(/<section\b/g) || []).length };
+    iterations.push({ n, round: n, at: iso(tp), how: n === 1 ? 'write' : 'edit', lines: n === 1 ? ['Wrote version 1 in your brand'] : fixes.slice(0, 6), sections: [], reviewers: [], review: n - 1 });
+    moments.push({ kind: n === 1 ? 'draft_saved' : 'round_started', at: iso(tp), label: n === 1 ? 'Version 1 is written.' : `Version ${n}: ${fixes.length} fixes from the review.`, agent: 'designer' });
+    push(tp, 'building', n === 1 ? 'Writing version 1' : `Making version ${n}`);
+    const ts = mtime(shot);
+    if (!ts) break;
+    renders = [{ width: 1440, faults: 0 }, { width: 390, faults: 0 }];
+    moments.push({ kind: 'rendered', at: iso(ts), label: `Version ${n} drawn on a laptop and a phone.`, agent: 'checker' });
+    push(ts, 'checking', `Reviewing version ${n} on a laptop and a phone`);
+    const s = json(sc), tsc = mtime(sc);
+    if (!s || !tsc) break;
+    const page100 = mean(s.new), live100 = mean(s.live);
+    score = { live: live100, page: page100, history: score.history.concat([{ at: iso(tsc), page: page100 }]) };
+    compare = { verdict: page100 > live100 ? 'wins' : page100 < live100 ? 'loses' : 'even', wins_on: [], loses_on: [] };
+    moments.push({ kind: 'scored', at: iso(tsc), label: `Version ${n} scored ${page100} out of 100. Your page today: ${live100}.`, agent: 'director' });
+    for (const l of labels(read(f(`r${n}`, 'verdict.md'))).slice(0, 3)) moments.push({ kind: 'director_thought', at: iso(tsc), label: l, agent: 'director' });
+    push(tsc, 'checking', `Version ${n} reviewed`);
+  }
+  const zip = fs.readdirSync(dir).find((x) => x.endsWith('-page.zip'));
+  if (zip) push(mtime(f(zip)), 'finishing', 'Final checks');
+  return rows;
+}
+
 function siteJson(name) {
   const dir = path.join(pages, name), A = (f) => json(path.join(dir, 'audit', f));
   const comp = A('competitive.json');
@@ -201,7 +245,7 @@ function siteJson(name) {
   const lookSent = path.join(dir, 'directions', '.look-sent');
   const building = fs.existsSync(lookSent) && !fs.existsSync(path.join(dir, '.page-sent')) ? { at: new Date(mtime(lookSent) || Date.now()).toISOString() } : null;
   return {
-    url, name, startedAt, updatedAt, done, building,
+    url, name, startedAt, updatedAt, done, building, buildSnaps: building ? buildSnaps(dir) : [],
     events: events(dir, desk, facts, done),
     looks: looksOf(dir),
     parts: {

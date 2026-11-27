@@ -192,6 +192,18 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
     const P = path.join(W, 'page.html'); fs.copyFileSync(path.join(W, `r${best.i}/page.html`), P);
     const t = (fs.statSync(path.join(W, `r${n}/page.html`)).mtimeMs - 1000) / 1000; fs.utimesSync(P, t, t);
   }
+  // The final judge (27 Nov). The critic knows the brief and the live page, and it flattered run 13 by 2 points.
+  // A fresh judge sees only the finished page, cold, on the absolute bar. Under 9, the page gets its one change
+  // and one more judge. Two judges at most.
+  const J = k => json(`judge-${k}.json`);
+  let jk = 1; while (has(`judge-${jk}.json`) && jk < 2) jk++;
+  const lastJ = J(jk) ? jk : jk - 1;
+  const jNeeded = !J(jk) && (jk === 1 || (J(jk - 1) && J(jk - 1).overall < 9 && newer('page.html', `judge-${jk - 1}.json`)));
+  if (jNeeded) say('final judge', `judge:${jk}`, `Run the final judge: a FRESH subagent on your strongest model, never a small one, that has seen nothing of this run. Give it only the prompt in KIT/steps/4-review.md "The final judge", the business name and these images of the page as it is now: r${n}/first.png, r${n}/whole.jpg, r${n}-phone/first.png and the r${n}-phone/t*.png images. Tell it to write ${W}/judge-${jk}.json in one Write call. In the same message run ${kit} await landing-pages/${site} judge-${jk}.json (timeout 600000 ms).`, `KIT/steps/4-review.md, "The final judge".`, { gate: 'judge' });
+  const jl = J(lastJ);
+  if (lastJ >= 1 && jl && !(typeof jl.overall === 'number' && jl.worst && jl.change)) say('final judge', `judge-fix:${lastJ}`, `judge-${lastJ}.json must be {"scores": {...}, "overall": number, "worst": "...", "change": "..."}. Ask the judge to write it again.`);
+  if (lastJ === 1 && jl && jl.overall < 9 && !newer('page.html', 'judge-1.json')) say('final judge', 'judge-change', `Make the final judge's change as small edits to page.html, keeping everything else: ${jl.change} (its worst fault: ${jl.worst}). Then render with ${kit} shot landing-pages/${site}/page.html ${n + 1} and ${kit} shot landing-pages/${site}/page.html ${n + 1} phone, and run ${kit} next ${site}.`, `KIT/steps/4-review.md, part 3. Never start a new layout.`);
+  if (lastJ === 1 && jl && jl.overall < 9 && newer('page.html', 'judge-1.json') && !has(`r${n}/first.png`)) say('final judge', `shot:${n}`, `Render: ${kit} shot landing-pages/${site}/page.html ${n}, then ${kit} shot landing-pages/${site}/page.html ${n} phone.`);
   }
 
   // Stage 5: hand it over.

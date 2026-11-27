@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.7 (27 Nov 2026)
+
+- Stronger proof on every page: the kit now hunts reviews, ratings and awards before it builds. A final fresh check scores every finished page, and the studio shows each step of your build.
+
 ## 0.8.6 (27 Nov 2026)
 
 - Higher bar: the page review scores on an absolute scale and adds a craft score. The studio shows the build screen while your page is built.

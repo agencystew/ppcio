@@ -13,7 +13,7 @@ const items = s => s.split(/\n(?=\s*\d+\.\s)/).map(x => x.trim()).filter(x => /^
 const norm = s => s.toLowerCase().replace(/[‘’`´]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, '-').replace(/\s+/g, ' ');
 
 // Words the buyer must never see (runs 2, 4, 5, 11: "my team of 12 checkers", "the critic", "4 of 11 checks", "rivals").
-const INTERNAL = /\b(sub-?agents?|agents?|critic|guard|checkfacts|kit\.sh|json|brief\.md|facts\.md|audit\.md|context\.md|first-look\.md|checkers?|lp-[a-z-]+|wave \d|step \d|stage \d|harness|rivals?)\b/i;
+const INTERNAL = /\b(sub-?agents?|agents?|critic|guard|checkfacts|kit\.sh|json|brief\.md|facts\.md|audit\.md|context\.md|first-look\.md|checkers?|judge|lp-[a-z-]+|wave \d|step \d|stage \d|harness|rivals?)\b/i;
 // The AI register Stewart calls slop (site-copy skill, rule 7) and the em dash (rule 8).
 const AI_WORDS = /\b(delve|leverage|utili[sz]e|robust|seamless(ly)?|holistic|streamline|empower|elevate|actionable|best practices|landscape|unlock|game-?changer|supercharge)\b/i;
 const PERCENT_PROMISE = /\b\d{1,3}\s?%\s+(more|higher|better|increase|lift|uplift|boost)/i;
@@ -29,7 +29,7 @@ const banned = (text, where) => {
 // Everything the business itself says: their pages, late-loading parts, the capture facts, the owner's words.
 const known = (W, own) => {
   let s = ''; const IN = path.join(W, 'inputs');
-  for (const d of [IN, path.join(IN, 'pages')]) for (const f of fs.existsSync(d) ? fs.readdirSync(d) : []) if (/\.md$/.test(f)) s += read(d, f) + '\n';
+  for (const d of [IN, path.join(IN, 'pages'), path.join(IN, 'proof')]) for (const f of fs.existsSync(d) ? fs.readdirSync(d) : []) if (/\.md$/.test(f)) s += read(d, f) + '\n';
   for (const f of ['live-parts.json', 'inputs/site-facts.json', 'facts.md', 'ads.md', 'owner.md', ...(own ? [] : ['context.md'])]) s += read(W, f) + '\n';
   // own: only what the business and the owner said. The audit agents' suggestions are not proof of a promise.
   const A = path.join(W, 'audit'); if (!own) for (const f of fs.existsSync(A) ? fs.readdirSync(A) : []) if (/\.json$/.test(f)) s += read(A, f) + '\n';
@@ -127,6 +127,14 @@ G.audit = W => {
   f.push(...stray(W, dx + '\n' + plan).slice(0, 4).map(n => `The diagnosis or the plan says "${n}", a figure that is nowhere in their pages or the audit. Use a real figure or cut it.`));
   let cf = ''; try { execFileSync(process.execPath, [path.join(__dirname, 'checkfacts.cjs'), W, 'facts.md'], { encoding: 'utf8' }); } catch (e) { cf = String(e.stdout || ''); }
   cf.split('\n').filter(l => /^NOT ON THEIR SITE/.test(l)).slice(0, 4).forEach(l => f.push(`facts.md: ${l}`));
+  // Proof was the weakest score in the blind judge on 27 Nov (kit 6.3 of 10). The hunt is not optional.
+  const facts = read(W, 'facts.md'); const proof = (facts.split(/^## Proof[ \t]*$/m)[1] || '').split(/^## /m)[0];
+  const proofItems = proof.split('\n').filter(l => /^\s*[-*\d]/.test(l) && /(https?:\/\/|inputs\/)/.test(l));
+  const searched = (proof.match(/^Searched:(.*)$/m) || [])[1] || '';
+  const saved = fs.existsSync(path.join(W, 'inputs', 'proof')) ? fs.readdirSync(path.join(W, 'inputs', 'proof')).filter(x => x.endsWith('.md')).length : 0;
+  if (!proof.trim()) f.push('facts.md has no "## Proof" section. Run the proof hunt in KIT/steps/1-audit.md part 5 first: their testimonial, case study and about pages, their Google reviews, Yelp, BBB, Houzz or Trustpilot, trade bodies, maker certifications, awards, named clients and press.');
+  else if (proofItems.length < 5 && searched.split(',').filter(x => x.trim()).length < 6) f.push(`facts.md "## Proof" lists ${proofItems.length} items with a source. Find at least 5 (a named review, a review count, a certification, an award, a named client or project), each with its source, or list the 6 places you searched on a "Searched:" line.`);
+  if (proof.trim() && !saved && /https?:\/\//.test(proof)) f.push('facts.md "## Proof" cites outside pages, but inputs/proof/ is empty. Save the text of each page you used to inputs/proof/<name>.md, first line "Source: <url>", so each quote can be checked word for word.');
   return f;
 };
 

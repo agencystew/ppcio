@@ -13,6 +13,9 @@ const IN = path.join(work, 'inputs'); const sources = [];
 for (const f of fs.existsSync(IN) ? fs.readdirSync(IN) : []) if (/^site-page-text.*\.md$/.test(f)) sources.push(path.join(IN, f));
 const PAGES = path.join(IN, 'pages');
 for (const f of fs.existsSync(PAGES) ? fs.readdirSync(PAGES) : []) if (f.endsWith('.md')) sources.push(path.join(PAGES, f));
+// Proof from outside their site (reviews, awards, case studies): saved page text, first line "Source: <url>".
+const PROOF = path.join(IN, 'proof');
+for (const f of fs.existsSync(PROOF) ? fs.readdirSync(PROOF) : []) if (f.endsWith('.md')) sources.push(path.join(PROOF, f));
 if (!sources.length) { console.log(`No captured text in ${IN}. Give the work folder (landing-pages/<site>), or run the capture first.`); process.exit(2); }
 // live-parts.json holds text that loads late (review widgets, sliders): its strings count as their site too.
 const strings = o => typeof o === 'string' ? [o] : o && typeof o === 'object' ? Object.values(o).flatMap(strings) : [];
