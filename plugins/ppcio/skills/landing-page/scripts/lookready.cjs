@@ -23,5 +23,5 @@ const msg = [
   fs.existsSync(path.join(dir, 'styles.html')) ? `The other styles are here: ${process.env.PPCIO_STUDIO ? `${process.env.PPCIO_STUDIO}/s/${site}/styles` : base + 'styles.html'}. Tell me the one you like better and I'll switch.` : '',
   'I\'m building the whole page in this look now. About 10 minutes.',
 ].filter(Boolean).join('\n\n');
-fs.writeFileSync(path.join(dir, '.look-sent'), new Date().toISOString());
+fs.writeFileSync(path.join(dir, '.look-sent'), msg); // the message itself: next checks the chat holds it
 console.log(`MESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Then, in this same turn, run kit.sh next <site> and do the step it prints, and write nothing else in chat until a tool prints the next MESSAGE TO SEND NOW.\n----\n${msg}\n----`);

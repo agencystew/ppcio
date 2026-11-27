@@ -4,7 +4,7 @@ Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then 
 
 ## 0.8.6 (27 Nov 2026)
 
-- Fix standalone zip packaging for local captured photos/logos, fix shot.cjs path handling, and verified full non-Claude harness run.
+- Higher bar: the page review scores on an absolute scale and adds a craft score. The studio shows the build screen while your page is built.
 
 ## 0.8.5 (27 Nov 2026)
 

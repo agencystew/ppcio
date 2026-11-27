@@ -197,8 +197,11 @@ function siteJson(name) {
   const pageHtml = read(pageFile);
   const host = (() => { try { return new URL(url).host.replace(/^www\./, ''); } catch { return name; } })();
   const done = fs.existsSync(path.join(dir, 'audit.md')) || fs.existsSync(path.join(dir, 'audit.html'));
+  // The owner saw the look and the page is not handed over yet: a build is running.
+  const lookSent = path.join(dir, 'directions', '.look-sent');
+  const building = fs.existsSync(lookSent) && !fs.existsSync(path.join(dir, '.page-sent')) ? { at: new Date(mtime(lookSent) || Date.now()).toISOString() } : null;
   return {
-    url, name, startedAt, updatedAt, done,
+    url, name, startedAt, updatedAt, done, building,
     events: events(dir, desk, facts, done),
     looks: looksOf(dir),
     parts: {

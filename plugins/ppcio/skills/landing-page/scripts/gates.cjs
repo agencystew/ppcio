@@ -193,8 +193,8 @@ G.page = async W => {
 // The critic's files: a bad scores.json made the review screen show no scores (26 Nov).
 G.scores = (W, n) => {
   const s = json(W, `r${n}/scores.json`); const f = [];
-  const ok = a => Array.isArray(a) && a.length === 5 && a.every(x => typeof x === 'number' && x >= 0 && x <= 10);
-  if (!s || !ok(s.live) || !ok(s.new)) f.push(`r${n}/scores.json must be {"live": [5 numbers], "new": [5 numbers]}, each 0 to 10, in the order first screen, case, proof, offer, action.`);
+  const ok = a => Array.isArray(a) && a.length === 6 && a.every(x => typeof x === 'number' && x >= 0 && x <= 10);
+  if (!s || !ok(s.live) || !ok(s.new)) f.push(`r${n}/scores.json must be {"live": [6 numbers], "new": [6 numbers]}, each 0 to 10, in the order first screen, case, proof, offer, action, craft.`);
   const v = read(W, `r${n}/verdict.md`);
   if (!v) f.push(`r${n}/verdict.md is missing.`); else if (!/^\s*1\.\s+\*\*/m.test(v) && !(s && s.new && s.new.every(x => x >= 9))) f.push(`r${n}/verdict.md has no numbered faults with bold labels (1. **Label.** sentence). The review screen lists these labels.`);
   return f;

@@ -2,7 +2,7 @@
 // The review screen: review.html in the work folder, in the postclick app's look.
 // It shows the blind test scores (their live page against the new page), the two
 // first screens side by side, and the faults the review found and fixed.
-// Reads r1/scores.json {"live":[5 numbers],"new":[5 numbers]}, r1/verdict.md,
+// Reads r1/scores.json {"live":[6 numbers],"new":[6 numbers]}, r1/verdict.md,
 // inputs/live-page-today.png and the newest r<round>/first.png.
 const fs = require('fs'); const path = require('path');
 const work = path.resolve(process.argv[2] || '.');
@@ -84,5 +84,5 @@ const msg = [
   ask ? `${ask}\n` : '',
   'Tell me any change and I\'ll fold it in.',
 ].filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n').replace(/\n{3,}/g, '\n\n').trim();
-try { fs.writeFileSync(path.join(work, '.page-sent'), new Date().toISOString()); } catch (e) {}
+try { fs.writeFileSync(path.join(work, '.page-sent'), msg); } catch (e) {}
 console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Attach page.html too, or show it in your app's preview, so they can share it.\n----\n${msg}\n----`);

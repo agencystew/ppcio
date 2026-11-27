@@ -44,6 +44,21 @@ const often = gate => Object.entries(mem[gate] || {}).filter(([, n]) => n >= 2).
 // Every blind run (1-12) wrote status lines between the moments ("Critic is reviewing...", "I am waiting for 9 agents").
 // A ban alone failed 6 times: apps ask the model to say what it is doing. So the harness gives it the one line to say.
 const LIVE = process.env.PPCIO_STUDIO ? ` Watch it live: ${process.env.PPCIO_STUDIO}/s/${site}/` : '';
+// 27 Nov, run 13: the tools marked each message sent when they printed it, and the model then put a one-line
+// progress note in its place. The owner saw none of the 4 messages. So next reads the app's own chat record
+// (Claude Code keeps one per folder) and goes on only when the message is in the chat as real text.
+const chatText = (() => { let memo = null; return () => {
+  if (memo !== null) return memo; memo = '';
+  if (process.env.PPCIO_NO_CHAT_CHECK) return memo;
+  const home = process.env.CLAUDE_CONFIG_DIR || path.join(require('os').homedir(), '.claude');
+  const P = path.join(home, 'projects', process.cwd().replace(/[^A-Za-z0-9]/g, '-'));
+  let files = []; try { files = fs.readdirSync(P).filter(f => f.endsWith('.jsonl')).map(f => path.join(P, f)).filter(f => Date.now() - fs.statSync(f).mtimeMs < 12 * 3600e3); } catch (e) { return memo; }
+  for (const f of files) for (const l of fs.readFileSync(f, 'utf8').split('\n')) { if (!l.includes('"assistant"')) continue; try { const d = JSON.parse(l); for (const c of (d.message && d.message.content) || []) if (c.type === 'text') memo += c.text + '\n'; } catch (e) {} }
+  memo = files.length ? memo + '\u0001' : ''; return memo; }; })();
+const plain = t => t.replace(/[*_`#>]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const inChat = msg => { const c = chatText(); if (!c) return true; const C = plain(c); const ls = msg.split('\n').map(plain).filter(l => l.length >= 25 && !/^(https?:|\/)/.test(l)); return !ls.length || ls.filter(l => C.includes(l.slice(0, 60))).length * 2 >= ls.length; };
+const sentCheck = (marker, stage, what) => { if (agency || !has(marker)) return; const msg = fs.readFileSync(path.join(W, marker), 'utf8'); if (msg.length < 40 || inChat(msg)) return; const key = `resend:${marker}`; if (streak(key) >= 3) return;
+  say(stage, key, `The owner has not seen the ${what} message. It is not in the chat as a message (a progress note or your thinking does not count). Send it now as your next chat message, word for word, then run ${kit} next ${site}:\n----\n${msg}\n----`); };
 const QUIET = `Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat. If your app asks you to say what you are doing, write only this, word for word, once: "Still working on it.${LIVE}"`;
 const AGAIN = `When it is done, run ${kit} next ${site}.`;
 const say = (stage, key, step, how, opts = {}) => {
@@ -54,7 +69,10 @@ const say = (stage, key, step, how, opts = {}) => {
   if (how) out.push(`HOW: ${how}`);
   const o = opts.gate ? often(opts.gate) : []; if (o.length && !(opts.faults || []).length) out.push(`On this computer, this step most often goes wrong on: ${o.join('; ')}. Get these right the first time.`);
   if (n >= 3) out.push(`STUCK: this is try ${n} at this step. Change the approach, not the details: read the HOW part again and rewrite the file from the start${opts.agents ? ', or start any agent whose file is still missing again, on its own' : ''}.`);
-  out.push(QUIET, AGAIN); console.log(out.join('\n')); process.exit(0);
+  // Run 13 sent "Still working on it." 4 times: offer the line once per stage, then only silence.
+  const said = path.join(W, '.harness', `said-${stage.split(',')[0].replace(/\W+/g, '-')}`);
+  if (fs.existsSync(said)) out.push('Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat.'); else { try { fs.mkdirSync(path.dirname(said), { recursive: true }); fs.writeFileSync(said, ''); } catch (e) {} out.push(QUIET); }
+  out.push(AGAIN); console.log(out.join('\n')); process.exit(0);
 };
 // A check on a step's own file. Soft checks (layout of a file) let the run go on after 4 tries, so a format rule can
 // never trap a buyer; a fact check (an invented quote, figure, phone number or promise) never lets go.
@@ -76,6 +94,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   await check('first-look', 'first-look.md', 'first look', 'Edit first-look.md for each line above. A quote must be their exact words from inputs/site-page-text.md.', false);
   if (!has('.first-look-sent') && !agency) say('first look', 'send:first-look', `Run ${kit} view ${site} (or ${kit} firstlook ${site} if your app does not keep background servers running). It prints the first look under MESSAGE TO SEND NOW: send it as your very next chat message, word for word.`);
 
+  sentCheck('.first-look-sent', 'first look', 'first look');
   // Stage 2: the audit, as a graph of agents in 2 waves.
   if (!has('context.md')) say('audit', 'write:context', `Capture 2 competitors into competitors/, then write context.md and run ${kit} checkfacts landing-pages/${site} context.md.`, `KIT/steps/1-audit.md, parts 2 and 3.`, { gate: 'context' });
   await check('context', 'context.md', 'audit', 'KIT/steps/1-audit.md, part 3.');
@@ -92,6 +111,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   if (!has('facts.md') || !has('audit.md')) say('audit', 'write:audit', `Check the team's work against the screenshots, then write facts.md and audit.md.`, `KIT/steps/1-audit.md, parts 5 and 6. audit.md opens with a "**Verdict:** " line, "## The diagnosis" (3 to 4 sentences, as a senior strategist) and "## The plan for your new page" (exactly 3 moves, each a change to the whole page).`, { gate: 'audit' });
   await check('audit', 'audit.md', 'audit', 'KIT/steps/1-audit.md, part 6, "The diagnosis and the plan come first". Fix facts.md quotes word for word from the captured text.', false);
   if (!has('audit.html') || newer('audit.md', 'audit.html') || (!has('.audit-sent') && !agency)) say('audit', 'send:audit', `Run ${kit} report landing-pages/${site}. It prints the audit-done message under MESSAGE TO SEND NOW: send it as your very next chat message, word for word. When it prints NOT DRAWN, fix those lines and run it again.`);
+  sentCheck('.audit-sent', 'audit', 'audit-done');
 
   // The new page comes with the licence.
   let licence = ''; try { licence = execFileSync(process.execPath, [path.join(__dirname, 'licence.cjs'), 'status'], { encoding: 'utf8' }); } catch (e) {}
@@ -105,6 +125,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   if (!has('directions/a.html') || !has('directions/choice.md')) say('look', 'write:look', `Build their first screen in the style you picked as directions/a.html. Render it (${kit} shot landing-pages/${site}/directions/a.html a, and again with phone), open both images, fix what looks wrong, then write directions/choice.md.`, `KIT/steps/2-directions.md, part 3.`, { gate: 'choice' });
   await check('choice', 'directions/choice.md', 'look', 'KIT/steps/2-directions.md, part 3.');
   if (!has('directions/.look-sent') && !agency) say('look', 'send:look', `Run ${kit} look ${site}. Send what it prints under MESSAGE TO SEND NOW as your very next chat message, word for word.`);
+  sentCheck('directions/.look-sent', 'look', 'look-ready');
 
   // Stage 4: the build. Blind-4 skipped 3 of the audit's fixes, so plan.md must carry out the 3 moves.
   if (!has('plan.md')) say('build', 'write:plan', `Write plan.md. Then test it with the case check: start a fresh subagent with the prompt in KIT/steps/4-review.md "The case check prompt", and tell it to write its reply to ${W}/case-check.md in one Write call. In the same message run ${kit} await landing-pages/${site} case-check.md (timeout 600000 ms), so you wait in a tool call, never in chat. Fix plan.md for each point you agree with, and add the line "Case check: READY".`, `KIT/steps/3-build.md, steps 3 and 4.`, { gate: 'plan' });
@@ -112,9 +133,9 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   if (!has('page.html')) say('build', 'write:page', `Write page.html in the look of directions/a.html, carrying out the 3 moves of the audit's plan and every section of plan.md.`, `KIT/steps/3-build.md, step 5.`, { gate: 'page' });
 
   // The review loop. Cheap checks first (code), then the expensive judge (a fresh critic). Up to MAX rounds.
-  const MAX = 5; const KEYS = ['first screen', 'case', 'proof', 'offer', 'action'];
-  const avg = s => s && s.new ? s.new.reduce((a, b) => a + b, 0) / 5 : 0;
-  const atBar = s => s && Array.isArray(s.new) && s.new.length === 5 && s.new.every((x, i) => x >= 8 && x >= ((s.live || [])[i] || 0));
+  const MAX = 5; const KEYS = ['first screen', 'case', 'proof', 'offer', 'action', 'craft'];
+  const avg = s => s && s.new ? s.new.reduce((a, b) => a + b, 0) / s.new.length : 0;
+  const atBar = s => s && Array.isArray(s.new) && s.new.length === KEYS.length && avg(s) >= 8.5 && s.new.every((x, i) => x >= 8 && x >= ((s.live || [])[i] || 0));
   let n = 1; while (has(`r${n + 1}`)) n++;
   // pack rewrites page.html to point at local copies of the photos. That is the same page, not a new round: the
   // round keeps its score, and only the code checks run again (they catch a photo the copy broke).
@@ -162,8 +183,9 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
     say(`review, round ${cur.i + 1}`, `rollback:${cur.i}`, `Round ${cur.i} scored ${cur.a.toFixed(1)}, below round ${best.i} (${best.a.toFixed(1)}), so page.html is back to round ${best.i}. Fix the faults in r${best.i}/verdict.md that round ${cur.i} did not fix, one small edit at a time, keeping everything round ${best.i} did well. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, part 3.`);
   }
   if (goOn) {
-    const low = KEYS.filter((k, i) => !(cur.s.new[i] >= 8 && cur.s.new[i] >= ((cur.s.live || [])[i] || 0)));
-    say(`review, round ${n + 1} of up to ${MAX}`, `improve:${n}`, `The page is not at the bar yet: a fresh critic must score it 8 or more out of 10, and at least their page today, on each of first screen, case, proof, offer and action. Round ${n} is below on: ${low.join(', ')}. Fix every fault in r${n}/verdict.md, strongest first, as small edits to page.html. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, parts 2 and 3. Never start a new layout.`);
+    let low = KEYS.filter((k, i) => !((cur.s.new[i] ?? 0) >= 8 && cur.s.new[i] >= ((cur.s.live || [])[i] || 0)));
+    if (!low.length) low = KEYS.filter((k, i) => (cur.s.new[i] ?? 0) < 9); // all at 8, the average under 8.5: raise the weakest
+    say(`review, round ${n + 1} of up to ${MAX}`, `improve:${n}`, `The page is not at the bar yet: a fresh critic must score it 8 or more out of 10, and at least their page today, on each of first screen, case, proof, offer, action and craft, and 8.5 or more on average. Round ${n} is below on: ${low.join(', ')}. Fix every fault in r${n}/verdict.md, strongest first, as small edits to page.html. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, parts 2 and 3. Never start a new layout.`);
   }
   // The loop is over. Hand over the best round's page. Its time is set back, so it does not count as a new edit.
   if (best && best.i !== cur.i && cur.a < best.a && has(`r${best.i}/page.html`)) {
@@ -177,5 +199,6 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   if (!has('ready.md')) say('hand over', 'write:ready', `Write ready.md.`, `KIT/steps/4-review.md, part 5, item 2. Lead with the most useful real catch of the run (blind-4: "the truck shows a different phone number from the buttons").`, { gate: 'ready' });
   await check('ready', 'ready.md', 'hand over', 'KIT/steps/4-review.md, part 5, item 2.');
   if ((!has('.page-sent') || newer('page.html', '.page-sent')) && !agency) say('hand over', 'send:page', `Run ${kit} review landing-pages/${site}. Send what it prints under MESSAGE TO SEND NOW as your very next chat message, word for word, and attach page.html.`);
+  sentCheck('.page-sent', 'hand over', 'page-ready');
   console.log(`STAGE: done\nNEXT: Nothing. Keep ${kit} wait running in the background. When they ask for a change in the studio or the chat: add one line to ${taste} with what they asked, in their words (the next page on this computer reads it), and any fact they gave to landing-pages/${site}/owner.md. Make the change, then run ${kit} next ${site} again: it renders, checks, judges and sends the new page.`);
 })();
