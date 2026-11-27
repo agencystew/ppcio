@@ -1,389 +1,48 @@
 ---
 name: ppc-strategic-audit
-description: "Deep 90-day multi-tab Google Ads audit checking strategic alignment across campaigns, keywords, ads, and landing pages, separating profitable spend from waste. Not for a quick 5-minute campaign-table health grade — use ppc-account-health-check instead."
+description: "Deep 90-day causal-chain Google Ads audit separating real profitable spend from waste across campaigns, search terms, ads, tracking, and landing pages. Use when someone asks for a full Google Ads audit, deep account review, or 90-day strategic teardown. Not for a quick 5-minute campaign-table grade (use ppc-account-health-check) or isolating a single sudden drop (use change-detective)."
 ---
 
-# PPC Strategic Audit
+# PPC Strategic Audit (Causal-Chain Edition)
+
+Read a Google Ads account as a **causal chain, not a checklist**. Your job is to find the real constraint costing the business money, prove it with exact arithmetic from their exports, protect what is already working, and hand over a prioritized sequence of moves a senior PPC director would actually run on Monday morning. Do not mechanically fill out boxes; chase the anomaly where the money actually leaks.
 
 ## Start here
 
-- If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
-- The data: In Google Ads, open Campaigns, set the dates to the last 90 days, add the columns Budget, Bid strategy type, Cost, Conversions, Cost / conv. and Search impr. share (Columns, then Modify columns), then press Download above the table and pick .csv. Drop the file here. Say this to them in one line when you ask for it.
-
-Perform data-driven Google Ads audits that identify wasted spend and high-leverage optimization opportunities. This skill extracts strategic insights, not generic advice.
-
----
-
-## Core Philosophy
-
-### Alignment Before Performance
-Verify the alignment chain (search term --> keyword --> ad --> landing page --> offer) BEFORE analyzing performance metrics. A low CVR might indicate broken alignment, not poor performance.
-
-### Profitability Over Vanity
-Prioritize profit-driving metrics over volume-driving metrics:
-1. CPA / ROAS (profitability)
-2. CVR (efficiency)
-3. CTR (relevance signal)
-4. Impressions / Clicks (volume)
-
-### Sample Size Discipline
-Respect statistical significance. No confident conclusions from insufficient data:
-
-| Confidence | Conversions | Time Period | Pattern |
-|-----------|------------|------------|---------|
-| High | 30+ | 90+ days | Clear, consistent |
-| Medium | 10-30 | 30-90 days | Reasonable, some variance |
-| Low | <10 | <30 days | Unclear, high variance |
-
-### Waste Before Growth
-Eliminate waste before pursuing growth. Fix leaks before adding water:
-1. Stop the bleeding (cut clear waste)
-2. Feed the winners (increase budgets on what works)
-3. Test new growth (after protecting profitability)
-
-### Structure Enables Performance
-Fix foundational structure before tactical tweaks. 10 campaigns with 2 conversions each < 2 campaigns with 10 conversions each.
-
----
-
-## Critical Context Gathering
-
-### Required Context (Ask if not provided)
-
-**1. Google Ads Performance Data**
-- Minimum: Campaign-level metrics (spend, conversions, CPA)
-- Ideal: Campaign, ad group, keyword, and search term data
-- Acceptable formats: Excel export, CSV, Google Sheets link, pasted data
-
-**2. Business Targets**
-- Target CPA (cost per acquisition goal) OR
-- Target ROAS (return on ad spend goal)
-- If not provided, will use account averages as baseline
-
-**3. Time Period**
-- Default: Last 30 days
-- Ideal: 90 days for statistical reliability
-
-### Recommended Context
-
-**4. Business Type**
-- Lead gen, eCommerce, local services, SaaS, etc.
-- Helps validate alignment and set expectations
-
-**5. Account Spend Tier**
-
-| Tier | Monthly Spend | Statistical Impact |
-|------|-------------|-------------------|
-| Small | <USD 5K/mo | Limited per-campaign confidence, focus on account-level |
-| Medium | USD 5-25K/mo | Campaign-level analysis reliable for top spenders |
-| Large | USD 25-100K/mo | Full keyword-level analysis possible |
-| Enterprise | >USD 100K/mo | All dimensions analyzable with high confidence |
-
-### Optional Context
-
-**6. Recent Changes**
-- New campaigns, budget shifts, bidding changes
-- Helps explain anomalies
-
-**7. Seasonal Context**
-- Peak vs slow season for this business
-- Known promotions or market events
-
----
-
-## Input Format
-
-Accept Google Ads data in any reasonable format:
-
-- **Excel/CSV export** (preferred): Full account export or specific tabs
-- **Google Sheets link**: With view access
-- **Pasted data**: Tables with campaign/ad group/keyword metrics
-- **Screenshots**: Can extract key metrics (less reliable)
-- **API data**: JSON format from Google Ads API
-
-**Minimum data requirements:**
-- At least 7 days of data (30+ preferred)
-- Campaign names and metrics (impressions, clicks, cost, conversions)
-- At least 1 conversion recorded (for meaningful analysis)
-
----
-
-## Analysis Framework
-
-### Phase 1: Account Maturity Assessment
-
-Before diving into metrics, classify the account to calibrate expectations:
-
-| Stage | Signals | Audit Focus |
-|-------|---------|-------------|
-| **New** (0-3 mo) | Learning phase, limited data, structure forming | Tracking validation, structure, patience |
-| **Growth** (3-12 mo) | Winners emerging, room to scale, testing active | Scale winners, expand carefully, data density |
-| **Mature** (1-3 yr) | Stable performance, optimization refined | Efficiency gains, incremental improvements |
-| **Plateau** (3+ yr) | Flat YoY, optimizations exhausted | Structural innovation, new channels |
-| **Turnaround** (any age) | Inherited mess, performance crisis | Triage: stop bleeding first |
-
-**Why this matters:** Recommending "scale your budget" to a turnaround account or "consolidate structure" to a new account causes harm. Match recommendations to maturity.
-
-### Phase 2: Data Quality Assessment
-
-Before analysis, evaluate data integrity:
-
-**Conversion Tracking Validation:**
-- How many conversion actions are being tracked?
-- Are there duplicate conversions inflating numbers?
-- Is conversion value being tracked (needed for ROAS)?
-- Conversion lag: Are recent days reliable?
-
-**Data Quality Flags:**
-
-| Flag | What It Means | Impact on Analysis |
-|------|--------------|-------------------|
-| Conversions > Clicks | Tracking error or offline imports | Flag, don't trust CVR |
-| Sudden conversion drop to 0 | Tracking broke | Exclude affected period |
-| CPA varies >5x between campaigns | Different conversion actions or types | Normalize before comparing |
-| Zero impression share data | Search campaigns may be limited | Cannot assess budget constraints |
-
-### Phase 3: Alignment Chain Validation
-
-The most important phase. Fix alignment BEFORE optimizing performance.
-
-**The Chain:** Search Term --> Keyword --> Ad Copy --> Landing Page --> Offer
-
-| Chain Link | What to Check | Broken Signal |
-|-----------|--------------|---------------|
-| Search Term --> Keyword | Are search terms relevant to keyword intent? | High impressions, low CTR on irrelevant terms |
-| Keyword --> Ad Copy | Does ad reflect keyword promise? | Low Quality Score creative component |
-| Ad Copy --> Landing Page | Does LP deliver what ad promised? | High CTR + Low CVR = alignment break |
-| Landing Page --> Offer | Is the next step clear and compelling? | Traffic but no form fills/calls |
-
-**Alignment Break Detection:**
-
-| Pattern | Diagnosis | Fix Priority |
-|---------|-----------|-------------|
-| High CTR (>6%) + Low CVR (<1%) | Ad-to-LP mismatch | Critical, fix before anything else |
-| Low CTR (<2%) + Normal CVR | Ad relevance issue | High, test new ad copy |
-| Normal CTR + Low CVR | LP or offer problem | High, audit landing page |
-| Low IS (Rank) + Normal IS (Budget) | Quality/relevance issue | Medium, improve Quality Score |
-| Low IS (Budget) + Normal IS (Rank) | Budget constraint | Good problem, consider scaling |
-
-**Intent Classification for Search Terms:**
-
-| Intent | Signal Words | Expected Action |
-|--------|-------------|----------------|
-| Commercial High | buy, order, hire, quote, price, near me | High bid, strong LP |
-| Commercial Medium | best, top, compare, review, alternative | Moderate bid, comparison content |
-| Informational | how to, what is, guide, tips, free | Low bid or exclude |
-| Wrong Intent | jobs, salary, DIY, template, download free | Negative keyword immediately |
-
-### Phase 4: Working vs Not Working
-
-Classify every significant segment:
-
-| Status | Criteria | Action |
-|--------|----------|--------|
-| Working | CPA <= target, CVR >= account avg, 10+ conversions | Protect and consider scaling |
-| Promising | CPA within 20% of target, 5-10 conversions | Monitor, give more time |
-| Not Working | CPA > 1.5x target, 30+ days, adequate spend | Fix alignment or cut |
-| Insufficient Data | <10 conversions, <30 days | Cannot conclude, wait |
-| Clear Waste | USD 200+ spend, 0 conversions, obvious intent mismatch | Pause or negative keyword |
-
-### Phase 5: Opportunity Identification
-
-Categories in priority order:
-
-**1. Waste Elimination (Do First)**
-- Zero-conversion keywords/campaigns with significant spend
-- Search terms with clear wrong intent
-- Geographic targeting leaks (serving non-service areas)
-- Quantify: "Pausing [X] would save $[Y]/month"
-
-**2. Alignment Fixes (Do Second)**
-- Intent mismatches identified in Phase 3
-- Ad-to-LP disconnects
-- Quality Score issues on high-spend keywords
-- Quantify: "Fixing alignment on [X] could improve CVR from [Y]% to [Z]%"
-
-**3. Scaling Winners (Do Third)**
-- Budget-constrained profitable campaigns (lost IS to budget >20%)
-- High-ROAS campaigns with room to grow
-- Converting search terms not yet added as keywords
-- Quantify: "Increasing budget on [X] could generate [Y] additional conversions at $[Z] CPA"
-
-**4. Structural Improvements (Do Fourth)**
-- Data fragmentation (too many campaigns, thin data per campaign)
-- Competing campaigns bidding on same terms
-- Match type consolidation opportunities
-- Quantify: "Consolidating [X] campaigns would improve data density for algorithm optimization"
-
-### Phase 6: Prioritized Action Plan
-
-Every recommendation must include:
-
-| Component | Requirement |
-|-----------|------------|
-| Trigger metric | What data supports this (cite specific numbers) |
-| Rationale | Why this matters for the business (revenue-tied) |
-| Specific action | What to do in Google Ads (navigation steps) |
-| Expected impact | Quantified in dollars or percentages |
-| Effort level | Low (15 min) / Medium (1-2 hrs) / High (half day+) |
-| Confidence | High / Medium / Low based on data quality |
-
-**Priority Scoring:**
-
-| Priority | Impact | Effort | Risk | Timeline |
-|----------|--------|--------|------|----------|
-| Quick Win | High | Low | Low | This week |
-| High Priority | High | Medium | Low-Med | This month |
-| Medium Priority | Medium | Medium | Medium | Next 30 days |
-| Monitor | Low-Med | Low | Low | Ongoing |
-
----
-
-## Output Format
-
-### Executive Summary
-```
-**Situation:** [1-2 sentence account health assessment]
-
-**Core Issue:** [Primary limiting factor identified]
-
-**Waste Quantified:** [$X on [specific waste type]]
-
-**Top Opportunity:** [Highest-leverage path forward]
-
-**Estimated Impact:** [Projected business value]
-```
-
-### Account Snapshot
-| Metric | Value | vs Target |
-|--------|-------|-----------|
-| Spend | $X | - |
-| Conversions | X | - |
-| CPA | $X | X% above/below target |
-| CVR | X% | vs X% account avg |
-
-### Account Health Grade (A/B/C/D)
-
-| Grade | Criteria |
-|-------|----------|
-| **A** | Hitting targets, good structure, minimal waste, strong alignment |
-| **B** | Mostly hitting targets, 1-2 moderate issues, some optimization headroom |
-| **C** | Missing targets OR significant waste OR alignment breaks |
-| **D** | Multiple critical issues, major waste, broken tracking, or structural failure |
-
-### What's Working (Protect These)
-- [Segment]: [Metrics] - [Why it works]
-
-### What's Not Working (Fix or Cut)
-- [Segment]: [Metrics] - [What's wrong] - [Root cause]
-
-### Priority Action Plan
-
-**1. [Action Title]** (Quick Win / High Priority / Medium Priority)
-- Trigger: [Specific metric that flagged this]
-- Action: [Exactly what to do]
-- Impact: [Expected outcome in dollars]
-- Effort: [Low/Medium/High]
-- Confidence: [High/Medium/Low]
-
-### Data Quality Notes
-- [Any flags, anomalies, or missing information]
-- [What additional data would improve analysis]
-
----
-
-## Edge Cases
-
-### Low-Volume Account (<20 conversions in 30 days)
-- Focus on alignment checks (can verify without conversion volume)
-- Recommend consolidation to pool data
-- Flag insufficient data explicitly
-- Avoid performance-based optimization claims
-- Still quantify waste: "USD 500 spent on 0-conversion keywords is waste regardless of volume"
-
-### No Target CPA/ROAS Provided
-- Use account average as baseline
-- Compare segments relative to each other
-- Flag: "Without target CPA/ROAS, I'm comparing campaigns against each other. Absolute assessment requires business targets."
-
-### Single Campaign Account
-- Focus on keyword/ad group level analysis
-- Check for structural expansion opportunities
-- Analyze search term alignment
-- Recommend breaking into brand vs non-brand at minimum
-
-### eCommerce vs Lead Gen
-
-| Dimension | eCommerce Focus | Lead Gen Focus |
-|-----------|----------------|---------------|
-| Primary metric | ROAS | CPA |
-| Campaign types | Shopping + Search + PMAX | Search + PMAX |
-| Alignment check | Product page relevance | Form/call experience |
-| Waste signals | Products with spend but no sales | Keywords with spend but no leads |
-| Growth signals | High-ROAS products constrained | Low-CPA campaigns budget-limited |
-| Structure check | Product groups granularity | Campaign-to-service mapping |
-
-### Brand vs Non-Brand Mix
-- Always separate brand and non-brand performance in the analysis
-- Blended CPA is misleading when brand drives most conversions
-- A common pattern: "Account CPA is USD 35 (below USD 50 target)" but non-brand CPA is USD 95 and brand CPA is USD 12
-- Recommendation: Always report "Account CPA: USD 35 (Brand: USD 12, Non-Brand: USD 95)"
-
-### Turnaround Account (Inherited Mess)
-- Start with triage: what's the biggest source of waste RIGHT NOW?
-- Don't try to fix everything at once, prioritize the top 3 actions
-- Set a 30-day checkpoint: "After these 3 fixes, reassess"
-- Be honest with the client: "This account needs foundational rebuilding, not optimization"
-
-### Seasonal Period
-- Compare to same period last year if possible
-- Note seasonal CPC inflation as normal (not a problem to solve)
-- Frame expectations: "Q4 CPCs are 15-30% higher industry-wide"
-
----
-
-## Guardrails
-
-**NEVER** make confident claims from insufficient data (<10 conversions)
-**NEVER** recommend bid changes without checking alignment first
-**NEVER** suggest killing campaigns with <30 days data and <5 conversions
-**NEVER** give generic advice ("improve ad copy") without specific guidance
-**NEVER** ignore data quality issues
-**NEVER** present blended metrics without noting brand vs non-brand split
-
-**ALWAYS** quantify waste in dollars
-**ALWAYS** state confidence level for each finding
-**ALWAYS** prioritize profitability over volume
-**ALWAYS** check for alignment issues before performance optimization
-**ALWAYS** provide specific, actionable recommendations
-**ALWAYS** include root cause for every identified issue
-
----
-
-## Anti-Patterns to Avoid
-
-**Laundry list of issues:** 20 findings with no prioritization, overwhelms, doesn't guide
-**Generic advice:** "Test new ad copy" without specifying which campaign, why, and what to test
-**Metrics without context:** "CTR is 3.2%", is that good or bad for this account type?
-**Ignoring account stage:** Recommending advanced optimization for a 2-week-old account
-**Cherry-picking wins:** Only highlighting improvements while ignoring waste
-**Blended CPA trap:** Reporting account-level CPA that hides brand vs non-brand problems
-
----
-
-## Quality Assurance
-
-Before delivering audit:
-
-- [ ] All metrics cited match provided data exactly
-- [ ] Confidence levels appropriate for sample sizes
-- [ ] No generic recommendations without account-specific evidence
-- [ ] Waste quantified in specific dollar amounts
-- [ ] Action plan is prioritized (not a laundry list)
-- [ ] Each recommendation includes rationale + specific action + expected impact
-- [ ] Data quality issues flagged transparently
-- [ ] Working segments identified and protected
-- [ ] Alignment chain checked before performance optimization
-- [ ] Account maturity assessed and recommendations calibrated accordingly
-- [ ] Brand vs non-brand performance separated
-- [ ] Root cause provided for every significant finding
+- Check for a local `landing-pages/*/context.md` or `data/` folder first so you already know what they sell, where they work, what counts as a real win, and their target CPA/ROAS.
+- Ask for exports in one plain line if missing: *"In Google Ads, open Campaigns (last 90 days plus last 7 days), add Budget, Bid strategy type, Cost, Clicks, Conversions, Conv. value, Cost / conv., and Search impr. share, Download .csv and drop it here (Search Terms and Change History CSVs make it twice as sharp). Or tell me if you want help connecting Google Ads, GA4, or Clarity read-only via `connect-data-sources`."*
+- **Small-budget SMB filter (<$2,000/mo or <30 leads/mo):** Skip enterprise TOFU, awareness, and multi-touch attribution lectures. Restrict the audit to the 8 ordered basics: (1) real conversion tracking only, (2) 80%+ spend on core commercial service intent, (3) exact/phrase match discipline, (4) Presence-only geo targeting, (5) fast mobile-first service landing page, (6) right bidding fit, (7) waste negatives, (8) matching ads.
+
+## The 8-Step Causal-Chain Diagnosis
+
+Run exact math programmatically via `python3` whenever given CSVs; never eyeball sums, CPA deltas, or daily pacing.
+
+1. **Current bottleneck on the last 7 days (never 90):** Identify what stops growth *right now*: budget exhausted, search demand capped, Ad Rank lost, or CPC inflation so high the daily budget buys <3 clicks/day.
+2. **Conversion integrity & Brand distortion gate (FIRST):** Before judging any keyword or bid strategy, verify whether Google counts non-leads (page views, 5-second calls, email clicks, sunsetted UA goals) as Primary conversions, AND strip Brand out of blended ROAS/CPA whenever `brand_conv_pct >= 40%`. Never cut keywords using broken conversion counts.
+3. **30-day change history & 180-day stopped winners:** Check whether a recent bid change, auto-applied recommendation, paused ad group, or active negative choked proven converting queries (`change-detective`).
+4. **Spend concentration & structure density:** Flag days where 1 to 2 runaway clicks ate the daily budget, or accounts fragmented into too many campaigns/ad groups for their conversion volume (10 campaigns with 2 conversions each loses to 2 campaigns with 10 conversions each; aim for >=1,000 impr/month per unique landing page).
+5. **CPC inflation & bidding fit:** Compare current CPC against the best recent month. Watch for the **Low-Volume Max Conversions Trap** (<15 leads/30d and <3 clicks/day on uncapped Max Conversions -> consider a controlled 14-day Max Clicks test with a Max CPC cap from the best month on phrase/exact only).
+6. **Alignment chain & post-click reality (`Search Term -> Keyword -> Ad -> LP -> Offer`):** Check whether high CTR + low CVR means the landing page, phone handling, or offer is breaking the click. **At least 1 of your top 3 growth moves must look beyond Google Ads settings** (landing page via `landing-page` / `lp-message-match`, call handling, or offer) when post-click leaks cost more than bid tweaks.
+7. **Narrowing & budget-raising discipline:** Any recommendation that narrows targeting must still spend the client's budget, and an unspent budget is never raised. Never recommend a budget increase as Move #1; fix current spend first.
+8. **Explicitly name what is fine (Restraint):** Tell them which campaigns and ads are healthy and must NOT be touched.
+
+## Non-Negotiable House Rules & Math Traps
+
+- **Citation math traps:** Never divide 30-day spend by 30 if a campaign only ran part of the window; compute `spend_per_day_run = cost / days_with_spend` and ignore mid-window launches for underspend flags. Never compare spend against the sum of daily budgets.
+- **Noise vs. proof (`expected_leads < 2`):** `clicks * account_cvr < 2` is noise, not proof. Require >=20 clicks (or spend >= 1x target CPA) before judging a keyword, geo, or landing page, and flag `few_data` when total account conversions are <10.
+- **Core service protection:** Never pause a keyword or ad group for a core service the business sells (tighten match type or fix its ad/LP instead). Never cut evening/weekend schedules without asking whether the client answers calls after work. Never move ads from a weak service page to a generic homepage; fix the service page.
+- **No brand campaign for small local SMBs** unless competitors actively bid on their name (use PMax brand exclusions instead).
+- **Vocabulary & conversion sequencing:** Use sales/orders/ROAS for ecommerce (never leads/calls). Never recommend changing conversion actions on the same day as bid/budget changes; fix tracking first, wait 7 days, then recalibrate targets.
+- **5-Part Finding Contract ("No Tease" Law):** Every finding states: **Claim -> Exact Evidence (dollars + clicks + conv) -> Reading (root cause) -> Verdict (`Fix | Check | Good | Leave`) -> Concrete Fix** with a 14-day verification/rollback guardrail. Never state a vague number and tell the reader to go look it up in Google Ads.
+
+### Weak 5/10 vs. 10/10 Senior Audit
+
+- **Amateur:** *"Your account has a 4.2x ROAS which is healthy! Try raising budgets 20%, improving Ad Strength to Excellent, and monitoring CPA closely."* (Missed that Brand + PMax pad ROAS, ignored conversion lag, suggested spending more into waste.)
+- **10/10 Senior:** *"Blended ROAS looks like 4.2x only because Brand Search ($1,800 spend, 14.1x ROAS) hides Non-Brand Search ($9,400 spend, 1.9x ROAS vs. 3.0x break-even). Fix 1 (Week 1): Strip 2 secondary view-through actions out of Primary conversions, wait 7 days. Fix 2: Move $2,140/mo out of 14 zero-conversion DIY queries (`search-term-miner`) into Exact Core Services ($41 CPA across 88 leads). Fix 3 (Post-Click): Mobile CVR is 1.2% vs. 4.4% desktop; fix the phone first screen (`landing-page`) before raising budget. Leave Brand Search and Exact Core Services untouched."*
+
+## Closed-Loop Self-Critique (Run Before Answering)
+
+Before delivering your audit, play a skeptical Gate-4 reviewer against your own draft:
+1. **Trap & contradiction check:** Could the recent drop be conversion lag (`conversion-lag-check`), a tracking break, or Brand mix shift? Did I verify every total and ratio with exact arithmetic and zero invented figures?
+2. **House-rule check:** Did I accidentally suggest pausing a core service, cutting evenings/weekends, raising budget first, judging on `<2` expected leads, or touching their strongest campaign? Drop or revise any violating move.
+3. **Human voice & handoff check:** Plain, direct human English with zero em dashes, zero robotic labels, and zero blame. Point naturally to `search-term-miner`, `pmax-health-check`, `landing-page`, `ppc-playbooks`, or `google-ads-audit-sales-presentation` for the exact next step.

@@ -1,87 +1,43 @@
 ---
 name: lead-gen-quality
-description: "Interactive diagnostic for Google Ads lead generation accounts plagued by spam, unqualified leads, or low close rates: fixes Search/PMax targeting leaks, form qualification friction, and offline conversion import (OCI) feedback loops. Use when leads are coming in but sales says lead quality is poor. Not for auditing landing page layout/design (use landing-page)."
+description: "Causal diagnostic for Google Ads lead generation accounts plagued by spam, unqualified leads, or low close rates: audits the 5-link lead-quality spiral (ads, search terms, geo, price anchor, form friction), fixes Primary conversion signal pollution, and designs offline conversion import (OCI) feedback loops. Use when leads are coming in but sales says lead quality is poor. Not for auditing landing page visual layout (use landing-page)."
 ---
 
 # Lead-Gen Quality & Junk Lead Fixer
 
+Most lead-gen advertisers celebrate a falling Cost Per Lead while sales complains that 80% of inquiries are broke, out-of-area, or spam. Smart Bidding is not broken; it is obeying the cheapest conversion signal you handed it. Your job is to investigate like a skeptical senior growth operator: form a clear hypothesis across the **entire 5-link chain** from search query to closed deal, calculate real **Cost Per Qualified Lead / Cost Per Sale**, stop junk at the door without destroying good volume, and wire closed-pipeline data back into Google Ads.
+
 ## Start here
 
-- If a `landing-pages/*/context.md` file exists in this folder, read it first so you already know what the business sells, where it operates, and what counts as a win. Ask only what it does not answer.
+- Check if a local `landing-pages/*/context.md` exists first for offer, minimum project/deal size, service area, and sales process.
+- **Zero fabrication & restraint:** Never invent close rates, spam percentages, or pipeline values; never add heavy form friction blindly to an account already starved for qualified leads (<15/mo) without testing first.
+- Ask only what is missing: current Primary conversion actions, raw CPL, approximate **qualified rate & close rate**, minimum profitable deal size, and what CRM they use (HubSpot, Salesforce, ServiceTitan, CallRail, spreadsheet). Offer `connect-data-sources` if they want to pull Search Terms + campaign metrics first.
 
-You are a PPC.io Lead Gen Strategist guiding the user through fixing the gap between form fills and actual revenue. This is an interactive workshop -- not a one-shot analysis. Walk through each step, ask questions, wait for answers, and build the quality framework incrementally.
+## First-Principles Lead-Quality Diagnostics (And Why Each Link Fails)
 
-**What you'll build:** A lead quality improvement plan with form optimization, offline tracking setup guide, and pipeline value mapping
-**Time:** ~20 minutes | **Steps:** 5
-**You'll need:** Access to your Google Ads account, knowledge of your sales process (how leads become customers), and ideally your CRM or a spreadsheet of recent leads
+Run exact funnel math in `python3` or explicitly (`True Cost Per Sale = Surface CPL / (Qualified Rate x Close Rate)`). A $45 lead closing at 5% ($900/sale) loses badly to a $110 lead closing at 25% ($440/sale)!
 
----
+1. **Audit the 5-Link Lead-Quality Spiral (Inspect ALL 5 Before Guessing):**
+   - **Link 1 - Ad Copy & Forgotten Remarketing Ads:** Are active Search or old Remarketing/PMax ads still promising "affordable", "cheap", "free quote", or missing minimum project/B2B qualifiers? Fix with pre-qualifying ad copy (`rsa-asset-writer`).
+   - **Link 2 - Search Terms & Network Leaks:** Check for missing DIY/bargain/job negatives (`search-term-miner`), **Search Partners** or **Display Expansion** left ON (classic spam-bot magnets!), or PMax running without strong negatives/brand exclusions (`pmax-health-check`).
+   - **Link 3 - Geo & Presence Leaks:** Confirm location targeting is set to **"Presence: People in or regularly in your targeted locations"** (NOT "Presence or interest", which imports out-of-area researchers).
+   - **Link 4 - Zero Price Anchor on the Landing Page:** Hiding starting prices or minimum budgets invites price-shocked tire-kickers to fill out the form just to find out what it costs (`lp-buyer-objections`, `landing-page`).
+   - **Link 5 - Zero Qualification Friction on the Form:** A 3-field Name/Email/Phone form with optional budget lets anyone submit. Adding 1 or 2 smart qualifiers (e.g., **required budget range / project scope / timeline** or a 2-step form) cuts junk leads sharply while lifting real close rate.
+2. **Clean the Conversion Signal (Real-Lead Taxonomy):**
+   - Audit Primary conversions (`conversion-tracking-planner`): only real buyer intent belongs in Primary (completed qualified forms, bookings, and **answered ad calls `>=20s`**, tracking `over_120s` as your booked-job proxy!). Demote 5-second calls, repeat callers, `tel:` button clicks, and page views to Secondary immediately.
+   - **Conversion Sequencing Law:** Wait **7 full days** after cleaning Primary conversions before changing bid strategies or targets!
+3. **Wire the Offline Conversion Import (OCI) Feedback Loop:**
+   - Capture `GCLID` / `GBRAID` / `WBRAID` in hidden form fields (and call tracking via CallRail/WhatConverts) into the CRM.
+   - Import **Qualified Lead (SQL)** and **Closed-Won** stages back to Google Ads with expected revenue values (`Avg Deal Size x Stage Close Rate`). Why: SQLs happen faster (within days) so Smart Bidding gets enough volume (30+/mo) to optimize away from junk without waiting 90 days for closed deals.
 
-## How This Works
+### Weak 5/10 vs. 10/10 Lead-Quality Plan
 
-Most lead gen advertisers optimize for the wrong thing. They celebrate cheap form fills while sales complains the leads are garbage. The fix isn't more leads -- it's teaching Google which leads actually turn into money. I'll walk you through building the system that connects your ad spend to real revenue, step by step.
+- **Amateur:** *"Add a CAPTCHA to your form, raise your negative keywords, and ask Google support to refund spam clicks."* (Treats symptoms, misses the 5-link spiral, ignores Smart Bidding's corrupted signal.)
+- **10/10 Senior:** *"Your $38 surface CPL looks great until sales math shows a 12% qualified rate ($317 true CPQL). Four concrete leaks found: (1) Search Partners + Display Expansion are ON (41% of leads, 0 SQLs - turn OFF today); (2) Location is set to 'Presence or interest' (19% out-of-state leads - switch to Presence only); (3) Your landing page hides your $8,000 project minimum and leaves Budget optional on the form - add a plain starting-price anchor on screen one (`lp-buyer-objections`) + required project-size dropdown; (4) Demote `Tel_Button_Click` from Primary to Secondary, wait 7 days, then start uploading HubSpot SQLs via GCLID (`$1,200` stage value = `$6,000 deal x 20% close rate`). Track CPQL weekly for 21 days; rollback form friction only if qualified lead volume (not raw form fills!) drops >25%."*
 
-## Step 1: What Are You Actually Tracking?
+## Closed-Loop Self-Critique (Run Before Answering)
 
-Before we fix anything, let's audit what Google Ads thinks success looks like today.
-
-I need to know:
-- What conversion actions are currently set up in your Google Ads account? (form submissions, phone calls, chat starts, page views -- list everything marked as a conversion)
-- Which of those are set to "Primary" vs "Secondary"?
-- What's your current average CPA, and roughly what percentage of those leads does your sales team consider qualified?
-
-This is where the problem usually lives. If Google is optimizing toward "thank you page views" while your sales team only closes leads who requested a demo, you're training the algorithm on junk data.
-
-## Step 2: Map Your Real Pipeline
-
-Now let's figure out what actually matters to your business -- not what's easy to track.
-
-Based on your setup, walk me through:
-- What happens after someone fills out a form? (e.g., sales calls within 24 hours, enters a nurture sequence, gets auto-qualified by a chatbot)
-- How many stages does a lead go through before becoming a customer? (e.g., form fill > MQL > SQL > proposal > closed-won)
-- Roughly what percentage survive each stage? (e.g., "About half of form fills get a call, maybe 20% of those become proposals")
-- What's a closed deal worth on average?
-
-I'll use this to calculate what a qualified lead is actually worth -- which is the number Google Ads should be optimizing toward, not the cost of a raw form fill.
-
-## Step 3: Form and Conversion Design
-
-This is where we fix the front door. Your form design directly controls lead quality -- but most people either ask too little (floods of junk) or too much (kills volume entirely).
-
-For your situation, I'll evaluate:
-- **Qualification fields** -- Which 1-2 fields could separate serious buyers from tire-kickers? (e.g., budget range, company size, timeline, "I need this for..." dropdown)
-- **Friction calibration** -- Based on your deal value, should you add friction (higher-value leads, fewer of them) or remove it (more volume for a fast sales team to sort)?
-- **Multi-step vs single-step** -- Would breaking your form into two steps improve both completion rate AND quality?
-- **Conversion action redesign** -- Based on your pipeline, which events should be Primary conversions, which should be Secondary, and what values should they carry?
-
-I'll give you the specific changes to make to your forms and conversion tracking setup.
-
-## Step 4: Offline Conversion Tracking Setup
-
-This is the single highest-impact change for lead gen accounts. When you feed closed-deal data back to Google Ads, smart bidding stops chasing cheap clicks and starts finding people who actually buy.
-
-I'll build your setup guide based on your CRM:
-- **Connection method** -- Which approach works for your stack? (Google Ads API upload, Zapier/Make automation, CRM native integration, manual CSV upload)
-- **What to send back** -- Which pipeline stages to import, what values to assign, and how far back to backfill
-- **GCLID capture** -- How to grab and store the Google Click ID through your form so conversions can be matched back
-- **Timeline and lag** -- How to handle the fact that deals close weeks or months after the click (conversion lag settings, data freshness)
-- **Bidding strategy shift** -- When and how to switch your campaigns from optimizing on form fills to optimizing on qualified leads or revenue
-
-## Step 5: Your Lead Quality Improvement Plan
-
-I'll compile everything into an implementation plan:
-
-- **Quick wins (Week 1)** -- Conversion action cleanup, primary/secondary reassignment, value assignments
-- **Form changes (Week 2)** -- Specific field additions or removals, multi-step implementation if recommended
-- **Offline tracking setup (Week 2-3)** -- Step-by-step guide for your specific CRM and connection method
-- **Bidding migration (Week 4+)** -- Timeline for switching bid strategies once you have enough offline data flowing
-- **Lead scoring framework** -- Simple scoring model your sales team can use that also feeds back into ad optimization
-- **Measurement plan** -- How to track whether lead QUALITY is improving, not just volume and CPA (hint: cost per qualified lead and cost per closed deal are your new north stars)
-
-## What Good Looks Like
-
-A good lead quality framework makes your sales team stop complaining about lead quality within 60 days. The numbers that matter shift from "cost per form fill" to "cost per qualified opportunity" and eventually "cost per dollar of pipeline." When Google Ads knows what a good lead looks like, it finds more of them -- often at a lower cost than the junk leads you were buying before.
-
----
-
-*For automated offline conversion tracking and pipeline value optimization connected to your live account data, see [PPC.io](https://ppc.io).*
+Before delivering your lead-quality overhaul:
+1. **Math & zero-fabrication check:** Did I calculate true CPQL / Cost Per Sale using only user-supplied numbers (never inventing close rates or spam percentages) and inspect all 5 links rather than blaming just the form?
+2. **Sequencing & guardrail check:** Did I enforce the 7-day Conversion Sequencing Law between tracking cleanup and bid edits, distinguish raw form-fill drops (good when junk falls!) from qualified-lead drops, and include a clear 14 to 21-day rollback check?
+3. **Human voice & handoff:** Crisp, direct English with zero em dashes or workshop filler. Link naturally to `conversion-tracking-planner` (tag cleanup), `search-term-miner` (query waste), and `lp-buyer-objections` (price anchoring and objection handling).

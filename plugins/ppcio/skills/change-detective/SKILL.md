@@ -4,113 +4,47 @@ description: Works out why Google Ads performance changed by finding the day eac
 license: Apache-2.0 portions, see NOTICE.md
 metadata:
   author: PPC.io
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
-# Change detective
+# Change Detective
+
+Most "why did performance drop?" answers are pure confirmation bias: someone remembers one bid edit and blames it while missing the auto-applied broad keywords or tracking edit made 48 hours earlier. Your job is to investigate like a forensic analyst: pinpoint the exact shift day via deterministic script, score every competing suspect (including Google's silent auto-applied recommendations and same-day tracking+bid collisions), and separate real evidence from coincidence.
 
 ## Start here
 
 - Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
+- Read [references/account-profile.md](references/account-profile.md) when no profile is in the chat or project (currency, targets, typical lag, who approves changes).
 
-Most "why did it drop" answers are guesses: someone remembers one change
-and blames it. This skill does it the way a good analyst would. It finds
-the exact day the numbers moved, then lists every change made in the days
-before, scores each one by timing, scope and whether that kind of change
-can move that metric, and shows before-and-after numbers. Changes made by
-Google's auto-applied recommendations are called out, because nobody
-remembers making them.
+## Inputs (CSV or Live MCP via `connect-data-sources`)
 
-## Step 0: account profile
-Read [references/account-profile.md](references/account-profile.md) when
-no profile is in the chat or project. Fields needed: currency, targets,
-typical conversion lag, who approves changes.
+Ask for what is missing (live API option in [references/mcp-queries.md](references/mcp-queries.md); note API keeps only 30 days of change events):
+1. **Daily campaign report** (60 to 90 days to yesterday): `Campaign`, `Impr.`, `Clicks`, `Cost`, `Conversions`, `Search lost IS (budget)`, `Search lost IS (rank)`.
+2. **Change history CSV** (same date range; keep ALL users and tools, never filter out Google's auto-applied edits!). If missing, state plainly that you can only show *when* numbers moved, not *why*, and ask for it before guessing.
+3. **Days to conversion report** (90 days ending >=30 days ago; if missing, ask usual lag and pass `--settle-days N`).
 
-## Inputs
-Ask for what is missing:
-1. Daily campaign report (Campaigns view segmented by Day, or Report
-   editor with Day and Campaign rows), last 60 to 90 days to yesterday.
-   Columns: Campaign, Impr., Clicks, Cost, Conversions, Search lost IS
-   (budget), Search lost IS (rank).
-2. Change history download: Change history page, same date range,
-   download as CSV. Keep all users and tools; do not filter out Google's
-   changes.
-3. Days to conversion report (Campaigns view, Segment > Conversions > Days
-   to conversion, 90 days ending at least 30 days ago). Without it, ask
-   for the usual lag and use `--settle-days N`.
-Live data: [references/mcp-queries.md](references/mcp-queries.md) (read
-when the Google Ads MCP tools are connected; the API keeps only 30 days
-of change events).
+## Workflow & Competing-Hypothesis Analysis
 
-If the change history is missing, say the answer will only show when and
-where numbers moved, not why, and ask for it before guessing.
-
-## Workflow
-1. Run:
+1. **Run the deterministic forensic script first:**
    `python3 "${CLAUDE_SKILL_DIR}/scripts/change_detective.py" --daily <daily.csv> --changes <changes.csv> --lag <lag.csv> --target-cpa <CPA> [--campaign-target "Implants=90"]`
-   Add `--campaign "<text>"` to focus on one campaign. Changes made at
-   the same minute by the same person or tool are grouped (for example
-   "3 changes: Keyword added ...").
-   The script reports shifts of at least 15% with strength 3 or more.
-   These are settings, not Google rules: lower them with `--min-pct` and
-   `--min-t` for small accounts, and say so in the answer.
-2. Read "Where the numbers moved". Each line is a shift: the first day
-   the new level started, before and after levels, and strength (above 3
-   is a clear shift). Conversion metrics use lag-adjusted values on days
-   at least half complete, so a conversion-rate shift can show up later
-   than a clicks shift. Daily conversion rate is noisy on small
-   campaigns; the before/after block (CPA vs target) is often the clearer
-   signal for keyword and auto-applied changes.
-3. For each shift, read the suspects. Scores near 1.0 mean the change
-   happened 0 to 1 days before, in that campaign, and is the kind of
-   change that moves that metric. Use
-   [references/change-types.md](references/change-types.md) (read when
-   explaining why a type of change moves a metric).
-4. If two changes share the top score, say they cannot be separated from
-   the numbers. Use the pattern of metrics to argue which is likelier
-   (for example lost IS (rank) rising points to bidding, not ad text).
-5. For shifts with no suspect, list the outside causes to check:
-   tracking, landing page, season, competitors (Auction insights).
-   Read [references/field-notes.md](references/field-notes.md) when you
-   rank suspects or when no row explains the shift. Why: website and Tag
-   Manager changes, and Google's own auto-apply settings, leave no row or
-   only a hidden one.
-6. Run the self-check, then answer with the output template.
+   Add `--campaign "<text>"` to isolate one campaign. For small accounts, lower `--min-pct` / `--min-t` explicitly and state that you did so.
+2. **Match Shift Day to Metric Signature:** Read `"Where the numbers moved"` first (settled days only for conversion rate/CPA; clicks/cost have no lag). Read [references/change-types.md](references/change-types.md) to verify mechanism fit (e.g., rising `lost IS (rank)` points to a tighter bid/target, NOT an RSA copy edit!).
+3. **Check High-Risk Forensic Traps:**
+   - **Auto-Applied Recommendations:** Always name Google's auto-applied changes explicitly (the durable fix is disabling the auto-apply rule, not just reverting one keyword!).
+   - **Conversion Sequencing Law Violation:** Check whether someone edited Primary conversion actions AND bid strategies/targets on the same day or within 7 days! Simultaneous changes confound Smart Bidding and make attribution inseparable.
+   - **Inseparable Same-Day Edits:** When two changes share top suspect scores on the same day, state honestly that numbers alone cannot separate them, and rank likelihood strictly by metric mechanics.
+   - **Unexplained Shifts (Outside Causes):** Read [references/field-notes.md](references/field-notes.md) whenever no change-history row fits: website/GTM tracking breaks, landing page deploys, seasonality, or new auction rivals leave zero rows in Google Ads Change History!
 
-## Guardrails
-- Read-only. Never undo or change anything. Suggest a fix as a draft for
-  the approver, with the expected effect. Why: undoing the wrong change
-  adds a second shock and makes the next diagnosis harder.
-- Call a change a suspect, never the proven cause. Why: timing is
-  evidence, not proof.
-- Do not judge conversions on unsettled days. Why: they are dated by
-  click and still arriving; clicks and cost have no lag.
-- Name the person or tool that made each change, including
-  auto-applied recommendations. Why: the fix is often a setting
-  (auto-apply) rather than the change itself.
+### Weak 5/10 vs. 10/10 Forensic Finding
 
-## Output template
-**What changed and why: [account], [window]**
+- **Amateur:** *"Performance dropped last week because of recent account changes. Recommend reverting your edits and adjusting bids."* (No date, no metric signature, no suspect name, risks adding a second shock.)
+- **10/10 Senior:** *"1. **Invisalign:** Search lost IS (rank) jumped from 28% to 52% starting **Nov 5** (clicks -39%, settled CPA $68 -> $91). **Prime suspect (High confidence):** Target CPA cut from $70 to $45 by Jo on **Nov 4, 16:51** (cutting tCPA 36% below actual directly throttles bids and spikes Rank Lost IS). Competing edit (RSA headline tweak 2 minutes later) cannot explain a 24-point rank loss. **Draft fix for Jo to approve:** raise tCPA back to $65 (within 10% of baseline), leave RSAs untouched, and verify Rank Lost IS + clicks over 7 days (revert only if settled CPA crosses $85)."*
 
-1. [Campaign]: [metric] moved from [before] to [after] from [date].
-   Prime suspect: [change, date, who], because [timing + metric fit].
-   Before vs after: [numbers]. Confidence: [high/medium/low and why].
-   Draft fix: [what, for whom to approve].
-(repeat, most important first)
+## Guardrails & Closed-Loop Self-Check (Run Before Answering)
 
-Not explained by any change: [shift + checks to run].
-
-Good: "Invisalign: lost IS (rank) jumped from 28% to 52% from 5 Nov, the
-day after Jo cut target CPA from £70 to £45 (4 Nov, 16:51). A tighter
-target makes Google bid lower, which shows up as rank loss. The RSA edit
-2 minutes later is unlikely to move rank share."
-Avoid: "Performance dropped because of recent changes." (no date, no
-change, no numbers).
-
-## Self-check (run before answering)
-- [ ] Every suspect has a date, who made it, and before-and-after numbers.
-- [ ] Conversion claims use settled days only.
-- [ ] Same-day changes flagged as inseparable.
-- [ ] Auto-applied changes called out by name.
-- [ ] No change made; fixes are drafts with an approver.
+- **Read-only restraint:** Never undo or apply changes directly; present every fix as a draft for the named approver (undoing the wrong change adds a second shock!). Call every match a **suspect**, never absolute proof, and never judge conversions on unsettled lagged days.
+- **Self-critique before sending:**
+  1. **Evidence & math check:** Does every suspect list the exact date, who/what made it (calling out auto-applied edits explicitly), and verified before-vs-after numbers with zero fabricated figures?
+  2. **Competing-hypothesis check:** Did I test alternative explanations (same-day edits, Conversion Sequencing violation, tracking/LP/competitor external causes) and verify conversions use settled days only?
+  3. **Voice & handoff:** Crisp, direct English with zero em dashes. Route to `conversion-lag-check` if lag was not ruled out first, `ppc-change-analyzer` to grade one known change's keep/revert verdict, or `weekly-client-report` for client-safe wording.

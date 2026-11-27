@@ -4,9 +4,9 @@ This repo is **PPC.io**: the complete Landing Page Studio (16 specialist agents,
 
 When the user asks what PPC.io can do, or asks for help with a landing page or Google Ads:
 
-1. **Front door:** Read `plugins/ppcio/skills/start/SKILL.md` and follow it. In any skill, `${CLAUDE_SKILL_DIR}` means that skill's own folder, and `KIT` means `plugins/ppcio/skills/landing-page`. Skip instructions mentioning `/plugin` or `claude plugin` — those are for Claude Code (in other apps, re-running `install.sh` updates the kit).
+1. **Front door:** Read `plugins/ppcio/skills/start/SKILL.md` and follow it. In any skill, `${CLAUDE_SKILL_DIR}` means that skill's own folder, and `KIT` means `plugins/ppcio/skills/landing-page`. Skip instructions mentioning `/plugin` or `claude plugin` (those are for Claude Code; in other apps, re-running `install.sh` updates the kit).
 2. **Landing pages & CRO:** Read `plugins/ppcio/skills/landing-page/SKILL.md`.
-   - For **quick CRO questions** (headline critique, form teardown, offer/risk reversal, AI-slop check, vertical LP structure), load only the 1 or 2 matching playbooks in `plugins/ppcio/skills/landing-page/references/` and answer immediately — do not force a full capture/build pipeline.
+   - For **quick CRO questions** (headline critique, form teardown, offer/risk reversal, AI-slop check, vertical LP structure), load only the 1 or 2 matching playbooks in `plugins/ppcio/skills/landing-page/references/` and answer immediately without forcing a full capture/build pipeline.
    - For **full audits & builds**, follow its "Your app" section. Run `bash KIT/scripts/kit.sh agents-dir` to get the exact resolved path to the 16 `lp-*.md` specialist files (works reliably even through symlinked skill directories). If your app does not support parallel subagents, read each specialist file and write its output file sequentially, skipping `kit.sh await`.
 3. **Quick-CRO, Google Ads, Scripts & Playbooks:** The complete job-indexed catalog is in `plugins/ppcio/skills/start/catalog.md`. Every skill lives at `plugins/ppcio/skills/<name>/SKILL.md` (with `python3` scripts inside `<skill>/scripts/`, 21 production `.js` scripts inside `google-ads-script-creator/scripts-library/`, and 24 deep playbooks inside `ppc-playbooks/references/`).
 

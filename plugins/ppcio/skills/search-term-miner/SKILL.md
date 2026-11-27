@@ -1,122 +1,50 @@
 ---
 name: search-term-miner
-description: Mines a Google Ads search terms report for wasted spend using n-grams judged against the account's own target CPA (not fixed money cut-offs), protects brand, service, competitor and location words, and drafts negative keywords with match type and level for a human to approve. Use when someone asks for a search terms review, negative keywords, wasted spend, "what should I exclude", the weekly search terms check, or attaches a search terms report. Not for writing ads (use rsa-asset-writer) or explaining a performance change (use change-detective).
+description: "Mine a Google Ads search terms CSV for wasted spend using n-grams judged against the account's own target CPA or ROAS, protect brand, service synonyms, competitor, and location words, and simulate every negative against Google's matching rules before human approval. Use when someone attaches a search terms report or asks for negative keywords and wasted spend. Not for small pasted tables under 50 rows (use negative-keyword-analyzer) or writing ads (use rsa-asset-writer)."
 license: Apache-2.0 portions, see NOTICE.md
 metadata:
   author: PPC.io
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
-# Search term miner
+# Search Term Miner
+
+A bad negative keyword is worse than wasted spend because it silently blocks profitable searches for months. This skill follows a **mechanical before magical** discipline: deterministic Python scripts calculate n-gram waste against the account's real target CPA/ROAS and simulate every proposed negative against Google's exact matching rules before a human ever approves it.
 
 ## Start here
 
 - Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
-- If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
+- Check for a local `landing-pages/*/context.md` first (it holds what they sell, where they work, and core buyer searches). Read [references/account-profile.md](references/account-profile.md) when no profile exists yet: confirm currency, target CPA/ROAS (per campaign if different), brand terms + misspellings, services sold (including colloquial synonyms & device names!), services NOT sold, target locations per campaign, and never-negate words.
+- **Inputs:** Search Terms CSV (30 to 90 days, ending 3 to 5 days ago to respect conversion lag; columns: Search term, Match type, Campaign, Ad group, Impr., Clicks, Cost, Conversions, Conv. value) + ideally Search Keywords CSV (so the simulator catches negatives that block enabled keywords). If they want live/automated exports, point to `connect-data-sources` or bundled script `02-search-term-ai-ready-export.js`.
+- **Data gates:** No target CPA/ROAS -> ask, never guess. Conversions column missing -> stop (cannot judge waste). Under 30 days -> state clearly and only flag high-confidence terms >=2x target.
 
-A bad negative keyword is worse than wasted spend: it blocks good
-searches silently and nobody notices for weeks. So this skill is strict
-about two things. Waste is measured against your own target CPA, not a
-generic "USD 10 with no conversions" rule. And brand, service, competitor and
-location words you care about can never end up in a negative.
+## First-Principles Nuance (Don't Negate Like a Robot)
 
-## Step 0: account profile
-Read [references/account-profile.md](references/account-profile.md) when
-no profile is in the chat or project. Fields needed: currency, targets
-(per campaign if they differ), brand terms, competitor names you bid on,
-services you sell and do not sell, target locations per campaign, never
-negate list, who approves. Ask for missing targets and locations before
-running; every flag depends on them.
+1. **Protect industry synonyms & colloquialisms:** Never auto-negate abbreviations, device names, or everyday words customers use for the core service (e.g., `"lipo"` for `"liposuction"`, `"ac"` for `"air conditioning"`). Add them to `services.txt` so you negate only the disqualifying modifier (`"school"`, `"salary"`, `"diy"`), never the core service.
+2. **Intent over blunt word bans:** Distinguish *early-funnel question* research (`"how much does X cost"`) from *near-buy noun* price queries (`"X cost near me"`). Similarly, `"cheap dental implants near me"` can convert well in price-sensitive trades; always read the actual converting queries before excluding any price modifier.
+3. **Spot internal auction cannibalization:** Watch for identical search terms triggering across 2 or 3 campaigns (e.g., Broad Search + Exact Search + PMax) at wildly different CPCs (200% to 900% variance is common!). Flag those for exact-match traffic routing negatives (`[exact]` in the wrong campaign), not account-wide blocks.
+4. **Noise vs. proof:** Zero-conversion queries with spend under half the target CPA (`expected_leads < 2`) belong on the **Watch List**, not the negative list, unless clearly irrelevant (a job seeker, another trade, or out-of-area state).
 
-## Inputs
-Search terms report: Insights and reports > Search terms (or Keywords >
-Search terms). Date range: 30 to 90 days, ending a few days ago so recent
-conversions have arrived. Columns: Search term, Match type, Campaign, Ad
-group, Impr., Clicks, Cost, Conversions, Conv. value. Download as CSV.
+### Weak 5/10 vs. 10/10 Search Term Review
 
-Keywords report (strongly advised): Keywords > Search keywords, all
-campaigns, with Keyword, Match type, Campaign and Status. The simulator
-uses it to catch a negative that blocks one of the account's own keywords.
+- **Amateur:** Adds `free`, `cost`, and `emergency` as broad negatives across the account without simulation, silently killing 40 converting `"emergency plumber cost"` queries.
+- **10/10 Senior:** Runs `st_miner.py` + `simulate_negatives.py`, explicitly lists converting words kept on purpose (`"emergency"`: 38 conv, `"cost"`: 14 conv), catches `"turkey"` (`£437, 102 clicks, 0 conv`) and plural variants (`"course"` + `"courses"`), flags 3 queries cannibalizing between Broad and Exact at 4x CPC, and hands over a `Checks: PASS` paste-ready list for human approval.
 
-If something is missing:
-- No target CPA: ask. Never guess it.
-- Under 30 days of data: say so and only flag terms at 2x target or more.
-- Conversions column missing: stop; waste cannot be judged without it.
+## Workflow (Verify -> Critique -> Refine)
 
-## Workflow
-1. From the profile, write three small files:
-   - `protect.txt`: brand terms and misspellings, competitor names you bid
-     on, never-negate words. A negative containing one is never proposed.
-   - `services.txt`: what you sell. Never negated on its own; negate the
-     modifier instead ("course", not "implant").
-   - `locations.txt`: one line per campaign, `campaign text: town, town`.
-2. Find candidates:
-   `python3 "${CLAUDE_SKILL_DIR}/scripts/st_miner.py" <csv> --target-cpa <CPA> [--campaign-target "Implants=90"] --protect protect.txt --services services.txt --locations locations.txt --exclude-campaign "<brand pattern>" --low-spend <half the target>`
-   For ecommerce use `--target-roas 4` instead; it works out the implied
-   target CPA and lists converting n-grams under half the target ROAS.
-   Each theme is listed once with its queries; fragments covered by a
-   bigger theme are folded in.
-3. Read [references/field-notes.md](references/field-notes.md), then
-   read every candidate's queries. Keep it only if it is wrong for this
-   business in every query. Wrong-location searches (a town another
-   campaign targets) go to that campaign only. Read the "converting words
-   that look like waste" block out loud in the answer: those words stay.
-4. Write `negatives.txt` in the syntax you would type in Google Ads
-   (`word` broad, `"phrase"`, `[exact]`), with `campaign=<text> |` or
-   `list=<name> |` in front. Choose match type and level with
-   [references/negatives-rules.md](references/negatives-rules.md).
-5. Prove it:
+1. Write `protect.txt` (brand + misspellings, targeted competitors, never-negate words), `services.txt` (core services + buyer synonyms), and `locations.txt` (`campaign text: town, town`).
+2. Mine candidates:
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/st_miner.py" <csv> --target-cpa <CPA> [--campaign-target "Implants=90"] --protect protect.txt --services services.txt --locations locations.txt --exclude-campaign "<brand pattern>" --low-spend <half target>`
+   (For ecommerce, pass `--target-roas <ROAS>` instead.)
+3. Read [references/field-notes.md](references/field-notes.md) and inspect EVERY candidate's actual queries. Keep a negative only if it is wrong for this business across every query. Route wrong-location towns to campaign-level negatives, never account-wide. Call out the **"Kept on purpose (they convert)"** words explicitly.
+4. Draft `negatives.txt` (`word` broad, `"phrase"`, `[exact]` with `campaign=<text> |` or `list=<name> |` prefix) using [references/negatives-rules.md](references/negatives-rules.md). Remember Google negatives do NOT auto-match plurals or close variants.
+5. Simulate and loop until spotless:
    `python3 "${CLAUDE_SKILL_DIR}/scripts/simulate_negatives.py" <csv> negatives.txt --protect protect.txt --exclude-campaign "<brand pattern>" --keywords <keywords.csv>`
-   Ask for the keywords export (Keywords > Search keywords > download)
-   if the user has not given it. With it, a negative that blocks one of
-   their own enabled keywords is a STOP. Without it, say this was not
-   checked.
-   It applies Google's matching rules and reports, per negative, exactly
-   which searches it blocks. Fix every STOP (blocks conversions or
-   contains a protected term) and every NOT BLOCKED variant you want
-   gone, then run it again until "Checks: PASS". Why: Google negatives do
-   not match plurals, so "course" leaves "courses" running; and a broad
-   negative can block converting searches you never looked at.
-6. Run the self-check, then answer with the output template, using the
-   simulator's TOTAL line for waste.
+   Fix every `STOP` (blocks conversions, protected word, or enabled keyword) and every missed plural/variant, then re-run until `Checks: PASS`. Never hand over an unsimulated list.
 
-## Guardrails
-- Draft only; a named person adds negatives. Why: a wrong negative costs
-  invisible lost leads.
-- Never hand over a negative list the simulator has not passed. Why: in
-  testing, negating "dental" would have blocked 44 conversions and
-  "emergency" 100; nobody spots that by reading n-grams.
-- Never propose a negative that contains a protected word or would block
-  a query with conversions.
-- Zero-conversion searches under the target line go on the watch list,
-  not the negative list, unless they are plainly unrelated (a vet, a job);
-  those are marked low confidence.
-- No negatives in brand campaigns without asking. Why: misspelled brand
-  searches look wasteful but protect brand traffic.
-- Label anything under the low-spend line as low confidence.
+## Closed-Loop Self-Check & Critique (Run Before Answering)
 
-## Output template
-**Search terms review: [account], [date range]**
-Analysed: [currency][cost], [clicks] clicks, [conv] conversions (brand excluded).
-Waste these negatives block: [currency][simulator TOTAL] ([x]% of analysed spend), 0 conversions.
-
-Negatives to approve:
-- `[negative in match syntax]` | [level] | [cost, clicks, conversions, x target] | [example queries] | [confidence]
-
-Kept on purpose (they convert): [words and their conversions].
-Watch list: [searches under the target line].
-Needs a human call: [item | why]
-Paste-ready lists: [simulator output, grouped by list and campaign].
-
-Good row: `"turkey"` | Implants campaign | £437.05, 102 clicks, 0 conv, 4.9x target |
-dental implants turkey; ... | High
-Avoid: `implants` as a negative (the service), or a row without numbers.
-
-## Self-check (run before answering)
-- [ ] Totals match the export minus brand.
-- [ ] Simulator says "Checks: PASS"; waste taken from its TOTAL (each query once).
-- [ ] Plural/variant misses handled (added or explained).
-- [ ] No negative contains a protected word or blocks a converting query.
-- [ ] No negative blocks an enabled keyword, or the answer says the keywords export was not given.
-- [ ] Every row has numbers and a confidence label.
-- [ ] Date range stated; lag respected (export ends a few days ago).
+Before delivering your final review (draft only; a human uploads, and rechecks Non-Brand volume/CPL after 14 days as a rollback guardrail):
+1. **Simulator & math truth:** Totals match the export minus brand; waste dollar figure comes strictly from the simulator's deduplicated `TOTAL` line; zero invented figures.
+2. **Adversarial trap check:** Could any proposed broad negative quietly block a converting synonym or plural? Did I leave Brand campaigns untouched unless explicitly asked? Did I check for cross-campaign cannibalization?
+3. **Plain human delivery:** Present the clean executive summary (spend analysed, deduplicated waste blocked, negatives to approve with cost/clicks/conv/confidence, words kept on purpose, watch list, needs-a-human-call items, and paste-ready simulator blocks) in plain English with zero em dashes. If search terms look clean yet CPA is still high, point naturally to `landing-page` or `conversion-lag-check`.

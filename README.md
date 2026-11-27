@@ -14,7 +14,7 @@ Install it into your AI tool and you get:
 
 ---
 
-## Install in 2 Lines (Claude Code — Recommended)
+## Install in 2 Lines (Claude Code - Recommended)
 
 Claude Code gives the fullest experience (parallel specialist agents, zero-friction permissions, and live preview). In Claude Code (the **Code** tab in Claude Desktop, or terminal), run:
 
@@ -29,7 +29,7 @@ Start a new chat and ask:
 what can PPC.io do for me?
 ```
 
-It asks for your website and delivers the first 3 things a buyer notices on it in about 2 minutes — or ask any quick CRO or Google Ads question immediately.
+It asks for your website and delivers the first 3 things a buyer notices on it in about 2 minutes, or ask any quick CRO or Google Ads question immediately.
 
 If you have a PPC.io Pro licence key (starts with `PPCIO-`), paste it into the chat at any time.
 
@@ -54,7 +54,7 @@ Re-run the same command any time to pull updates.
 
 - **Full Landing Page Audit & Build:** *"Audit and redesign https://mybusiness.com for my Google Ads traffic."*
 - **Quick CRO Help (30 seconds):** *"Critique this hero headline"*, *"Why isn't my mobile roofing form converting?"*, *"Check this landing page copy for AI slop"*, *"Compare my Google Ads against my landing page opening."*
-- **Google Ads Data & Scripts:** *"Mine wasted spend from this 90-day search terms CSV"*, *"Give me the PMax Insight Engine script"*, *"My ads aren't showing — help me troubleshoot"*, *"Check if this week's CPA drop is real or conversion lag."*
+- **Google Ads Data & Scripts:** *"Mine wasted spend from this 90-day search terms CSV"*, *"Give me the PMax Insight Engine script"*, *"My ads aren't showing, help me troubleshoot"*, *"Check if this week's CPA drop is real or conversion lag."*
 - **Agency Mode:** *"Run audits and new pages for these 5 client URLs."*
 - **Thank-you pages and quiz funnels:** *"Build the thank-you page for after someone enquires."*
 
@@ -81,7 +81,7 @@ Re-run the same command any time to pull updates.
 
 ## Requirements & Privacy
 
-- **Platform:** macOS or Linux (Windows via WSL). Node.js and the headless Chromium page checker install automatically on first run (about 1 minute) — nothing to configure manually.
+- **Platform:** macOS or Linux (Windows via WSL). Node.js and the headless Chromium page checker install automatically on first run (about 1 minute), with nothing to configure manually.
 - **Privacy:** Everything runs locally on your computer inside your own AI tool. Your client pages, copy, and Google Ads CSV exports are never sent to PPC.io servers. With a Pro licence key, the 322-page style library downloads once from PPC.io; that request sends only your licence key.
 - **If your AI app stops mid-run** (a usage limit, a closed laptop): open a new chat in the same folder and say *"carry on with my landing page"*. The kit reads the files it already wrote and starts at the step it stopped on.
 - **The style library** holds screenshots of public landing pages, graded for study and inspiration. PPC.io does not copy their words, logos or photos into your page. If you own a page in the library and want it removed, email support@ppc.io and we take it out in the next update.

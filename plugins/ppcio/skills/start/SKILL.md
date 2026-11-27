@@ -54,8 +54,12 @@ Only after the first look message is sent: read the landing-page skill, then run
 
 Read `${CLAUDE_SKILL_DIR}/catalog.md` only when they ask what else you can do. Then show it by job: the job name and one line each. Never list file names or skill folder names.
 
-## Rules
+## Rules & Closed-Loop Self-Critique (Run Before Sending First Look)
 
-- Never show commands, file names or tool output unless they ask.
-- One question at a time.
-- The free version runs the first look and the audit on one website. The licence unlocks the page build, the full style library, agency mode and every website. When they ask for a locked part, say what it does, that it comes with the PPC.io licence at ppc.io, and that they can paste their key here any time.
+- **Why keep internals hidden:** Never show commands, file names, skill folder names, or raw tool output unless the user asks. They hired a sharp PPC team, not a terminal log.
+- **One question at a time:** Keep momentum effortless; if they already gave their URL and goal, skip re-asking and move straight to the first result.
+- **Weak 5/10 vs. 10/10 `first-look.md`:**
+  - **Amateur:** *"1. **Hero messaging needs clarity.** Your headline could be more compelling to drive engagement. Fix: Write a stronger benefit-driven headline."* (Generic, unquoted, zero buyer hypothesis.)
+  - **10/10 Senior:** *"1. **Hero quotes no service or location.** Screen one opens with `'Welcome to Apex'` while paid searchers are pricing a $12,000 roof replacement in Austin, forcing them to scroll to confirm you even work in their area. Fix: Lead screen one with `'Austin Roof Replacement - Written Quote in 24 Hours'` beside your phone number."*
+- **Adversarial self-critique & restraint check:** Before running `kit.sh view`, challenge your own `first-look.md` like a skeptical buyer: (1) does every blocker quote real words or exact visual elements from `inputs/live-phone-today.png`, `inputs/live-page-today.png`, or `inputs/site-page-text.md` (zero invented numbers, reviews, or claims); (2) did I protect what already works well on their page instead of nitpicking; and (3) does the prose read like plain human English with zero em dashes?
+- **Free vs. Pro clarity:** The free version runs the first look and the audit on one website (plus all 33 Google Ads & reporting skills, 21 scripts, and 24 playbooks). The licence adds the full page build, the 322-page style library, agency mode, and unlimited websites. When they ask for a locked part, say calmly what it does, that it comes with the PPC.io licence at ppc.io, and that they can paste their key here any time.

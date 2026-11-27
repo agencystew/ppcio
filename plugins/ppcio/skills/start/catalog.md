@@ -31,19 +31,19 @@
 ## RSA Ads & Competitors
 
 - **RSA Asset Writer** *(recommended for real accounts)*: Writes and script-lints RSA headlines and descriptions against strict 30/90-character limits and your verified facts sheet.
-- **RSA Headline Generator** *(quick brainstorm)*: Rapidly generates 15 headlines across 6 angles and 4 descriptions when you have no existing ad CSV or facts file yet.
-- **Competitor Messaging Analysis**: Compares how competitors position themselves, what proof and offers they lead with, and where messaging gaps sit.
-- **Channel Expansion Planner**: Benchmarks Meta, Microsoft, LinkedIn, and TikTok against your Google Ads economics and recommends which channel to test next.
+- **RSA Headline Generator** *(quick brainstorm)*: Rapidly generates 15 direct-response headlines across 8 buying angles and 4 mobile-front-loaded descriptions when you have no existing ad CSV or facts file yet.
+- **Competitor Messaging Analysis**: Compares how your top 3 to 5 real auction rivals position themselves across Offer, Proof, Specificity, and Risk Reversal to uncover unclaimed SERP white space.
+- **Channel Expansion Planner**: Tests whether Google Search has truly earned expansion, then benchmarks Meta, Microsoft, LinkedIn, and TikTok against your unit economics with explicit stop-loss rules.
 
 ## Google Ads Audits & Troubleshooting
 
-- **Ads Not Showing Troubleshooter**: Fast 5-minute interactive diagnostic to find why campaigns have zero impressions (billing, policy, targeting, schedule, budget, Ad Rank, negative conflicts).
-- **PPC Account Health Check** *(5-minute triage)*: Grades a 30-day campaign export A to D, flags critical leaks, and ranks quick wins by impact and effort.
-- **PPC Strategic Audit** *(deep 90-day audit)*: Multi-tab audit checking alignment across campaigns, keywords, ads, and landing pages to separate profitable spend from waste.
-- **PMax Health Check**: Strips brand searches out of Performance Max first, judges real non-brand performance, and ends with keep, fix, or kill.
-- **Quality Score Repair**: Component-by-component Quality Score teardown (Expected CTR, Ad Relevance, Landing Page Experience) with CPC savings math.
-- **Demand Ceiling Analyzer**: Uses impression share and marginal return to tell you whether search still has room to scale before raising budgets.
-- **Google Ads Audit Sales Presentation**: Turns an audit into a 12–15 slide, white-label agency HTML sales deck led by the money problem.
+- **Ads Not Showing Troubleshooter**: Fast 5-minute causal diagnostic in probability order (billing, policy, targeting, negative conflicts, bid starvation, schedule) with exact Ad Preview verification.
+- **PPC Account Health Check** *(5-minute triage)*: Fast 30-day causal triage that checks tracking and Brand distortion first, spots the 3 biggest dollar leaks, protects healthy campaigns, and hands over a clear priority order.
+- **PPC Strategic Audit** *(deep 90-day audit)*: Multi-tab 8-step causal audit separating Brand vs. Non-Brand, noise vs. waste, and broken tracking vs. real ad problems across campaigns, search terms, ads, and landing pages.
+- **PMax Health Check**: Calculates incremental non-brand ROAS by stripping Brand out of Performance Max first, flags Paused-Brand illusions, and ends with keep, fix, or migrate to Standard Shopping.
+- **Quality Score Repair**: Spend-weighted Quality Score teardown (Expected CTR, Ad Relevance, Landing Page Experience) focusing on spend-carrying keywords while protecting pre-qualifying high-CVR ads.
+- **Demand Ceiling Analyzer**: Separates Lost IS (Budget vs. Rank), marginal CPA, and SEO-PPC overlap to tell you whether Search still has profitable room to scale before raising budgets.
+- **Google Ads Audit Sales Presentation**: Turns verified audit receipts into a 12-to-15 slide, white-label agency HTML sales deck led by the money problem in your own agency colours.
 
 ## Tracking, Bidding, Shopping & Lead Quality Workshops
 

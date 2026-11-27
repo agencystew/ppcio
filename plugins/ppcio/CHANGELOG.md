@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.8 (27 Nov 2026)
+
+- All 41 skills elevated to Karpathy-style first-principles reasoning with closed-loop self-critique, verified by a 95+/100 eval gate (41/41 pass, avg 97.4/100), plus crisper human copy across the kit and tool-neutral Studio text.
+
 ## 0.8.7 (27 Nov 2026)
 
 - Stronger proof on every page: the kit now hunts reviews, ratings and awards before it builds. A final fresh check scores every finished page, and the studio shows each step of your build.

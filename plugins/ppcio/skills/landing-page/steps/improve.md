@@ -13,7 +13,7 @@ Use this mode when the owner **likes their current landing page** and wants to l
 1. **First-screen promise & ad scent:** Tighten the H1 and subhead into plain founder-voice outcomes matching what buyers searched for (preserve multi-service scope).
 2. **Proof beside the main action:** Move their real rating + review count + source directly next to the hero button and every major decision button.
 3. **Form or call above the fold:** Bring their estimate/quote form or tap-to-call (`tel:`) action onto screen 1 where buyers expect it, and add a slim sticky mobile action bar.
-4. **Offer & risk-reversal clarity:** Surface their real starting price, financing disclosure, warranty, or no-obligation terms right beside the ask — never invent terms they do not state.
+4. **Offer & risk-reversal clarity:** Surface their real starting price, financing disclosure, warranty, or no-obligation terms right beside the ask (never invent terms they do not state).
 5. **Action continuity:** Give every primary button one consistent outcome-led label and add a plain "what happens next" line directly beneath it.
 6. **Clean out leaks:** Replace weak/stale copy (old years, filler slogans, negative featured reviews) with verified customer quotes and real facts from `inputs/pages/` or `facts.md`.
 7. **Mobile-first rescue:** Fix 390px overflow, oversized chat popups covering CTAs, unclickable phone numbers, tiny text (<17px body / <16px inputs), and hidden nav actions.

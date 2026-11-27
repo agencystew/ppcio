@@ -1,126 +1,52 @@
 ---
 name: gpt-to-skill
-description: Turns a ChatGPT custom GPT into a clean, portable Agent Skill (works in Claude Code, Cursor, Codex, Antigravity, Windsurf, Gemini CLI, and Claude.ai). Reads the GPT's instructions, knowledge files, conversation starters and actions, audits them, then builds a tested skill folder (SKILL.md, references, scripts, evals) and a zip ready to upload to Claude. Use when someone says "move my GPT to Claude", "convert my custom GPT", "migrate my GPTs", pastes GPT instructions and asks for a skill, or mentions custom GPTs retiring. Do not use for writing a brand new skill from scratch with no GPT behind it, or for moving a GPT to a ChatGPT plugin.
+description: Turns a ChatGPT custom GPT into a clean, portable, reasoning-first Agent Skill (works in Claude Code, Cursor, Codex, Antigravity, Windsurf, Gemini CLI, and Claude.ai). Audits shouted rules, bloat, and rigid templates, moves exact checks into Python scripts and knowledge into references/, and packages a validated zip with adversarial evals. Use when someone says "move my GPT to Claude", "convert my custom GPT", "migrate my GPTs", or pastes GPT instructions asking for a skill. Not for building a brand-new Google Ads skill from scratch with no GPT behind it (use google-ads-skill-builder).
 metadata:
   author: PPC.io
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
-# GPT to Skill
+# GPT to Skill (Foundation Audit & Karpathy-Style Migration)
+
+Copying a ChatGPT custom GPT verbatim into a `SKILL.md` produces an amateur, bloated skill. Most custom GPTs are one giant wall of shouted `ALL CAPS / MUST / NEVER` rules, rigid fill-in-the-blank templates, and prose trying (and failing) to enforce exact math or character limits. Your job is to perform a **Foundation Audit** and rebuild the GPT into a **lean, portable, reasoning-first Agent Skill** that outperforms the original GPT across every frontier model.
 
 ## Start here
 
 - Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
+- If a `landing-pages/*/context.md` exists in the folder, read it first if relevant; otherwise ask in one message for what is missing: (1) GPT **Instructions** (paste is fine), (2) uploaded **Knowledge files**, (3) **Conversation starters**, (4) **Actions** (name + endpoint purpose; note actions & API keys never carry over directly!), and (5) enabled capabilities (web search, code, image gen). If they only have instructions, start right away and note what is missing.
 
-You move one custom GPT into Claude as a skill. The goal is a skill that
-works better than the GPT did, not a copy of it. GPT instructions are often
-one long prompt with shouted rules. A good skill is a short workflow, with
-knowledge in separate files and exact checks in scripts.
+## Step 1. Run Deterministic Audit & Foundation Diagnosis
 
-Why this matters: Moving a custom GPT into an open Agent Skill. Instructions and files can
-be moved, but actions and the chosen model do not carry over (OpenAI's
-migration FAQ). People will lose GPTs they rely on unless someone moves them
-properly.
-
-## Step 1. Collect the GPT
-
-Ask for what is missing, in one message:
-
-1. The instructions (GPT editor, Configure tab, the Instructions box). A
-   paste is fine.
-2. The knowledge files (the files uploaded under Knowledge).
-3. The conversation starters.
-4. Actions, if any: the name and what each one calls.
-5. Capabilities that were on: web search, code, image generation.
-
-If the person only has the instructions, start with those. Say what is
-missing and carry on.
-
-## Step 2. Audit the GPT
-
-Save the instructions to a file and run:
-
+Save instructions to `instructions.txt` and run:
 `python3 "${CLAUDE_SKILL_DIR}/scripts/gpt_audit.py" instructions.txt [--starters starters.txt]`
 
-It prints: word count, shouted rules (ALL CAPS, NEVER, ALWAYS, MUST), exact
-limits it found (character counts, word counts, lists of N), links, file
-names it refers to, and a first sort of each line into role, steps, rules,
-facts, format and examples.
+Then run a **Foundation Audit** on the GPT instructions to spot bloat before migrating:
+- **Shouted rules (`ALL CAPS / MUST / NEVER`):** Replace with calm rules paired with a concrete **why** (frontier models obey reasoned trade-offs far better than shouting).
+- **Deterministic checks hidden in prose:** Any exact character count, word count, list length, or math formula belongs in a Python script (`scripts/limits_check.py`), NOT a wishful prompt instruction.
+- **Template & persona bloat:** Strip robotic role-play walls and fill-in-the-blank questionnaires that stifle model critical thinking; preserve the GPT's genuine domain expertise, concrete examples, and voice!
 
-Show the person 3 to 5 findings in plain words. Example: "Your GPT has 14
-rules in capitals. Claude follows a calm rule with a reason better than a
-shouted one."
+Share 3 to 5 crisp findings in plain English, then ask at most **3 quick questions (one at a time, skipping anything already clear)**: (1) top 3 real jobs it does (becomes triggers + evals), (2) when it must NOT be used, (3) which limits/numbers must be 100% exact.
 
-## Step 3. Ask 3 questions, one at a time
+## Step 2. Map Every Part Transparently (No Silent Drops)
 
-Ask only these, one per message. Skip any the files already answer.
+Read [references/migration-map.md](references/migration-map.md) and show a concise table (`GPT part | Skill destination | What changes & why`). Wait for approval. Never drop a rule silently; if you merge or delete bloat, name it and explain why. For any Custom GPT Action, specify the clean replacement (live MCP connector via `connect-data-sources`, local Python script, or CSV input step) and **never hardcode API keys or private credentials** into the skill. Keep private knowledge files strictly local unless the user confirms they can be bundled.
 
-1. "What are the 3 jobs people use this GPT for most?" (These become the
-   test prompts and the trigger words in the description.)
-2. "When should it not be used?" (Offer your guess from the instructions.)
-3. "Which numbers must be exact?" (Offer the limits the audit found.)
+## Step 3. Build an Elite, Portable Agent Skill
 
-## Step 4. Map every part
+Folder name = lowercase-hyphen `name` field (target `45 to 240` lines in `SKILL.md`, moving >50-line reference tables to `references/` and exact counts/math to `scripts/`):
+- **`SKILL.md` (cleanly under 240 lines):** Front matter (`name`, third-person `description` with explicit `"Use when"` and `"Not for"` triggers), hypothesis-driven workflow, calm reasoned rules (with `why`), a concrete Weak-vs-10/10 output contrast (preserving the GPT's real voice!), guardrails, and a **Closed-Loop Self-Critique** step run before every answer.
+- **`references/`:** Convert uploaded knowledge files into focused topic Markdown files, each linked from `SKILL.md` with one line telling the agent *when* to read it.
+- **`scripts/`:** Add a deterministic check for every exact limit from Question 3 (starting from `scripts/limits_check.py`).
+- **`evals.md`:** Include the 3 core jobs as test prompts PLUS at least 1 **Trap / Restraint** prompt and 1 **Non-Trigger** prompt that must NOT activate the skill, with clear pass/fail criteria.
 
-Read [references/migration-map.md](references/migration-map.md). Then write
-the map in a short table: GPT part, where it goes in the skill, and what
-changes. Show it and wait for a yes. Never drop a rule silently. If you merge
-or remove one, say which and why.
+### Weak 5/10 vs. 10/10 GPT Migration
 
-## Step 5. Build the skill
+- **Amateur:** Pastes the 1,800-word Custom GPT prompt straight into `SKILL.md` with 22 `NEVER/ALWAYS` shouts, keeps broken references to OpenAI Actions, and skips validation scripts.
+- **10/10 Senior:** Runs `gpt_audit.py`, distills `SKILL.md` to 85 lines of clean reasoning + self-critique, moves 400 lines of reference tables into `references/`, enforces the GPT's 150-char limit via `scripts/limits_check.py`, replaces the old Action with a clean MCP/connector note (zero hardcoded keys), passes `validate_skill.py` with 0 FAILs, and packages a clean portable `.zip`.
 
-Folder name = the `name` field, lowercase with hyphens.
+## Step 4. Guardrails, Self-Check, Dry-Run & Package (Run Before Answering)
 
-- `SKILL.md`: front matter (name, description), then the workflow in steps,
-  rules with a reason each, the output format, a guardrails section and a
-  self-check section. Under 300 lines.
-- Description: what it does, when to use it (with the words people type,
-  from question 1), and when not to (question 2). Third person.
-- `references/`: one file per topic from the knowledge files, converted to
-  Markdown. Link each from SKILL.md with one line on when to read it.
-- `scripts/`: a check for every exact number from question 3. Start from
-  `scripts/limits_check.py` (character, word and item counts).
-- `evals.md`: the 3 jobs from question 1 as test prompts, plus 1 prompt that
-  must not trigger the skill. Say what a good answer contains.
-
-Rules for the rewrite (from Anthropic's skill best practices):
-
-- Turn shouted rules into calm ones with a reason. "Keep headlines to 30
-  characters, because Google rejects longer ones."
-- Cut what Claude already does well. Keep what the GPT needed to correct.
-- Keep the GPT's voice and examples. They are usually the best part.
-
-## Step 6. Check and package
-
-1. Run `python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <folder>`. Fix every FAIL. Fix a
-   WARN unless you can say why it does not apply.
-2. Run the 3 eval prompts against the new skill in your head, step by step,
-   and fix any step that would go wrong.
-3. Run `python3 "${CLAUDE_SKILL_DIR}/scripts/package_skill.py" <folder>`. It writes `<name>.zip`.
-4. Tell the person how to install it: Claude, Customize, Skills, Upload a
-   skill. Run this locally in Claude Code, Cursor, Codex, Antigravity, or Gemini CLI (or in your AI tool.ai with Code Execution enabled) (Settings, Capabilities).
-
-## Guardrails
-
-- Actions do not carry over. For each action, say what replaces it: a Claude
-  connector if one exists, a script, or a manual step. Never write API keys
-  into the skill. Keys belong in the connector.
-- Do not invent rules or facts the GPT did not have. If something looks
-  missing, ask.
-- Knowledge files may hold private data. Keep them in the skill only if the
-  person says the skill stays private.
-
-## Self-check before you answer
-
-- Every GPT rule is in the skill, merged, or listed as removed with a reason.
-- The description has a "use when" and a "do not use" part.
-- Every exact number has a script check.
-- validate_skill.py shows no FAIL.
-- The answer ends with: the zip, the install steps, and the 3 test prompts.
-
-## Output
-
-1. The audit findings (3 to 5 lines).
-2. The migration map (table).
-3. The zip, then install steps.
-4. The 3 test prompts to try first.
+1. Run `python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <folder>` and fix every `FAIL` (and every applicable `WARN`).
+2. **Adversarial dry-run & zero-fabrication check:** Walk through the 3 core eval prompts + the non-trigger prompt in your head as a fresh agent holding ONLY this skill. Confirm zero invented rules the GPT never had, zero hardcoded secrets, zero em dashes, and clear failure/rollback handling if an external file or input is missing.
+3. Package via `python3 "${CLAUDE_SKILL_DIR}/scripts/package_skill.py" <folder>` to produce `<name>.zip`.
+4. Deliver cleanly: (1) 3 to 5 audit findings, (2) migration map, (3) `<name>.zip` + portable install steps (Claude.ai Customize > Skills > Upload with Code Execution enabled, OR local skills folder for Claude Code, Cursor, Codex, Antigravity, Windsurf, Gemini CLI), and (4) 3 starter test prompts. For building a brand-new Google Ads skill from scratch, point them to `google-ads-skill-builder`.
