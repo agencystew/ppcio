@@ -143,7 +143,7 @@ Policy violations, disapprovals, or technical issues.
 #### 3. Waste Reduction
 
 **Elephant Hunting:**
-- Keywords with >$200 spend and 0-1 conversions in 30 days
+- Keywords with >USD 200 spend and 0-1 conversions in 30 days
 - Solution: Pause, restructure, or landing page fix
 
 **Segment Underperformance:**
@@ -233,7 +233,7 @@ Policy violations, disapprovals, or technical issues.
 
 | Decision Type | Minimum Data | Rationale |
 |---------------|--------------|-----------|
-| Pause campaign | 50+ conv OR $500+ spend, 30+ days | Avoid false negatives |
+| Pause campaign | 50+ conv OR USD 500+ spend, 30+ days | Avoid false negatives |
 | Scale campaign | 30+ conv, 14+ days stable | Validates consistency |
 | Change match type | 20+ conv on current | Need baseline |
 | Test landing page | 100+ sessions/variant | Statistical significance |

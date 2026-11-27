@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.8.1 (27 Nov 2026)
+- **Every postclick prompt, open:** `skills/landing-page/postclick/` holds the 53 prompts that ran postclick (24 audit, 27 build, 2 A/B) and its 4 house rules, with a README that maps each one to the kit. New jobs: thank-you pages and quiz funnels, and a plan for a whole site.
+- **Fixes from blind run 12:** the first look is checked before it is shown; the audit asks for its Verdict line; the report always links the studio; dollar amounts in skills no longer turn into the website address.
 - **Connect Your Analytics & Ad Platforms on the Fly (`connect-data-sources`):** Added a guided, read-only data connector skill for **Google Ads, GA4, Microsoft Clarity, Meta Ads, and Google Search Console** (offering both a 30-second zero-setup CSV export path and a live MCP/API/Script connection path), plus natural non-blocking offers across Landing Page Studio and Client Report Dashboards.
 - **Real Data Piped Automatically into Every Audit Expert:** `kit.sh brief` now automatically includes `data/analytics-summary.md` (and any `data/*.md` / `data/*.txt` files) inside `audit/brief.md`, so all 14 Landing Page Studio specialists use actual search terms, mobile vs. desktop conversion gaps, scroll drop-offs, and rage-clicks whenever provided.
 

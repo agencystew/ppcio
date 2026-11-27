@@ -23,7 +23,7 @@ Turn Google Ads exports (or live API/MCP data) into a single, self-contained HTM
 3. **Ecom vs. Lead Gen auto-adaptation.**
    - **Ecommerce:** Lead with Revenue, Spend, ROAS, Purchases, Cost/Purchase, AOV, and top products/campaigns.
    - **Lead Gen:** Lead with Conversions/Leads, Spend, Cost per Lead (CPA), Conv. Rate, and lead-quality / search-term notes.
-4. **Dollar thinking over vanity percentages.** Always pair `%` shifts with actual currency and volume (`-18% CPA (-$14/lead across 92 leads)`). Never invent a number — every KPI must match the uploaded data exactly.
+4. **Dollar thinking over vanity percentages.** Always pair `%` shifts with actual currency and volume (`-18% CPA (-USD 14/lead across 92 leads)`). Never invent a number — every KPI must match the uploaded data exactly.
 5. **Respect conversion lag.** If the reporting window ends within the last 3–5 days and the account has multi-day lag, add a clear 1-line lag note so clients don't panic over unattributed recent days.
 
 ## How to Build a Dashboard

@@ -96,7 +96,7 @@ Search term | Impressions | Clicks | Cost | Conversions
 
 **1. Alignment Waste** (Intent mismatch - high confidence)
 Search intent CANNOT be fulfilled by your offer:
-- "free smart lipo" when service costs $5,000
+- "free smart lipo" when service costs USD 5,000
 - "laser lipo jobs" (employment, not customer)
 - No conversion possible regardless of ad/landing page quality
 

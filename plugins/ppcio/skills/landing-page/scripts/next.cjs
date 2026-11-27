@@ -63,7 +63,7 @@ const check = async (gate, file, stage, fixHow, soft = true, arg) => {
   remember(gate, faults);
   say(stage, key, `${file} does not pass its check yet.`, fixHow, { faults, gate });
 };
-const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.join(', ')} in ONE message (the Agent tool; let them run while you wait). Tell each: "Work folder: ${W}. Read audit/brief.md and the 2 screenshots in your first turn, then write your file in one Write call." Then run ${kit} await landing-pages/${site} ${outs.join(' ')} in the same message (timeout 600000 ms; when it prints STILL RUNNING, run it again and write nothing). In apps without subagents, find the expert prompts via ${kit} agents-dir, do each one yourself in order, and skip ${kit} await.`;
+const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.join(', ')} in ONE message (the Agent tool; let them run while you wait). Tell each: "Work folder: ${W}. Read audit/brief.md (and every brief part it names) and the 2 screenshots in your first turn, then write your file in one Write call." Then run ${kit} await landing-pages/${site} ${outs.join(' ')} in the same message (timeout 600000 ms; when it prints STILL RUNNING, run it again and write nothing). In apps without subagents, find the expert prompts via ${kit} agents-dir, do each one yourself in order, and skip ${kit} await.`;
 
 (async () => {
   // Stage 1: the first look (start/SKILL.md part 3). Runs 5, 8 and 11 lost it; Stewart: "talk like a strategist".
@@ -86,7 +86,7 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
     ...['leaks', 'actions', 'offer', 'forensics', 'trust', 'anatomy', 'psych', 'design'].map(k => [`lp-${k}`, `audit/${k}.json`]), ...(paid ? [['lp-ad-match', 'audit/ad-match.json']] : [])].filter(([, f]) => !has(f));
   if (w2.length) say('audit', 'agents:2', agents(w2.map(x => x[0]), w2.map(x => x[1])), '', { agents: true });
   if (!has('audit/copy.json')) say('audit', 'agents:3', agents(['lp-copy'], ['audit/copy.json']), '', { agents: true });
-  if (!has('facts.md') || !has('audit.md')) say('audit', 'write:audit', `Check the team's work against the screenshots, then write facts.md and audit.md.`, `KIT/steps/1-audit.md, parts 5 and 6. audit.md opens with the verdict, "## The diagnosis" (3 to 4 sentences, as a senior strategist) and "## The plan for your new page" (exactly 3 moves, each a change to the whole page).`, { gate: 'audit' });
+  if (!has('facts.md') || !has('audit.md')) say('audit', 'write:audit', `Check the team's work against the screenshots, then write facts.md and audit.md.`, `KIT/steps/1-audit.md, parts 5 and 6. audit.md opens with a "**Verdict:** " line, "## The diagnosis" (3 to 4 sentences, as a senior strategist) and "## The plan for your new page" (exactly 3 moves, each a change to the whole page).`, { gate: 'audit' });
   await check('audit', 'audit.md', 'audit', 'KIT/steps/1-audit.md, part 6, "The diagnosis and the plan come first". Fix facts.md quotes word for word from the captured text.', false);
   if (!has('audit.html') || newer('audit.md', 'audit.html') || (!has('.audit-sent') && !agency)) say('audit', 'send:audit', `Run ${kit} report landing-pages/${site}. It prints the audit-done message under MESSAGE TO SEND NOW: send it as your very next chat message, word for word. When it prints NOT DRAWN, fix those lines and run it again.`);
 

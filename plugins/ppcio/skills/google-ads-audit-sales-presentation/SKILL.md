@@ -56,10 +56,10 @@ If audit data isn't structured, extract key elements via AskUserQuestion:
 - Header: "Account"
 - Question: "What's the account name and monthly spend range?"
 - Options:
-  - "Small ($1-5K/mo)": Starter accounts
-  - "Medium ($5-25K/mo)": Growing accounts
-  - "Large ($25-100K/mo)": Established accounts
-  - "Enterprise ($100K+/mo)": Major accounts
+  - "Small (USD 1-5K/mo)": Starter accounts
+  - "Medium (USD 5-25K/mo)": Growing accounts
+  - "Large (USD 25-100K/mo)": Established accounts
+  - "Enterprise (USD 100K+/mo)": Major accounts
 
 **Question 2: Current Health**
 - Header: "Status"
@@ -390,7 +390,7 @@ Would you like me to make any adjustments?
 
 ## Edge Cases
 
-### Small Accounts (< $5K/mo)
+### Small Accounts (< USD 5K/mo)
 - Simplify metrics (absolute numbers may be small)
 - Focus on % improvements rather than $ amounts
 - Shorter presentation (8-10 slides)

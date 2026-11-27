@@ -288,7 +288,7 @@ If compliance requires "Licensed & Insured":
 **Proof:** Customer reviews, units sold, satisfaction rate
 **CTAs:** "Shop Now," "Buy Today," "Get [X]% Off"
 **Headlines:**
-- "Free Shipping Over $50"
+- "Free Shipping Over USD 50"
 - "30-Day Free Returns"
 - "Limited Stock Available"
 

@@ -107,7 +107,7 @@ I'll compile everything into a timeline:
 
 ## What Good Looks Like
 
-A good QS repair plan fixes the dominant component first instead of guessing. It prioritizes by spend impact, not by QS number -- a QS 5 keyword spending $3,000/month matters more than a QS 2 keyword spending $20/month. Every fix is specific enough to execute without further interpretation, and the plan includes realistic timelines because QS takes 2-4 weeks to update after changes.
+A good QS repair plan fixes the dominant component first instead of guessing. It prioritizes by spend impact, not by QS number -- a QS 5 keyword spending USD 3,000/month matters more than a QS 2 keyword spending USD 20/month. Every fix is specific enough to execute without further interpretation, and the plan includes realistic timelines because QS takes 2-4 weeks to update after changes.
 
 ---
 

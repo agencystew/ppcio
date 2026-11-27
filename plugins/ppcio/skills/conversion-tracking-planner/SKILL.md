@@ -52,7 +52,7 @@ For each conversion action we identified:
 - **Value assignment:** What is this action worth? For ecommerce, this is dynamic (actual transaction amount). For lead gen, I'll help you calculate: what percentage of leads close, and what's the average deal worth? That gives us a per-lead value.
 - **Counting method:** "One" or "Every"? A person submitting a contact form twice is one lead (use "One"). A person buying two products is two purchases (use "Every"). Setting lead forms to "Every" is one of the top 3 most common tracking errors -- it doubles your apparent conversion count and halves your apparent CPA.
 
-I'll also flag any value mismatches that would confuse Smart Bidding. If a demo request is worth $500 in pipeline value and a content download is worth $5, they need different values -- not both counting as "1 conversion."
+I'll also flag any value mismatches that would confuse Smart Bidding. If a demo request is worth USD 500 in pipeline value and a content download is worth USD 5, they need different values -- not both counting as "1 conversion."
 
 ## Step 4: Attribution Windows and Settings
 

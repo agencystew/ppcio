@@ -672,7 +672,7 @@ AdsApp.campaigns()
 ```javascript
 // High spend, zero conversions
 AdsApp.searchTerms()
-  .withCondition('Cost > 50000000')  // $50 in micros
+  .withCondition('Cost > 50000000')  // USD 50 in micros
   .withCondition('Conversions = 0')
   .forDateRange('LAST_30_DAYS')
   .get();
@@ -688,7 +688,7 @@ AdsApp.searchTerms()
 ### Common Metric Conditions
 | Metric | Condition | Notes |
 |--------|-----------|-------|
-| Cost | `Cost > 50000000` | Micros! $50 = 50,000,000 |
+| Cost | `Cost > 50000000` | Micros! USD 50 = 50,000,000 |
 | Clicks | `Clicks >= 100` | Integer |
 | Impressions | `Impressions > 1000` | Integer |
 | CTR | `Ctr < 0.02` | Decimal (0.02 = 2%) |

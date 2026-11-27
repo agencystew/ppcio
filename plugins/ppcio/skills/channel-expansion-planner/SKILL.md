@@ -190,10 +190,10 @@ Profitability Check: Does margin support this CPA? Yes/No
 
 | Channel | Minimum Test Budget | Why | Learning Period |
 |---------|-------------------|-----|----------------|
-| Meta Ads | $2,000/month | Need ~50 conversions for algorithm learning | 4-6 weeks |
-| Microsoft Ads | $500/month | Can start small, lower competition | 2-4 weeks |
-| LinkedIn Ads | $3,000/month | Higher CPCs, need volume for optimization | 6-8 weeks |
-| TikTok Ads | $3,000/month | Algorithm is extremely data-hungry | 4-6 weeks |
+| Meta Ads | USD 2,000/month | Need ~50 conversions for algorithm learning | 4-6 weeks |
+| Microsoft Ads | USD 500/month | Can start small, lower competition | 2-4 weeks |
+| LinkedIn Ads | USD 3,000/month | Higher CPCs, need volume for optimization | 6-8 weeks |
+| TikTok Ads | USD 3,000/month | Algorithm is extremely data-hungry | 4-6 weeks |
 
 **Viability check:**
 
@@ -203,7 +203,7 @@ Profitability Check: Does margin support this CPA? Yes/No
 | Current spend = 1-2x channel minimum | Stretch | Risky: must reduce Google or have new budget |
 | Current spend < 1x channel minimum | Too early | "Scale Google to $X/month first, then revisit" |
 
-**Critical question:** Is the expansion budget NEW money or carved from Google? If carved from Google, quantify the cannibalization risk: "Reducing Google by $2K/month could cost [X] conversions at your current CPA."
+**Critical question:** Is the expansion budget NEW money or carved from Google? If carved from Google, quantify the cannibalization risk: "Reducing Google by USD 2K/month could cost [X] conversions at your current CPA."
 
 ---
 
@@ -230,7 +230,7 @@ Profitability Check: Does margin support this CPA? Yes/No
 ### Step 1: Identify Hard Constraints (Rare)
 
 Only THREE things truly block a channel:
-- Budget: <$2K/month total across all channels = most channels blocked except Microsoft
+- Budget: <USD 2K/month total across all channels = most channels blocked except Microsoft
 - TikTok without ANY video capability = hard block (video is non-negotiable)
 - Restricted industry without platform policy compliance = legal block
 
@@ -249,7 +249,7 @@ For each of Meta, Microsoft, LinkedIn, and TikTok, assess all 6 signals. No sing
 If a channel has potential but specific blockers:
 - List exact unlock conditions with numbers
 - Provide timeline for when gates might be met
-- Example: "TikTok: Strong audience fit BUT need 50+ conv/mo (currently 23), 5-8 videos (currently 0), $3K/mo budget (currently $5K total). Revisit Q3 2026."
+- Example: "TikTok: Strong audience fit BUT need 50+ conv/mo (currently 23), 5-8 videos (currently 0), USD 3K/mo budget (currently USD 5K total). Revisit Q3 2026."
 
 ### Step 4: Rank Viable Channels
 
@@ -393,7 +393,7 @@ CONFIDENCE: HIGH / MODERATE / LOW
 - Say "this channel has a large audience" as evidence (that's not account-specific)
 - Recommend launching during known dead seasons (wasted learning budget)
 - Recommend expansion when Google itself is not yet profitable
-- Recommend expanding when total budget is <$2K/month (scale Google first)
+- Recommend expanding when total budget is <USD 2K/month (scale Google first)
 
 **ALWAYS:**
 - Analyze competitor channel presence FIRST before recommending
@@ -423,9 +423,9 @@ CONFIDENCE: HIGH / MODERATE / LOW
 - Provide a roadmap: "Revisit in 3 months when [specific conditions are met]"
 - Don't force a recommendation just to have output
 
-### Budget Too Constrained (<$2K/month Total)
-- "Too early to expand. Scale Google to $4-5K/month first."
-- Provide budget gates: "$5K/mo = Microsoft viable. $8K/mo = Meta viable. $12K/mo = multiple channels."
+### Budget Too Constrained (<USD 2K/month Total)
+- "Too early to expand. Scale Google to USD 4-5K/month first."
+- Provide budget gates: "USD 5K/mo = Microsoft viable. USD 8K/mo = Meta viable. USD 12K/mo = multiple channels."
 - Explain WHY: Underfunded pilots fail because the algorithm can't learn.
 
 ### Competitor Data Unavailable
@@ -451,7 +451,7 @@ CONFIDENCE: HIGH / MODERATE / LOW
 ### Seasonal Business
 - Time-aware recommendations: "Launch Q3 to complete learning BEFORE Q4 peak"
 - Never recommend launching during dead months (wasted learning budget)
-- Budget seasonal ramp: "Start at $2K/mo in September, scale to $5K in November"
+- Budget seasonal ramp: "Start at USD 2K/mo in September, scale to USD 5K in November"
 
 ### Hitting Google Impression Share Ceiling
 - This is the strongest signal to expand: you've maxed out Google

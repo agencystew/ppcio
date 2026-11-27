@@ -120,26 +120,26 @@ Before analyzing performance, determine if PMAX should even be running.
 - No or unsure: STOP: PMAX will optimize for junk leads
 
 **Q5: Monthly ad budget?**
-- $5,000+/month: Proceed
-- $2,000-$5,000: Borderline (expect slower learning)
-- <$2,000: STOP: better ROI from focused Search/Shopping
+- USD 5,000+/month: Proceed
+- USD 2,000-USD 5,000: Borderline (expect slower learning)
+- <USD 2,000: STOP: better ROI from focused Search/Shopping
 
 **Disqualifiers (recommend killing PMAX):**
 - Account has <30 conversions/month total
 - Lead gen without CRM/offline conversion tracking
-- Monthly budget <$2,000 (insufficient for multi-channel learning)
+- Monthly budget <USD 2,000 (insufficient for multi-channel learning)
 - Account is <3 months old (no historical signals)
 - Conversion tracking is broken or uses micro-conversions
 
 **Yellow flags (proceed with caution):**
 - Lead gen with CRM integration but <50 conversions/month
-- Budget $2,000-$5,000/month (borderline)
+- Budget USD 2,000-USD 5,000/month (borderline)
 - Ecommerce without product feed optimization
 
 **Green lights:**
 - Ecommerce with 50+ purchases/month and optimized feed
 - Lead gen with CRM integration and 30+ qualified leads/month
-- Budget $5,000+/month with proven Search performance
+- Budget USD 5,000+/month with proven Search performance
 
 ### Step 2: Brand Cannibalization Analysis
 

@@ -56,6 +56,11 @@ Re-run the same command any time to pull updates.
 - **Quick CRO Help (30 seconds):** *"Critique this hero headline"*, *"Why isn't my mobile roofing form converting?"*, *"Check this landing page copy for AI slop"*, *"Compare my Google Ads against my landing page opening."*
 - **Google Ads Data & Scripts:** *"Mine wasted spend from this 90-day search terms CSV"*, *"Give me the PMax Insight Engine script"*, *"My ads aren't showing — help me troubleshoot"*, *"Check if this week's CPA drop is real or conversion lag."*
 - **Agency Mode:** *"Run audits and new pages for these 5 client URLs."*
+- **Thank-you pages and quiz funnels:** *"Build the thank-you page for after someone enquires."*
+
+## Every postclick prompt, open
+
+`plugins/ppcio/skills/landing-page/postclick/` holds the 53 prompts that ran [postclick](https://postclick.ppc.io), word for word: 24 audit experts, the 27-prompt build team (brief, art direction, copy, images, sections, critic, fact check, thank-you pages and funnels) and the A/B test forge. Its README says what each one does and where the kit uses it.
 
 ---
 

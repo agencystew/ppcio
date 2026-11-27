@@ -388,7 +388,7 @@ Data confidence scales with volume. Use this to calibrate recommendation strengt
 |-------|---------|---------|
 | 10 | Could improve profitability by 20%+ | Fix broken conversion tracking |
 | 7-9 | Could improve key metric by 10-20% | Move top campaign to smart bidding |
-| 4-6 | Solid improvement 5-10% | Add 15 negative keywords saving $150/week |
+| 4-6 | Solid improvement 5-10% | Add 15 negative keywords saving USD 150/week |
 | 1-3 | Minor improvement <5% | Update ad extensions |
 
 ### Effort Score (1-10)

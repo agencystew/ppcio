@@ -74,10 +74,10 @@ Fix foundational structure before tactical tweaks. 10 campaigns with 2 conversio
 
 | Tier | Monthly Spend | Statistical Impact |
 |------|-------------|-------------------|
-| Small | <$5K/mo | Limited per-campaign confidence, focus on account-level |
-| Medium | $5-25K/mo | Campaign-level analysis reliable for top spenders |
-| Large | $25-100K/mo | Full keyword-level analysis possible |
-| Enterprise | >$100K/mo | All dimensions analyzable with high confidence |
+| Small | <USD 5K/mo | Limited per-campaign confidence, focus on account-level |
+| Medium | USD 5-25K/mo | Campaign-level analysis reliable for top spenders |
+| Large | USD 25-100K/mo | Full keyword-level analysis possible |
+| Enterprise | >USD 100K/mo | All dimensions analyzable with high confidence |
 
 ### Optional Context
 
@@ -185,7 +185,7 @@ Classify every significant segment:
 | Promising | CPA within 20% of target, 5-10 conversions | Monitor, give more time |
 | Not Working | CPA > 1.5x target, 30+ days, adequate spend | Fix alignment or cut |
 | Insufficient Data | <10 conversions, <30 days | Cannot conclude, wait |
-| Clear Waste | $200+ spend, 0 conversions, obvious intent mismatch | Pause or negative keyword |
+| Clear Waste | USD 200+ spend, 0 conversions, obvious intent mismatch | Pause or negative keyword |
 
 ### Phase 5: Opportunity Identification
 
@@ -299,7 +299,7 @@ Every recommendation must include:
 - Recommend consolidation to pool data
 - Flag insufficient data explicitly
 - Avoid performance-based optimization claims
-- Still quantify waste: "$500 spent on 0-conversion keywords is waste regardless of volume"
+- Still quantify waste: "USD 500 spent on 0-conversion keywords is waste regardless of volume"
 
 ### No Target CPA/ROAS Provided
 - Use account average as baseline
@@ -326,8 +326,8 @@ Every recommendation must include:
 ### Brand vs Non-Brand Mix
 - Always separate brand and non-brand performance in the analysis
 - Blended CPA is misleading when brand drives most conversions
-- A common pattern: "Account CPA is $35 (below $50 target)" but non-brand CPA is $95 and brand CPA is $12
-- Recommendation: Always report "Account CPA: $35 (Brand: $12, Non-Brand: $95)"
+- A common pattern: "Account CPA is USD 35 (below USD 50 target)" but non-brand CPA is USD 95 and brand CPA is USD 12
+- Recommendation: Always report "Account CPA: USD 35 (Brand: USD 12, Non-Brand: USD 95)"
 
 ### Turnaround Account (Inherited Mess)
 - Start with triage: what's the biggest source of waste RIGHT NOW?

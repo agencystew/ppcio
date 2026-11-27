@@ -277,14 +277,14 @@ Before recommending a revert, check these gates:
 
 | Metric | Before (Apr 17-30) | After (May 1-14) | Change |
 |--------|-------------------|-------------------|--------|
-| Cost | $4,200 | $3,800 | -9.5% |
+| Cost | USD 4,200 | USD 3,800 | -9.5% |
 | Conversions | 28 | 32 | +14.3% |
-| CPA | $150 | $119 | -20.7% |
+| CPA | USD 150 | USD 119 | -20.7% |
 | ROAS | 2.1X | 2.8X | +33.3% |
 
 **Verdict:** POSITIVE (Confidence: 0.85)
 **Why:** CPA dropped 21% while conversions increased 14%. Budget previously wasted on low-performers was reallocated to better-performing ad groups. Single change, adequate window, clear metrics improvement.
-**Recommendation:** KEEP. Monitor for 2 more weeks to confirm trend holds. Consider similar analysis for other ad groups with CPA >$150.
+**Recommendation:** KEEP. Monitor for 2 more weeks to confirm trend holds. Consider similar analysis for other ad groups with CPA >USD 150.
 
 ### Example 2: Negative, But Needs Patience, Bid Strategy Switch
 
@@ -293,14 +293,14 @@ Before recommending a revert, check these gates:
 
 | Metric | Before (Mar 1-14) | After (Mar 15-28) | Change |
 |--------|-------------------|-------------------|--------|
-| Cost | $5,000 | $5,200 | +4.0% |
+| Cost | USD 5,000 | USD 5,200 | +4.0% |
 | Conversions | 50 | 38 | -24.0% |
-| CPA | $100 | $137 | +37.0% |
-| Avg CPC | $2.50 | $4.10 | +64.0% |
+| CPA | USD 100 | USD 137 | +37.0% |
+| Avg CPC | USD 2.50 | USD 4.10 | +64.0% |
 
 **Verdict:** NEGATIVE (Confidence: 0.65, reduced because bid strategy learning period may not be complete)
 **Why:** CPA rose 37% while conversion volume dropped 24%. The algorithm is bidding more aggressively (CPC up 64%) without finding proportional conversions. However, Maximize Conversions typically needs 2-4 weeks to optimize, and 14 days may not be enough.
-**Recommendation:** MONITOR LONGER. Check again at day 30. If CPA doesn't improve to <$120, consider reverting to Manual CPC or switching to Target CPA with a $110 target.
+**Recommendation:** MONITOR LONGER. Check again at day 30. If CPA doesn't improve to <USD 120, consider reverting to Manual CPC or switching to Target CPA with a USD 110 target.
 
 ### Example 3: Inconclusive, Multiple Concurrent Changes
 
@@ -317,19 +317,19 @@ Before recommending a revert, check these gates:
 
 ### Example 4: Neutral with Trade-Off, Budget Increase
 
-**Change:** Increased campaign budget from $100/day to $150/day on June 1
+**Change:** Increased campaign budget from USD 100/day to USD 150/day on June 1
 **Window:** 14 days before vs. 14 days after
 
 | Metric | Before | After | Change |
 |--------|--------|-------|--------|
-| Cost | $1,400 | $2,050 | +46.4% |
+| Cost | USD 1,400 | USD 2,050 | +46.4% |
 | Conversions | 20 | 26 | +30.0% |
-| CPA | $70 | $79 | +12.9% |
+| CPA | USD 70 | USD 79 | +12.9% |
 | IS (Budget) | 35% lost | 18% lost | Improved |
 
 **Verdict:** NEUTRAL (Confidence: 0.80)
 **Why:** Conversions increased 30% but CPA rose 12.9%. The additional budget captured incremental conversions at a higher marginal cost, this is expected. The trade-off is volume vs. efficiency.
-**Recommendation:** KEEP if the business prioritizes volume growth and CPA at $79 is still below target ($100). REVERT if efficiency is the priority and $70 CPA was more valuable than the extra 6 conversions.
+**Recommendation:** KEEP if the business prioritizes volume growth and CPA at USD 79 is still below target (USD 100). REVERT if efficiency is the priority and USD 70 CPA was more valuable than the extra 6 conversions.
 
 ---
 
@@ -337,7 +337,7 @@ Before recommending a revert, check these gates:
 
 **CPA improved but conversions dropped:**
 - Calculate total impact: fewer conversions at lower CPA may mean less total value
-- Ask: Would the client prefer 50 conversions at $100 or 30 at $80?
+- Ask: Would the client prefer 50 conversions at USD 100 or 30 at USD 80?
 - Frame as a trade-off requiring business judgment
 - If conversion volume dropped >50%, flag as NEGATIVE regardless of CPA improvement
 
@@ -418,7 +418,7 @@ If either window has zero conversions:
 - Focus on directional signals (click volume trends, CTR changes)
 - Recommend monitoring until at least 10 conversions accumulate in both windows
 
-### Very Small Accounts (<$1K/month)
+### Very Small Accounts (<USD 1K/month)
 
 For small-spend accounts:
 - Widen noise thresholds by 50% (e.g., CPA noise range becomes +/-15% instead of +/-10%)
@@ -429,7 +429,7 @@ For small-spend accounts:
 
 ## Guardrails
 
-**ALWAYS** cite specific metrics in every diagnosis (e.g., "CPA dropped from $150 to $119" not "CPA improved")
+**ALWAYS** cite specific metrics in every diagnosis (e.g., "CPA dropped from USD 150 to USD 119" not "CPA improved")
 **ALWAYS** state confidence level alongside every verdict
 **ALWAYS** acknowledge when concurrent changes make attribution unreliable
 **ALWAYS** recommend monitoring duration before reverting

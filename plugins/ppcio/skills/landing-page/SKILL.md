@@ -26,6 +26,10 @@ The kit folder is `${CLAUDE_SKILL_DIR}`. In the step files, `KIT` means this fol
 4. **Build a brand-new page from scratch (new Google Ads campaign or offer, no existing landing page):** Read `KIT/steps/new-page.md`.
 5. **A/B test variants or focused post-build edits (fork a finished page into 3–5 single-lever test variants):** Read `KIT/steps/variants.md`.
 6. **Many pages at once (agency / client list / batch):** Read `KIT/steps/agency.md`.
+7. **A thank-you page or a quiz funnel:** Read `KIT/steps/thankyou-funnel.md`.
+8. **A plan for a whole site or account (which pages to fix or add first):** Read `KIT/postclick/audit/suite-planner.md` and `KIT/postclick/audit/opportunity-planner.md`, after an audit of each page.
+
+Every prompt postclick ran is in `KIT/postclick/` (see its README). Read them when a step points to them.
 
 ## Your app
 

@@ -28,3 +28,5 @@ Each variant forks `page.html` into `landing-pages/<site>/variants/v1.html`, `v2
 2. **Same brand & quality bar:** Every variant passes `kit.sh guard` and `kit.sh checkfacts` and renders cleanly at 1440px and 390px (`kit.sh shot variants/v1.html v1` + `phone`).
 3. **Comparison board:** Write `landing-pages/<site>/variants/board.html` showing the Control alongside each variant's desktop + phone first screen, the exact hypothesis (**Change / Why / Primary Metric**), and direct links to each variant file.
 4. **Honest testing advice:** Never promise a lift percentage. Remind the owner in one line to measure **qualified enquiries/sales** (not clicks), keep tracking identical across variants, and if traffic is under ~300 conversions/month, test only the single biggest lever (Control vs. V1) rather than splitting traffic 5 ways.
+
+For the full test pool and the one-change rule, read `KIT/postclick/ab-test/hypothesis-pool.md` and `KIT/postclick/ab-test/variant-patcher.md`.

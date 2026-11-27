@@ -121,7 +121,9 @@ case "$cmd" in
   checkfacts) DIR="$(resolve_site_dir "${1:-}")"; shift 2>/dev/null || true; node "$K/checkfacts.cjs" "$DIR" "$@" ;;
   check-site) node "$K/licence.cjs" need site "$(resolve_site_name "${1:-}")" ;;
   report) DIR="$(resolve_site_dir "${1:-.}")"; node "$K/licence.cjs" need site "$(basename "$DIR")" || exit 4
-    SURL="$(find_studio_url)"; [ -n "$SURL" ] && export PPCIO_STUDIO="$SURL"
+    # Run 12: with no studio running, the message gave a file path. Start the studio first, then find it.
+    SURL="$(find_studio_url)"; if [ -z "$SURL" ]; then ( bash "$0" view > /dev/null 2>&1 ); SURL="$(find_studio_url)"; fi
+    [ -n "$SURL" ] && export PPCIO_STUDIO="$SURL"
     node "$K/report.cjs" "$DIR" ;;
   pack) node "$K/licence.cjs" need pack || exit 4; DIR="$(resolve_site_dir "${1:-.}")"; shift 2>/dev/null || true; node "$K/pack.cjs" "$DIR" "$@" ;;
   progress) DIR="$(resolve_site_dir "${1:-.}")"; shift 2>/dev/null || true; node "$K/progress.cjs" "$DIR" "$@" ;;

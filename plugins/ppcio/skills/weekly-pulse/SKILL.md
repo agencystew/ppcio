@@ -108,7 +108,7 @@ For each campaign, compute:
 | ROAS decrease | >20% WoW AND >15% vs 4-week avg | Financial bleeding |
 | Conversion volume drop | >30% WoW with stable spend | Data integrity risk |
 | Impression share loss | >20% WoW on profitable campaigns | Visibility crisis |
-| Zero conversions | Any campaign with >$200 weekly spend | Execution block |
+| Zero conversions | Any campaign with >USD 200 weekly spend | Execution block |
 | Budget exhaustion | >5 days hitting cap on profitable campaign | Growth constraint |
 
 **Warning (monitor, may escalate):**
@@ -126,7 +126,7 @@ For each campaign, compute:
 |--------|-----------|------|
 | Impression share fluctuation | <10% WoW | Normal competitive noise |
 | Single-day performance swings | Any magnitude | Daily noise, not weekly signal |
-| Low-spend metric movement | <$50/week campaigns | Insufficient data |
+| Low-spend metric movement | <USD 50/week campaigns | Insufficient data |
 | CTR variance | <10% WoW | Statistical noise at most volumes |
 
 #### 1.3 Critical Issue Classification
@@ -134,7 +134,7 @@ For each campaign, compute:
 For each anomaly detected, classify:
 
 **Financial Bleeding:** CPA/ROAS significantly worse than target AND meaningful spend
-- Quantify: "Campaign X spending $500/week at $85 CPA vs $50 target"
+- Quantify: "Campaign X spending USD 500/week at USD 85 CPA vs USD 50 target"
 - Urgency: Fix within 48 hours
 
 **Data Integrity:** Conversion tracking breaks or data discrepancies
@@ -196,7 +196,7 @@ For each anomaly detected, classify:
 #### 2.3 Waste Reduction
 
 **Elephant hunting:**
-- Keywords with >$200 spend and 0-1 conversions in 30 days
+- Keywords with >USD 200 spend and 0-1 conversions in 30 days
 - Action: Pause, restructure, or fix landing page alignment
 - Priority: Highest spend first
 
@@ -269,7 +269,7 @@ Rate each recommendation on two dimensions:
 |-------|---------|---------|
 | 10 | Could improve profitability by 20%+ | Fix tracking break losing 50% of conversions |
 | 7-9 | Could improve key metric by 10-20% | Scale budget-constrained star campaign |
-| 4-6 | Solid improvement 5-10% | Add negative keywords saving $200/week |
+| 4-6 | Solid improvement 5-10% | Add negative keywords saving USD 200/week |
 | 1-3 | Minor improvement <5% | Update ad extensions |
 
 ### Effort Score (1-10)

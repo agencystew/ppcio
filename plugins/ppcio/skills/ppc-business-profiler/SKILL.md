@@ -248,7 +248,7 @@ When content from multiple pages is available, combine signals intelligently:
 - Problem focus: "struggling grades," "test anxiety," "learning gaps after COVID" (Source: about page)
 
 **Market Positioning:**
-- Pricing: "Starting from $45/hour" (Conf: 0.85, Source: pricing page)
+- Pricing: "Starting from USD 45/hour" (Conf: 0.85, Source: pricing page)
 - Trust: 4.9 Google rating, "500+ families served," 3 named testimonials (Source: homepage)
 - Differentiator: "Guaranteed score improvement" (SAT/ACT program only)
 

@@ -49,8 +49,8 @@ No jargon. Everyone on the team should understand immediately.
 
 Don't just say "CTR is low" - explain what it costs.
 
-- "Campaign losing 60% IS to budget" --> "Could be generating ~$12K more revenue"
-- "Search term converting at $18 CPA below $50 target" --> "Leaving money on table"
+- "Campaign losing 60% IS to budget" --> "Could be generating ~USD 12K more revenue"
+- "Search term converting at USD 18 CPA below USD 50 target" --> "Leaving money on table"
 
 ### Acknowledge Uncertainty
 
@@ -130,7 +130,7 @@ If something is clearly not working, stop spending.
 
 | Signal | Threshold | Action |
 |--------|-----------|--------|
-| Keyword with $200+ spend, 0 conversions | >2x target CPA in spend | Pause or restructure |
+| Keyword with USD 200+ spend, 0 conversions | >2x target CPA in spend | Pause or restructure |
 | Search term with CPA >3x target | Consistent over 30 days | Add as negative |
 | Campaign with ROAS <0.5x, no strategic reason | 30+ days of data | Reduce budget or pause |
 
@@ -221,20 +221,20 @@ Test new ad copy, landing pages, offers.
 ### Example 1: Clear Opportunity, Budget Scaling
 
 **Input data:** Campaign "Brand - Exact Match" over 30 days:
-- Spend: $1,250 | Conversions: 45 | CPA: $27.78 | ROAS: 7.6X
+- Spend: USD 1,250 | Conversions: 45 | CPA: USD 27.78 | ROAS: 7.6X
 - Search IS: 35% | Lost IS (budget): 65% | Lost IS (rank): 0%
-- Target CPA: $50, Target ROAS: 4.0X
+- Target CPA: USD 50, Target ROAS: 4.0X
 
 **Experiment:** Increase Brand campaign budget by 50%
 
 **Why test this:** Your branded campaign is performing at 7.6X ROAS but only capturing 35% of possible traffic. You're leaving money on the table.
 
-**Expected impact:** Should deliver ~25-30 additional conversions per month (~$700 extra revenue). Low risk since branded search is highest-intent traffic.
+**Expected impact:** Should deliver ~25-30 additional conversions per month (~USD 700 extra revenue). Low risk since branded search is highest-intent traffic.
 
 **How to run it:**
 1. Go to Campaigns > Select "Brand - Exact Match"
 2. Click Settings > Budget
-3. Increase daily budget from $42 to $63 (50% increase)
+3. Increase daily budget from USD 42 to USD 63 (50% increase)
 4. Monitor for 14 days
 5. Check if impression share increases and ROAS holds
 
@@ -243,17 +243,17 @@ Test new ad copy, landing pages, offers.
 ### Example 2: Ambiguous Signal, Device Performance Gap
 
 **Input data:** Campaign "Non-Brand - Plumbing Services" device breakdown:
-- Desktop: 18 conversions at $54 CPA (CVR 4.3%)
-- Mobile: 4 conversions at $205 CPA (CVR 0.7%)
+- Desktop: 18 conversions at USD 54 CPA (CVR 4.3%)
+- Mobile: 4 conversions at USD 205 CPA (CVR 0.7%)
 - Mobile gets 56% of clicks but only 18% of conversions
-- Target CPA: $75
+- Target CPA: USD 75
 
 **Experiment:** Reduce mobile bids by 30% OR test mobile landing page
 
 **Why test this:** Mobile users are converting 6X worse than desktop, driving CPA above target. Something is broken in the mobile experience.
 
 **Expected impact:**
-- Option 1 (reduce bids): Save ~$250/month in wasted mobile spend
+- Option 1 (reduce bids): Save ~USD 250/month in wasted mobile spend
 - Option 2 (fix mobile): Could add 10-15 conversions/month if mobile CVR improves to half of desktop
 
 **Risk:** Medium | **Confidence:** 0.65 (limited mobile conversion volume)
@@ -261,7 +261,7 @@ Test new ad copy, landing pages, offers.
 ### Example 3: Alignment Break, Strong CTR, Weak CVR
 
 **Input data:** Campaign "Free Trial - Broad Match" over 30 days:
-- CTR: 6% (above average) | CVR: 0.3% (terrible) | CPA: $400 vs $100 target
+- CTR: 6% (above average) | CVR: 0.3% (terrible) | CPA: USD 400 vs USD 100 target
 - Search term "free crm software": 450 clicks, 0 conversions
 - Search term "best crm for sales teams": 380 clicks, 4 conversions
 
@@ -269,7 +269,7 @@ Test new ad copy, landing pages, offers.
 
 **Why test this:** Your ads get great clicks but almost no conversions. The data shows you're attracting people looking for "free CRM" who won't convert on a paid trial offer.
 
-**Expected impact:** Cut wasted spend by $500-800/month by blocking "free" searchers. CVR should improve dramatically.
+**Expected impact:** Cut wasted spend by USD 500-800/month by blocking "free" searchers. CVR should improve dramatically.
 
 **Risk:** Low | **Confidence:** 0.85
 

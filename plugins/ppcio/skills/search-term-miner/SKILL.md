@@ -17,7 +17,7 @@ metadata:
 A bad negative keyword is worse than wasted spend: it blocks good
 searches silently and nobody notices for weeks. So this skill is strict
 about two things. Waste is measured against your own target CPA, not a
-generic "$10 with no conversions" rule. And brand, service, competitor and
+generic "USD 10 with no conversions" rule. And brand, service, competitor and
 location words you care about can never end up in a negative.
 
 ## Step 0: account profile

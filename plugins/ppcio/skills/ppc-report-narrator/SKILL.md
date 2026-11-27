@@ -25,8 +25,8 @@ Translate metrics to business outcomes. Clients don't hire you to say "CPA incre
 - Prioritize insights by strategic importance, not magnitude of change
 - Connect tactical metrics (CPC, CTR) to strategic outcomes (customer acquisition, profitability)
 
-**Right:** "You're paying $7 more per customer this month. This was driven by expanding into broader keywords to scale volume, a strategic trade-off that increased total conversions by 28%."
-**Wrong:** "Your CPA increased from $45 to $52 (+15.6%)"
+**Right:** "You're paying USD 7 more per customer this month. This was driven by expanding into broader keywords to scale volume, a strategic trade-off that increased total conversions by 28%."
+**Wrong:** "Your CPA increased from USD 45 to USD 52 (+15.6%)"
 
 ### Context Over Comparison
 
@@ -122,7 +122,7 @@ Do you have enough data for reliable conclusions?
 | 30+ conversions | High | Draw confident conclusions |
 
 ### Priority 3: Total Business Impact (Absolute Value)
-A 50% improvement in a $100/month campaign matters less than a 10% decline in a $10,000/month campaign. Always calculate absolute dollar impact.
+A 50% improvement in a USD 100/month campaign matters less than a 10% decline in a USD 10,000/month campaign. Always calculate absolute dollar impact.
 
 ### Priority 4: Strategic Alignment with Growth Phase
 The same performance can be "good" or "bad" depending on goals. CPA rising 10% while volume increases 40% is excellent for growth-focused clients.
@@ -147,10 +147,10 @@ The same performance can be "good" or "bad" depending on goals. CPA rising 10% w
 
 **Example:**
 - **S:** "Customer acquisition cost increased 15% this month"
-- **E:** "CPA moved from $45 to $52 across non-brand campaigns"
-- **I:** "At current volume (120 conversions), this represents $840 additional monthly spend"
+- **E:** "CPA moved from USD 45 to USD 52 across non-brand campaigns"
+- **I:** "At current volume (120 conversions), this represents USD 840 additional monthly spend"
 - **R:** "We expanded into broader match types to capture more volume, which brought in higher-funnel traffic"
-- **A:** "We're monitoring closely. If CPA doesn't return to <$50 by Week 3 of next month, we'll tighten match types back to phrase"
+- **A:** "We're monitoring closely. If CPA doesn't return to <USD 50 by Week 3 of next month, we'll tighten match types back to phrase"
 
 ### Change Significance Thresholds
 
@@ -170,10 +170,10 @@ Not every metric change deserves mention. Use these to filter noise from signal:
 When efficiency metrics conflict with volume metrics, frame for the client's growth phase:
 
 **Growth Phase Client:**
-"Conversions increased 40% while CPA rose 12%. This is the expected trade-off when scaling, each incremental customer costs slightly more to acquire, but you're growing revenue significantly faster. At $52 CPA vs your $60 target, there's still healthy margin."
+"Conversions increased 40% while CPA rose 12%. This is the expected trade-off when scaling, each incremental customer costs slightly more to acquire, but you're growing revenue significantly faster. At USD 52 CPA vs your USD 60 target, there's still healthy margin."
 
 **Efficiency Phase Client:**
-"CPA increased 12% to $52, approaching your $55 ceiling. While volume increased, the marginal cost of each new conversion is rising. We recommend holding budgets steady and focusing on conversion rate improvements before pushing for more volume."
+"CPA increased 12% to USD 52, approaching your USD 55 ceiling. While volume increased, the marginal cost of each new conversion is rising. We recommend holding budgets steady and focusing on conversion rate improvements before pushing for more volume."
 
 ---
 
@@ -298,7 +298,7 @@ When the user only provides one period of data:
 - Set expectations: "Month 1 is about building the foundation. Performance conclusions require 60-90 days of data."
 - Highlight what's been set up and what's working directionally
 
-### Very Small Account (<$2K/month, <10 conversions)
+### Very Small Account (<USD 2K/month, <10 conversions)
 
 - Avoid per-campaign efficiency analysis (insufficient data)
 - Focus on: alignment checks, traffic quality, keyword relevance
@@ -315,7 +315,7 @@ When the user only provides one period of data:
 When some campaigns crush targets while others underperform:
 - Report at account level FIRST (blended performance vs goals)
 - Then break down: "Here's where the wins are, here's where the challenges are"
-- Quantify the drag: "Campaign X is pulling blended CPA up by $8. Without it, account CPA would be $42 vs $50 target."
+- Quantify the drag: "Campaign X is pulling blended CPA up by USD 8. Without it, account CPA would be USD 42 vs USD 50 target."
 - Recommend: reallocate, fix, or pause the underperformers
 
 ### Seasonal Period (Holiday, Summer, etc.)

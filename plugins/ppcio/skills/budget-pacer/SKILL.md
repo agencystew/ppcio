@@ -109,15 +109,15 @@ Daily Target = (Monthly Budget - Current Spend) / (Days in Month - Days Elapsed)
 ### Example Calculation
 
 ```
-Monthly Budget: $30,000
-Current Spend: $12,000
+Monthly Budget: USD 30,000
+Current Spend: USD 12,000
 Days Elapsed: 15 (of 30)
 
-Expected Spend: ($30,000 / 30) x 15 = $15,000
-Pacing: ($12,000 / $15,000) x 100 = 80%
-Projected Spend: ($12,000 / 15) x 30 = $24,000
-Variance: $24,000 - $30,000 = -$6,000
-Daily Target Remaining: ($30,000 - $12,000) / 15 = $1,200/day
+Expected Spend: (USD 30,000 / 30) x 15 = USD 15,000
+Pacing: (USD 12,000 / USD 15,000) x 100 = 80%
+Projected Spend: (USD 12,000 / 15) x 30 = USD 24,000
+Variance: USD 24,000 - USD 30,000 = -USD 6,000
+Daily Target Remaining: (USD 30,000 - USD 12,000) / 15 = USD 1,200/day
 ```
 
 ---
@@ -170,7 +170,7 @@ When pacing is off, investigate causes in this order. The hierarchy moves from m
 | New campaign added but not spending | Possible approval issue | Check ad/keyword approvals |
 | Campaign enabled but 0 impressions | Serving issue | Check targeting, bids, and policy |
 
-**Example diagnosis:** "Non-brand campaign paused, killed $1,200/day in spend capacity. Account needs $2,133/day to hit target; only $900 available from active campaigns."
+**Example diagnosis:** "Non-brand campaign paused, killed USD 1,200/day in spend capacity. Account needs USD 2,133/day to hit target; only USD 900 available from active campaigns."
 
 ### Stage 2: Budget Constraints
 
@@ -323,7 +323,7 @@ To: [Campaign Name] ($A/day current)
   → Increase to: $B/day (+C%)
   → Rationale: [Why this campaign deserves more budget]
 
-Net impact: $0 total budget change
+Net impact: USD 0 total budget change
 Expected outcome: [Specific metric improvement]
 Monitor: Check pacing in 3-5 days
 ```
@@ -435,7 +435,7 @@ PROJECTED MONTH-END: $X (variance: +/-$X)
 ```
 From: [Campaign] ($X/day) -> Reduce to $Y/day
 To: [Campaign] ($A/day) -> Increase to $B/day
-Net: $0 change | Expected: [Outcome]
+Net: USD 0 change | Expected: [Outcome]
 ```
 
 ---
@@ -475,11 +475,11 @@ Net: $0 change | Expected: [Outcome]
 - Present a projection without stating forecast confidence
 - Recommend budget increases >50% in a single change (disrupts Smart Bidding)
 - Ignore client tier when prioritizing (Enterprise gets tighter tolerances)
-- Round to false precision ($36,247.83 should be $36,250)
+- Round to false precision (USD 36,247.83 should be USD 36,250)
 - Force a single diagnosis when multiple causes are possible (list top 2-3 with confidence)
 
 **ALWAYS:**
-- Include specific numbers in every diagnosis ($1,200/day, not "significant")
+- Include specific numbers in every diagnosis (USD 1,200/day, not "significant")
 - Show projected month-end spend, not just current pacing %
 - Factor time-of-month into urgency (day 25 is more urgent than day 5)
 - Distinguish between hard budget caps and flexible targets
@@ -549,7 +549,7 @@ Net: $0 change | Expected: [Outcome]
 - Days elapsed + days remaining = days in month
 - Campaign-level spend sums to (approximately) account-level spend
 - No campaigns showing impossible metrics (negative spend, >100% IS)
-- If spend is exactly $0.00, confirm the account is actually active
+- If spend is exactly USD 0.00, confirm the account is actually active
 
 **If data quality issues found:**
 - Flag before diagnosing

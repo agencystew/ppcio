@@ -121,6 +121,7 @@ G.audit = W => {
     if (words(m) < 14) f.push(`Plan move ${i + 1} is only ${words(m)} words. Each move says what the new page does and which part of the diagnosis it answers.`);
     if (MICRO.test(m) && !BIG.test(m)) f.push(`Plan move ${i + 1} ("${m.slice(3, 80)}") is a small fix. A move is a change to the whole page: its structure, its offer, its proof or its design. Put small fixes under "What to fix first".`);
   });
+  if (!/\*\*Verdict:\*\*\s*\S/.test(md)) f.push('audit.md has no "**Verdict:** " line. Add one line at the top: the page in one plain sentence, as you would say it to the owner.');
   if (!/\*\*Now:?\*\*|Now:/.test(md) || !/Change to/.test(md)) f.push('audit.md has no "What to fix first" list with Now and Change to lines.');
   f.push(...banned(dx + '\n' + plan, 'The diagnosis and the plan'));
   f.push(...stray(W, dx + '\n' + plan).slice(0, 4).map(n => `The diagnosis or the plan says "${n}", a figure that is nowhere in their pages or the audit. Use a real figure or cut it.`));

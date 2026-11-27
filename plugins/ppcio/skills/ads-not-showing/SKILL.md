@@ -49,8 +49,8 @@ I need to know:
 
 Common scenarios I'll diagnose:
 - **Budget exhausted early:** Your daily budget runs out by noon, so your ads stop for the rest of the day. Fix is either raising budget or tightening targeting.
-- **Bids too low:** You're bidding $1 on keywords where competitors bid $5. You never win the auction. Fix is raising bids or finding less competitive keywords.
-- **Target CPA too aggressive:** You set a $10 target CPA but the market requires $40. The algorithm gave up trying. Fix is raising the target to within 20% of actual performance.
+- **Bids too low:** You're bidding USD 1 on keywords where competitors bid USD 5. You never win the auction. Fix is raising bids or finding less competitive keywords.
+- **Target CPA too aggressive:** You set a USD 10 target CPA but the market requires USD 40. The algorithm gave up trying. Fix is raising the target to within 20% of actual performance.
 - **Learning period:** A recent change to bidding, budget, or campaign structure triggered a learning period. If it has been under 14 days, this may be normal.
 
 ## Step 3: Targeting and Eligibility
