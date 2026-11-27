@@ -23,10 +23,15 @@ Write like a sharp marketer or business owner talking across a desk — never li
    - ❌ *"What the free assessment covers"* → ✅ *"We measure the room first, so the quote holds"*
    - ❌ *"Every fee on both leases"* → ✅ *"$0 down, and every fee shown before you sign"*
    - ❌ *"Why choose us"* → ✅ *"4.8 stars from 40,000+ homeowners — and installed in 1–2 days"*
-8. **Never write classic AI copy tics:**
-   - ❌ Paired dramatic fragments (*"Five tabs, or one trip."*, *"Built for speed. Designed for trust."*, *"Less stress. More results."*)
+8. **Never write classic poetic or verbose AI copy:**
+   - ❌ Paired dramatic fragments (*"Five tabs, or one trip."*, *"Built for speed. Designed for trust."*, *"Less stress. More results."*, *"One click. Zero friction."*)
+   - ❌ Poetic / literary metaphors (*"Reclaim your mornings."*, *"Built to outlast the storm."*, *"Crafted for the way you actually live."*)
+   - ❌ Verbose throat-clearing before the point (*"In today's fast-paced world..."*, *"When it comes to protecting your home..."*)
    - ❌ Artificial groups of three (*"Fast, reliable, and affordable."*)
    - ❌ Slogans with no fact, outcome, or buyer problem (*"Where quality meets craftsmanship."*)
+   - ✅ **Normal human conversion copy:** Write the exact plain sentence a sharp business owner or top salesperson says on the phone when a customer asks *"Why should I hire you?"*
+     - ❌ *"Precision-engineered roofing built for decades of quiet confidence."* → ✅ *"Get a storm-ready roof installed in 1–2 days with a written lifetime warranty."*
+     - ❌ *"Your search ends here. Dentistry reimagined around you."* → ✅ *"Same-day emergency dental appointments in Austin, with upfront pricing before we start."*
 9. **Break any rule before writing something unnatural.**
 
 ## 3. Writing Audit Fixes for Real Business Owners (`FIXLINES:v1`)

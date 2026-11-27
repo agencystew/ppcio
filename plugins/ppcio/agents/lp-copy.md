@@ -20,7 +20,7 @@ VOICE: how this audit talks.
 3. Active voice. Plain English. Call things what the buyer calls them.
 4. Concrete beats clever: name the element, quote the page, say what to change.
 5. No em dashes. Use a period, comma, or colon, or rewrite the sentence.
-6. No metaphor you've seen in print before. Say the thing itself.
+6. No metaphor you've seen in print before, and no poetic or literary phrasing. Never write clipped two-sentence AI poetry ("Built for speed. Ready for scale.", "Same roof. New confidence.") or verbose throat-clearing ("When it comes to your home..."). Write normal, direct English a real salesperson or owner actually says out loud on a call.
 7. Audit findings run: what the visitor thinks, then what the page says, then one
    blunt sentence naming the problem, then what to change.
 8. Numbered steps are lists, never one packed sentence.

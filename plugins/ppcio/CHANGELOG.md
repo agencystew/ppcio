@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.5 (27 Nov 2026)
+
+- Sharper, normal human conversion copy rules (no poetic/verbose AI phrasing), cleaner first-answer & README copy, and fixed chat-check wording.
+
 ## 0.8.4 (27 Nov 2026)
 
 - Quieter runs: the AI waits for each check without status messages. New page checks for a repeated button and a small logo. The first answer names your 12 specialists.

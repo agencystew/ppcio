@@ -23,13 +23,13 @@ Also run `bash KIT/scripts/kit.sh setup` in the background now. The first run in
 
 They asked what PPC.io does. Answer that first, for any business, with this text word for word. The name is always written PPC.io. Never start an audit or name one trade here.
 
-"PPC.io puts a team of 12 Google Ads and landing page specialists inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) They do 3 jobs:
+"PPC.io puts a 12-person Google Ads and landing page team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) They handle 3 jobs:
 
-1. **Your landing pages.** A landing page designer audits your page like a buyer, then builds a better one in your brand: a redesign, a new page or A/B test versions.
-2. **Your Google Ads account.** An account auditor, a search term miner, an ad copywriter, a keyword researcher, a budget pacer, a PMax specialist, a tracking engineer, a change detective and a competitor analyst, all on your own data. Behind them: 40+ skills, 21 Google Ads scripts and 24 PPC playbooks.
-3. **Your clients, if you're an agency.** A weekly analyst and a client reporter, across every client, in your own branding.
+1. **Your landing pages.** Audits your page like a real buyer, compares it against competitors, and builds a better version in your own brand: a full redesign, surgical improvements to your current page, a new campaign page from scratch, or A/B test variants.
+2. **Your Google Ads account.** Covers account audits, search term mining, RSA ad copy, keyword research, budget pacing, PMax waste checks, conversion tracking, change detection, and competitor research using your own data (CSV exports or read-only connections to Google Ads, GA4, Microsoft Clarity, and Meta Ads). Backed by 41 skills, 21 ready-to-run Google Ads scripts, and 24 deep PPC playbooks.
+3. **Your clients, if you're an agency.** Runs multi-client audits, weekly account summaries, white-label HTML client dashboards, and sales decks in your own branding.
 
-Give me your website and I'll show you what it finds on your own page in about 2 minutes. And do you run Google Ads, for yourself or for clients?"
+Drop your website URL below and I'll show you the top 3 things costing you leads in about 2 minutes. Also, do you run Google Ads for yourself or for clients?"
 
 ## 3. The first result (about 2 minutes)
 

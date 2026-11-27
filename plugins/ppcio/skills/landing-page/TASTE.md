@@ -10,7 +10,7 @@ Loved:
 
 Hated:
 - "all very clearly defaulting to Opus's design styles when it comes to headlines - very similar header font, the italicized writing". Every page of the last round used a serif headline with italic accent words. It "would grate at our users". Do not do it.
-- "classic AI copy": paired fragments ("Five tabs, or one trip." "Fifteen minutes today. Smoother for months."), groups of three, slogans no human owner would say (a slogan is a line with no fact, no outcome and no buyer problem in it).
+- "classic AI copy": paired fragments ("Five tabs, or one trip." "Fifteen minutes today. Smoother for months."), groups of three, poetic or literary phrasing ("Built for speed. Ready for scale.", "Crafted to endure.", "Where precision meets peace of mind."), verbose throat-clearing, and slogans no human owner would ever say out loud (a slogan is a line with no fact, no outcome and no buyer problem in it). Write like a normal, sharp person explaining why a customer should pick this business: direct, concrete, easy to scan, and conversion-focused.
 - "diverted away from the brands colours": invented navy, sand or forest green carrying a page whose brand is cyan or lime.
 - "a template from 2002", abstract stretched hero images, grey underlined link-buttons, tiny type, cluttered heroes, "vibe coded slop", "AI generated and super similar" pages.
 - Em dashes, "unlock", "leverage", "seamless", "elevate", "robust", "empower" and every other deck word.
