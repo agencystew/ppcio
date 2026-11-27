@@ -25,9 +25,9 @@ They asked what PPC.io does. Answer that first, for any business, with this text
 
 "PPC.io puts a Google Ads team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) It does 3 jobs:
 
-1. **Your landing pages.** It checks your page like a buyer and a conversion team would, answers quick CRO questions from a decade of paid-search playbooks, and designs and builds a better page in your brand.
-2. **Your Google Ads account.** 32 Google Ads skills, 21 ready-to-run Google Ads scripts, and 24 deep PPC playbooks — finding wasted spend, checking account health, fixing Quality Score and tracking, writing ads, and writing client reports on your own data.
-3. **Your clients, if you're an agency.** All of that, across every client.
+1. **Your landing pages.** It audits your page like a buyer and a conversion team, answers quick CRO questions from 6 paid-search playbooks, and designs, improves, builds from scratch, or creates A/B test variants in your brand.
+2. **Your Google Ads account.** 33 Google Ads & reporting skills (including brand-adaptive HTML client dashboards and audit decks), 21 ready-to-run Google Ads scripts, and 24 deep PPC playbooks — all on your own data.
+3. **Your clients, if you're an agency.** All of that, across every client, with your own branding.
 
 Give me your website and I'll show you what it finds on your own page in about 2 minutes. And do you run Google Ads, for yourself or for clients?"
 
@@ -50,7 +50,7 @@ As soon as they answer:
 
 ## 4. Go straight on
 
-Only after the first look message is sent: read the landing-page skill and run its audit (stage 2) with what you already have, in the same turn. The intake answers you have are enough; do not ask them again. Do not end on a menu.
+Only after the first look message is sent: read the landing-page skill, then run `bash KIT/scripts/kit.sh next <site-name>` and do the step it prints, in the same turn. Run `next` again after every step, to the finished page. The intake answers you have are enough; do not ask them again. Do not end on a menu.
 
 Read `${CLAUDE_SKILL_DIR}/catalog.md` only when they ask what else you can do. Then show it by job: the job name and one line each. Never list file names or skill folder names.
 

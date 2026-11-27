@@ -56,7 +56,7 @@ Each item lists what to learn and what it changes in the built skill.
 ### 5. Data access
 - CSV exports from the Google Ads UI, Google Ads Editor, a spreadsheet, a
   connector, or Google's Google Ads MCP server?
-- If MCP: is it set up and working in their Claude? Read-only or with the
+- If MCP: is it set up and working in their AI tool? Read-only or with the
   asset and label tools on?
 - Changes: the Inputs section. CSV means exact export steps and column
   names. MCP means GAQL queries and the gotchas in data-access.md.

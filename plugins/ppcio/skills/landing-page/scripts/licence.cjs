@@ -31,14 +31,28 @@ const plan = r => r.ok ? String(r.d.p || 'pro').toUpperCase() : 'FREE';
 
 // The full library: the server checks the key and answers a link that lasts 10 minutes.
 const SERVER = process.env.PPCIO_SERVER || 'https://postclick.ppc.io';
+async function fetchWithRetry(url, init, tries = 2, timeoutMs = 45000) {
+  let lastErr;
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
+      if (res.status >= 500 && i + 1 < tries) { await new Promise(r => setTimeout(r, 1200)); continue; }
+      return res;
+    } catch (e) {
+      lastErr = e;
+      if (i + 1 < tries) await new Promise(r => setTimeout(r, 1200));
+    }
+  }
+  throw lastErr || new Error('network error');
+}
 async function getLibrary(key) {
-  const res = await fetch(`${SERVER}/api/public/ppcio/library`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ key }) });
+  const res = await fetchWithRetry(`${SERVER}/api/public/ppcio/library`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ key }) }, 2, 20000);
   const j = await res.json().catch(() => ({}));
-  if (res.status === 403) throw new Error('the server did not accept this key');
+  if (res.status === 403) throw new Error('the server did not accept this key. Check you copied the whole PPCIO-... key from your email.');
   if (res.status === 429) throw new Error('this key downloaded the library too many times this month. Email support@ppc.io');
   if (!res.ok || !j.url) throw new Error(`the library server answered ${res.status}`);
   const lib = path.join(HOME, 'library'); const tmp = path.join(HOME, 'library.download'); const tgz = path.join(HOME, 'library.tar.gz');
-  const file = await fetch(j.url); if (!file.ok) throw new Error(`the download answered ${file.status}`);
+  const file = await fetchWithRetry(j.url, {}, 2, 90000); if (!file.ok) throw new Error(`the download answered ${file.status}`);
   fs.mkdirSync(HOME, { recursive: true }); fs.writeFileSync(tgz, Buffer.from(await file.arrayBuffer()));
   fs.rmSync(tmp, { recursive: true, force: true }); fs.mkdirSync(tmp, { recursive: true });
   require('child_process').execFileSync('tar', ['-xzf', tgz, '-C', tmp]);

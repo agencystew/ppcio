@@ -3,10 +3,11 @@
 A decade of paid-search landing page mastery and Google Ads systems — packaged as one clean, portable plugin for **Claude Code**, **Cursor**, **Codex**, **Antigravity**, **Windsurf**, and **Gemini CLI**.
 
 Drop it into your AI agent and immediately get:
-- **The Landing Page Studio:** 16 specialist agents, 6 battle-tested paid-search CRO playbooks, instant Quick-CRO answers, and a full end-to-end audit → style board → build → critic → go-live zip pipeline.
+- **The Complete Landing Page Studio:** 16 specialist agents, a self-healing step harness (`kit.sh next` with automated review loop, rollback, and local taste memory), 6 battle-tested paid-search CRO playbooks, instant Quick-CRO answers, and all **4 Postclick build modes** (Full Redesign, Improve Existing Page, Build New Campaign Page From Scratch, and A/B Test Variants) + Agency Batch Mode.
 - **322-Page Graded Style Library:** The highest-scoring landing pages across 144 niches (selected from 1,112 graded pages), with real section breakdowns and anti-AI-slop design rules.
 - **4 Standalone Quick-CRO Skills:** Founder-voice copy rewrites, ad-to-page message match, buyer-objection fixes, and single-variable A/B experiment briefs.
-- **32 Google Ads Skills:** Search term mining with negative impact simulation, RSA character/fact linting, conversion-lag analysis, change detective, PMax & Shopping builders, Quality Score repair, tracking planner, bidding decision tree, weekly client reports, and agency pitch decks.
+- **Brand-Adaptive Client Reporting Suite:** Interactive self-contained HTML client performance dashboards + multi-client static portal hub (`client-report-dashboard`) and 12–15 slide audit pitch decks (`google-ads-audit-sales-presentation`) that adapt to **your own agency colours, logo, and typography** across 4 clean themes — never hardcoded to one style.
+- **33 Google Ads & Reporting Skills:** Search term mining with negative impact simulation, RSA character/fact linting, conversion-lag analysis, change detective, PMax & Shopping builders, Quality Score repair, tracking planner, bidding decision tree, weekly client emails, and agency pitch tools.
 - **21 Ready-to-Run Production Google Ads Scripts:** PMax Insight Engine, Make Exact Match Exact, Wasted Spend Forensics, Ad-to-LP Mismatch Detector, Conversion Health Check, Quality Score Tracker, MCC Daily Monitor, and AI-ready account exports.
 - **24 First-Principles PPC Knowledge Playbooks:** Deep paid-search foundations covering unit economics, measurement, Shopping feeds, broad match governance, bidding, scaling, and the 8-layer Paid Media Performance System.
 
@@ -41,7 +42,7 @@ Paste this single line into your terminal:
 curl -fsSL https://raw.githubusercontent.com/agencystew/ppcio/main/install.sh | sh
 ```
 
-It clones PPC.io into `~/.ppcio/kit`, links all 39 skills cleanly into every AI tool detected on your machine (`~/.cursor/skills`, `~/.agents/skills` for Codex, `~/.gemini/antigravity/skills`, `~/.codeium/windsurf/skills`, `~/.gemini/skills`), and prepares the browser checker automatically.
+It clones PPC.io into `~/.ppcio/kit`, links all 40 skills cleanly into every AI tool detected on your machine (`~/.cursor/skills`, `~/.agents/skills` for Codex, `~/.gemini/antigravity/skills`, `~/.codeium/windsurf/skills`, `~/.gemini/skills`), and prepares the browser checker automatically.
 
 Open your AI tool in any project folder and ask: `what can PPC.io do for me?`
 Re-run the same command any time to pull updates.
@@ -63,7 +64,7 @@ Re-run the same command any time to pull updates.
 |---|---|---|
 | Quick CRO help & all 6 paid-search CRO playbooks | ✓ | ✓ |
 | 4 Quick-CRO skills (`lp-copy-rewrite`, `lp-message-match`, etc.) | ✓ | ✓ |
-| 32 Google Ads skills, 21 production scripts & 24 PPC playbooks | ✓ | ✓ |
+| 33 Google Ads & brand-adaptive HTML reporting skills, 21 scripts & 24 playbooks | ✓ | ✓ |
 | First look at your page (first 3 buyer blockers in ~2 min) | ✓ | ✓ |
 | Full 14-specialist landing page audit | 1 website | Unlimited websites |
 | 9-style board, full custom page build, critic & go-live zip | | ✓ |

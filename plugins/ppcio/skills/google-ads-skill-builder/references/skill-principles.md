@@ -18,9 +18,9 @@ every skill you build. Each has a source you can open.
 12. Nothing that goes stale
 
 ## 1. The description is the trigger
-Claude picks a skill from its name and description alone, so the
+An AI agent picks a skill from its name and description alone, so the
 description must say what it does, when to use it, and when not to.
-- Anthropic: "Claude uses it to choose the right Skill from potentially 100+
+- Anthropic: "The AI agent uses it to choose the right Skill from potentially 100+
   available Skills." Write in third person.
   https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 - Anthropic's skill-creator notes Claude tends to "undertrigger" skills and

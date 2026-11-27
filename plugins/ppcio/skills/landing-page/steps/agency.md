@@ -25,8 +25,8 @@ Write everything to `landing-pages/batch.md`: one row per client with its answer
 
 Before you start, tell them in plain words:
 - About how long it takes: the clients run side by side, so the batch takes about as long as the slowest client plus a little. 5 clients take about 30 to 40 minutes, 10 clients about 45 to 60.
-- Their Claude may ask to approve some steps the first time. Approve them for this chat, or start Claude with edits auto-accepted, so the run does not wait for them.
-- A batch runs many agents at once, so it uses their Claude plan's usage faster. If it reaches the limit, the run stops. Say "carry on with the batch" later, and it picks up from `landing-pages/batch.md`.
+- Your AI tool may ask to approve some steps the first time. Approve them for this chat, or enable auto-accept edits, so the run does not wait on you.
+- A batch runs many specialists in parallel, so it uses your AI plan's usage faster. If you reach a usage limit, the run pauses cleanly. Say "carry on with the batch" later and it resumes from `landing-pages/batch.md`.
 
 ## 2. Run every client at the same time, in waves
 

@@ -1,6 +1,6 @@
 # Evals for gpt-to-skill
 
-Prompt: "Here are my custom GPT's instructions and its 2 knowledge files. Move it to Claude before GPTs shut down."
+Prompt: "Here are my custom GPT's instructions and its 2 knowledge files. Convert it into a portable Agent Skill."
 Good looks like: runs gpt_audit.py first, names the shouted rules and the limits, asks the 3 questions one at a time, shows a migration map, builds a folder that passes validate_skill.py, and gives a zip with install steps and 3 test prompts.
 
 Prompt: "My GPT calls our CRM with an action. Can that come across?"

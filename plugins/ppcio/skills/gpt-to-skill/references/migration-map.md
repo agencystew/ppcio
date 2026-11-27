@@ -1,4 +1,4 @@
-# Migration map: custom GPT to Claude skill
+# Migration map: custom GPT to Agent Skill
 
 | GPT part | Goes to | What changes |
 |---|---|---|
@@ -15,7 +15,7 @@
 | Actions (API calls) | A Claude connector, a script, or a manual step | OpenAI: actions do not transfer. Keys never go in the skill |
 | Capabilities: web search | A step that says when to search | Claude has web search in most plans |
 | Capabilities: code interpreter | Scripts in `scripts/`, run with code execution on | Turn on code execution in Claude settings |
-| Capabilities: image generation | A note: not part of the skill | Claude skills do not make images by default |
+| Capabilities: image generation | A note: not part of the skill | Agent Skills do not make images by default |
 | Chosen model | Nothing | OpenAI: the model choice does not carry over |
 
 ## Common GPT problems to fix on the way

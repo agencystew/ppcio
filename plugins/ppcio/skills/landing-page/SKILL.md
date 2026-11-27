@@ -21,8 +21,11 @@ The kit folder is `${CLAUDE_SKILL_DIR}`. In the step files, `KIT` means this fol
      - `KIT/references/forms-mobile-and-tracking.md` — Action matrix by page type, form friction & multi-step funnels, mobile UX, Google Ads tracking / DNI / launch QA.
      - `KIT/references/vertical-playbooks.md` — Blueprints for Local Urgent Trades, High-Ticket Home Services, Medical/Med Spa, B2B/SaaS, Legal/Finance, and E-commerce.
    - Answer directly in plain founder-level language with concrete `Now -> Change to` suggestions, inventing zero claims or numbers. Offer to run the full studio audit/build only in one short closing line if they want it.
-2. **Full Studio audit & page build (URL given or redesign requested):** Follow **The journey** below (stages 0 through 5).
-3. **Many pages at once (agency / client list / batch):** Read `KIT/steps/agency.md`.
+2. **Full Studio audit & redesign (URL given, wants a new world-class version):** Follow **The journey** below (stages 0 through 5), driven by `bash KIT/scripts/kit.sh next <site>`.
+3. **Improve my existing page (likes their design, wants 6–10 surgical CRO upgrades without a full redesign):** Read `KIT/steps/improve.md`.
+4. **Build a brand-new page from scratch (new Google Ads campaign or offer, no existing landing page):** Read `KIT/steps/new-page.md`.
+5. **A/B test variants or focused post-build edits (fork a finished page into 3–5 single-lever test variants):** Read `KIT/steps/variants.md`.
+6. **Many pages at once (agency / client list / batch):** Read `KIT/steps/agency.md`.
 
 ## Your app
 
@@ -37,6 +40,7 @@ The kit works in any AI app. Claude Code gives the best result (the best design 
 
 - **When a tool prints MESSAGE TO SEND NOW, that text is your very next chat message, word for word, before any other tool call.** You never write your own version of it.
 - **When the app asks for an update while you work, send only this line:** Still working on it. The studio link above shows the progress live. Never any other status line.
+- **When your turn ends while an agent or a check still runs, end with no text, or with that same line.** Never "Waiting on the critic", "Guard is clean" or any other line about your own work.
 - Plain words, short messages, one question at a time. The person may not be technical. Say "competitors", never "rivals". Never count or name your helpers ("my team of 12 checkers", "the reviewer"): say "I'm checking your page".
 - Never show file names, commands or tool output unless they ask. Say what you found and what it means for their customers.
 - Never invent a number, a review, a price, a result or a promise. Every claim comes from their own page, their own words, or a check you ran.
@@ -69,6 +73,8 @@ The kit works in any AI app. Claude Code gives the best result (the best design 
 - Their presses in the studio come to you. Keep `bash KIT/scripts/kit.sh wait` running in the background while the studio is open. When it prints a request ("Build my new page", "Not right?", a change), do it, then start `kit.sh wait` again.
 
 ## The journey
+
+**`kit.sh next` drives every run.** After every step, run `bash KIT/scripts/kit.sh next <site>`. It reads the work folder and prints the one next step (`NEXT:`), and the part of a step file to read for it (`HOW:`). Do that step, then run `next` again. Never plan the run from memory and never skip a step it prints. It also loops the review: the page goes back for another round of fixes until a fresh critic scores it 8 or more on all 5 points and above their live page (up to 4 rounds). The stages below say what each step is for.
 
 Go through these stages in order. Read each step file when you reach its stage, not before. The person can stop after any stage.
 

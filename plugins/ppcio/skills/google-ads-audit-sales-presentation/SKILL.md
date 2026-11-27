@@ -10,7 +10,7 @@ description: "Create stunning, animation-rich HTML sales presentations from Goog
 - If a `landing-pages/*/context.md` file exists in this folder, read it first. It holds what they sell, where they work, what a win is and the searches their ads buy. Ask only what it does not answer.
 - The data: In Google Ads, open Campaigns, set the dates to the last 90 days, add the columns Cost, Clicks, Conversions, Cost / conv. and Search impr. share (Columns, then Modify columns), then press Download above the table and pick .csv. Drop the file here. Say this to them in one line when you ask for it.
 
-Transform Google Ads audit findings into zero-dependency, animation-rich HTML presentations that sell. Built specifically for PPC agencies to present audit results in a bold, high-contrast visual style (adapt to your agency's own brand colours and name when provided).
+Transform Google Ads audit findings into zero-dependency, animation-rich HTML presentations that sell. Built specifically for PPC agencies to present audit results styled cleanly in your own agency brand colours, logo and typography (or 4 built-in themes: Executive Light, Editorial Warm, Modern Dark, Bold High-Contrast).
 
 ---
 
@@ -137,64 +137,74 @@ const presentation = {
 
 ---
 
-## Phase 3: Style Application (High-Contrast Agency Design System)
+## Phase 3: Brand-Adaptive Style System (Never Hardcoded)
 
-### Color Palette
+Always match the user's **own agency or company brand first** (name, logo, primary accent colour, light or dark preference, and font pairing). If they share their website URL or brand kit, extract their real primary colour and typography.
+
+When no brand preference is given, offer (or pick the best fit from) these **4 clean CSS variable themes**:
+
+| Theme | Best For | Background / Surface | Ink / Muted | Default Accent (Override With Agency Hex) |
+|---|---|---|---|---|
+| **Executive Light** *(default)* | B2B, enterprise, corporate prospects | `#ffffff` / `#f8fafc` | `#0f172a` / `#475569` | `#2563eb` |
+| **Editorial Warm** | Boutique agencies, hospitality, DTC | `#f6f4ee` / `#ffffff` | `#141915` / `#5f665d` | `#2f5d46` |
+| **Modern Dark** | SaaS, tech, screen-share sales calls | `#0b1120` / `#111827` | `#f8fafc` / `#94a3b8` | `#38bdf8` |
+| **Bold High-Contrast** | Direct-response & high-energy pitches | `#09090b` / `#18181b` | `#ffffff` / `#a1a1aa` | `#22c55e` *(or user's accent)* |
+
+### Semantic CSS Variables (Swap Tokens, Keep Structure)
 
 ```css
 :root {
-  /* Primary Colors */
-  --brand-accent: #F6DD00;        /* Accent, highlights, CTAs */
-  --brand-secondary: #1F0AE5;          /* Interactive elements */
-  --black: #000000;                   /* Primary backgrounds */
-  --white: #FFFFFF;                   /* Text on dark */
+  /* Override with the user's own agency palette or chosen theme above */
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --border: #e2e8f0;
+  --ink: #0f172a;
+  --text-secondary: #475569;
+  --brand-accent: #2563eb;        /* Agency primary accent, highlights, CTAs */
+  --brand-secondary: #0f766e;     /* Secondary accent */
 
-  /* Supporting Colors */
-  --dark-surface: #0A0A0A;           /* Card backgrounds */
-  --dark-border: #1A1A1A;            /* Subtle borders */
-  --text-secondary: #888888;          /* Muted text */
+  /* Backwards-compatible aliases used in slide templates */
+  --black: var(--bg);
+  --white: var(--ink);
+  --dark-surface: var(--surface);
+  --dark-border: var(--border);
 
-  /* Grade Colors */
-  --grade-a: #00FF88;                 /* Excellent - green */
-  --grade-b: #F6DD00;                 /* Good - yellow */
-  --grade-c: #FF8800;                 /* Needs work - orange */
-  --grade-d: #FF3366;                 /* Critical - red */
-
-  /* Semantic */
-  --waste-red: #FF3366;               /* Money bleeding */
-  --opportunity-green: #00FF88;       /* Potential gains */
-  --warning-orange: #FF8800;          /* Caution */
+  /* Semantic Grade & Signal Colors (adjust contrast for light vs. dark) */
+  --grade-a: #059669;             /* Excellent */
+  --grade-b: #2563eb;             /* Good */
+  --grade-c: #d97706;             /* Needs work */
+  --grade-d: #dc2626;             /* Critical */
+  --waste-red: #dc2626;           /* Money bleeding */
+  --opportunity-green: #059669;   /* Potential gains */
+  --warning-orange: #d97706;      /* Caution */
 }
 ```
 
 ### Typography
 
-```css
-/* Font Stack - Agency Deck Style */
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap');
+Use the agency's own font stack when provided, or pair clean display + body web fonts (e.g., `Plus Jakarta Sans` + `Inter`, `Fraunces` + `Inter`, or `Space Grotesk` + `Inter` — falling back gracefully to system sans):
 
+```css
 :root {
-  --font-display: 'Clash Display', sans-serif;  /* Headlines */
-  --font-body: 'Satoshi', sans-serif;           /* Body text */
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Type Scale */
-  --text-hero: clamp(3rem, 8vw, 6rem);          /* Title slides */
-  --text-h1: clamp(2rem, 5vw, 4rem);            /* Slide headlines */
-  --text-h2: clamp(1.5rem, 3vw, 2.5rem);        /* Section headers */
-  --text-h3: clamp(1.25rem, 2vw, 1.75rem);      /* Card titles */
-  --text-body: clamp(1rem, 1.5vw, 1.25rem);     /* Body text */
-  --text-small: clamp(0.875rem, 1vw, 1rem);     /* Captions */
+  --text-hero: clamp(2.75rem, 6.5vw, 5rem);     /* Title slides */
+  --text-h1: clamp(2rem, 4.5vw, 3.5rem);        /* Slide headlines */
+  --text-h2: clamp(1.4rem, 2.8vw, 2.25rem);     /* Section headers */
+  --text-h3: clamp(1.15rem, 1.8vw, 1.5rem);     /* Card titles */
+  --text-body: clamp(1rem, 1.3vw, 1.15rem);     /* Body text */
+  --text-small: clamp(0.875rem, 1vw, 0.95rem);  /* Captions */
 }
 
-/* Display text styling */
 .display-text {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
-/* Body text styling */
 .body-text {
   font-family: var(--font-body);
   font-weight: 400;

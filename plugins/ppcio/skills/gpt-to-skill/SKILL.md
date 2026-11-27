@@ -1,6 +1,6 @@
 ---
 name: gpt-to-skill
-description: Turns a ChatGPT custom GPT into a Claude skill before custom GPTs shut down. Reads the GPT's instructions, knowledge files, conversation starters and actions, audits them, then builds a tested skill folder (SKILL.md, references, scripts, evals) and a zip ready to upload to Claude. Use when someone says "move my GPT to Claude", "convert my custom GPT", "migrate my GPTs", pastes GPT instructions and asks for a skill, or mentions custom GPTs retiring. Do not use for writing a brand new skill from scratch with no GPT behind it, or for moving a GPT to a ChatGPT plugin.
+description: Turns a ChatGPT custom GPT into a clean, portable Agent Skill (works in Claude Code, Cursor, Codex, Antigravity, Windsurf, Gemini CLI, and Claude.ai). Reads the GPT's instructions, knowledge files, conversation starters and actions, audits them, then builds a tested skill folder (SKILL.md, references, scripts, evals) and a zip ready to upload to Claude. Use when someone says "move my GPT to Claude", "convert my custom GPT", "migrate my GPTs", pastes GPT instructions and asks for a skill, or mentions custom GPTs retiring. Do not use for writing a brand new skill from scratch with no GPT behind it, or for moving a GPT to a ChatGPT plugin.
 metadata:
   author: PPC.io
   version: "1.0.0"
@@ -98,7 +98,7 @@ Rules for the rewrite (from Anthropic's skill best practices):
    and fix any step that would go wrong.
 3. Run `python3 "${CLAUDE_SKILL_DIR}/scripts/package_skill.py" <folder>`. It writes `<name>.zip`.
 4. Tell the person how to install it: Claude, Customize, Skills, Upload a
-   skill. Run this locally in Claude Code, Cursor, Codex, Antigravity, or Gemini CLI (or in Claude.ai with Code Execution enabled) (Settings, Capabilities).
+   skill. Run this locally in Claude Code, Cursor, Codex, Antigravity, or Gemini CLI (or in your AI tool.ai with Code Execution enabled) (Settings, Capabilities).
 
 ## Guardrails
 

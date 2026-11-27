@@ -24,4 +24,4 @@ const msg = [
   'I\'m building the whole page in this look now. About 10 minutes.',
 ].filter(Boolean).join('\n\n');
 fs.writeFileSync(path.join(dir, '.look-sent'), new Date().toISOString());
-console.log(`MESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Then start the build in this same turn, and write nothing else in chat until a tool prints the next MESSAGE TO SEND NOW.\n----\n${msg}\n----`);
+console.log(`MESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Then, in this same turn, run kit.sh next <site> and do the step it prints, and write nothing else in chat until a tool prints the next MESSAGE TO SEND NOW.\n----\n${msg}\n----`);

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.8.0 (26 Nov 2026)
+- **All 4 Postclick build modes & brand-adaptive HTML client reporting:** Added full support for Redesign, Improve Existing Page (`steps/improve.md`), Build New Campaign Page From Scratch (`steps/new-page.md`), and A/B Test Variants (`steps/variants.md`), plus the brand-adaptive `client-report-dashboard` HTML reporting & multi-client portal suite (4 selectable themes, zero hardcoded agency branding) and de-hardcoded brand-adaptive audit sales decks.
 - **Built-in paid-search CRO knowledge base & Quick CRO mode:** 6 battle-tested reference playbooks inside the Landing Page Studio (CRO doctrine, above-the-fold & message match, anti-AI-slop voice & design, offer & risk reversal, forms/mobile/tracking, and 6 vertical playbooks) so your agent gives sharp paid-search CRO answers immediately on quick questions as well as full page builds.
 - **4 standalone Quick-CRO skills:** `lp-copy-rewrite`, `lp-message-match`, `lp-buyer-objections`, and `lp-experiment-brief` work directly on pasted copy/screenshots or local `landing-pages/` audits with zero external account needed.
 - **Expanded Google Ads bonus suite:** 32 Google Ads skills (including 7 new interactive workshops: Ads Not Showing, Quality Score Repair, Conversion Tracking Planner, Bidding Strategy Decision Tree, Ecommerce Shopping Builder, Keyword Universe Builder, and Lead-Gen Quality), 21 ready-to-paste production Google Ads Scripts (`google-ads-script-creator/scripts-library/`), and 24 first-principles PPC Knowledge Playbooks (`ppc-playbooks`).
@@ -8,6 +9,9 @@
 - **Same clear chat & exact Studio v2 score parity:** 5 clean stage messages, exact score parity between `audit.html`, `batch.html`, chat, and Studio, clean raw GTM tracking capture, zero permission spam on Pro library reads and PPC URLs with `&` query params, and reliable non-Claude agent/studio paths.
 - Faster audits: each specialist reads your page in one go and writes once, so the audit uses fewer tokens.
 - You always see your new look before the whole page is built, so you can switch styles early.
+- A new page goes back for more rounds of fixes until a fresh critic scores it 8 or more out of 10 on every point and above your page today.
+- Every step checks its own work before the next one starts: no invented quote, figure, phone number or promise reaches you.
+- The kit learns on your computer: the mistakes it made before, and the changes you asked for, shape the next page.
 
 ## 0.7.0 (26 Nov 2026)
 - The PPC.io studio: the postclick app's own screens, on your computer. Your audit, the live wait while the specialists work, your designs and your new page beside your live one, on a laptop and a phone. Claude opens it beside the chat.

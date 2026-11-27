@@ -1,6 +1,6 @@
 ---
 name: google-ads-skill-builder
-description: Interviews a Google Ads manager about one task, their account, goals, data and rules, then builds a complete custom Claude skill (SKILL.md, references, scripts) for that task, checked against a quality checklist. Use when someone wants to create, design, or improve a Google Ads or PPC skill, turn a PPC workflow into a skill, or says things like "build me a skill for search terms", "make a skill for my weekly client report", or "my PPC skills are too generic". Not for running a one-off audit or writing ads right now; do that task directly instead.
+description: Interviews a Google Ads manager about one task, their account, goals, data and rules, then builds a complete custom Agent Skill (SKILL.md, references, scripts) for that task, checked against a quality checklist. Use when someone wants to create, design, or improve a Google Ads or PPC skill, turn a PPC workflow into a skill, or says things like "build me a skill for search terms", "make a skill for my weekly client report", or "my PPC skills are too generic". Not for running a one-off audit or writing ads right now; do that task directly instead.
 license: Apache-2.0 portions, see NOTICE.md
 metadata:
   author: PPC.io

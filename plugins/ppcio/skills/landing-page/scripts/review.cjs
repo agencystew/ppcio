@@ -9,12 +9,14 @@ const work = path.resolve(process.argv[2] || '.');
 const has = f => fs.existsSync(path.join(work, f));
 const read = f => { try { return fs.readFileSync(path.join(work, f), 'utf8'); } catch (e) { return ''; } };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-let sc = null; try { sc = JSON.parse(read('r1/scores.json')); } catch (e) {}
+// The harness loops the review (kit.sh next): show the newest round's scores, and the faults fixed in every round.
+const nums = []; for (let i = 1; has(`r${i}`); i++) nums.push(i);
+let sc = null; for (const i of nums) { try { sc = JSON.parse(read(`r${i}/scores.json`)); } catch (e) {} }
 const rounds = fs.readdirSync(work).filter(d => /^r\d+$/.test(d) && has(`${d}/first.png`)).sort((a, b) => +b.slice(1) - +a.slice(1));
 const newShot = rounds[0] ? `${rounds[0]}/first.png` : '';
 // Each numbered fault starts with a short label: "1. **Label.** Sentence" or "1. Label. Sentence". The step file
 // never asked for bold, so a plain label found nothing and the screen showed no fixes (buyer test, 26 Nov).
-const fixes = read('r1/verdict.md').split('\n').map(l => l.match(/^\s*\d+\.\s+(?:\*\*(.+?)\*\*|([^.*\n]{3,90}?)\.(?:\s|$))/)).filter(Boolean).map(m => (m[1] || m[2]).replace(/\.$/, '').trim());
+const fixes = nums.map(i => read(`r${i}/verdict.md`)).join('\n').split('\n').map(l => l.match(/^\s*\d+\.\s+(?:\*\*(.+?)\*\*|([^.*\n]{3,90}?)\.(?:\s|$))/)).filter(Boolean).map(m => (m[1] || m[2]).replace(/\.$/, '').trim());
 const AX = ['First screen', 'Case', 'Proof', 'Offer', 'Action'];
 const avg = a => a && a.length ? (a.reduce((x, y) => x + y, 0) / a.length).toFixed(1) : '';
 const bars = sc && Array.isArray(sc.live) && Array.isArray(sc.new) ? AX.map((a, i) => `<div class="ax"><span>${a}</span><div class="b"><i class="l" style="width:${sc.live[i] * 10}%"></i><em>${sc.live[i]}</em></div><div class="b"><i class="n" style="width:${sc.new[i] * 10}%"></i><em>${sc.new[i]}</em></div></div>`).join('') : '';
@@ -80,4 +82,5 @@ const msg = [
   ask ? `${ask}\n` : '',
   'Tell me any change and I\'ll fold it in.',
 ].filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+try { fs.writeFileSync(path.join(work, '.page-sent'), new Date().toISOString()); } catch (e) {}
 console.log(`\nMESSAGE TO SEND NOW. Send the text between the lines as your very next chat message, word for word, before any other tool call. Attach page.html too, or show it in your app's preview, so they can share it.\n----\n${msg}\n----`);

@@ -159,7 +159,7 @@ if (tech.length || devList.length) cards.push({ area: 'technical', to: 'technica
 // Fill the last row of the 6-column card grid, as the app does.
 { const units = cards.reduce((a, c) => a + (c.wide ? 4 : 2), 0) % 6; if (units === 4) cards.slice(-2).forEach(c => c.cls = 'kit-half'); else if (units === 2) cards[cards.length - 1].cls = 'kit-full'; }
 
-const band = h2 => `<section class="br-band" aria-labelledby="br-band-h"><img alt="" src="${art('lead-face')}"><h2 id="br-band-h">${esc(h2)}</h2><div class="br-cta"><span class="rp-band-go au-share-go"><button type="button" class="btn" data-copy="Design a new version of this page from the audit."><span>Build a new version</span><span class="go" aria-hidden="true">${ic('go')}</span></button><span class="au-build-quiet">Or tell Claude: “design a new version”</span></span></div></section>`;
+const band = h2 => `<section class="br-band" aria-labelledby="br-band-h"><img alt="" src="${art('lead-face')}"><h2 id="br-band-h">${esc(h2)}</h2><div class="br-cta"><span class="rp-band-go au-share-go"><button type="button" class="btn" data-copy="Design a new version of this page from the audit."><span>Build a new version</span><span class="go" aria-hidden="true">${ic('go')}</span></button><span class="au-build-quiet">Or ask in your chat: “design a new version”</span></span></div></section>`;
 
 const overview = `<section class="view ovv ovv2" data-view="overview">
   ${D.diagnosis && (D.plan || []).length ? `<section class="br-peach kit-dx" aria-labelledby="kit-dx-h"><h2 id="kit-dx-h" class="br-big">What is going on</h2><p class="kit-dx-p">${esc(D.diagnosis)}</p>

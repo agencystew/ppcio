@@ -1,9 +1,12 @@
 # Everything PPC.io can do, by job
 
-## Landing Page Studio (Audit, Design & Build)
+## Landing Page Studio (Audit, Redesign, Improve, New Page & Variants)
 
 - **Audit my landing page**: 14 conversion specialists check your page like real buyers and a CRO team, benchmark your competitors, and produce an interactive studio audit with exact fixes.
-- **Build a better page**: Pick a direction from 322 top-graded landing pages (the best of 1,112 graded across 144 niches), then get the full page built in your brand, checked on laptop and phone, and zipped ready to go live.
+- **Redesign my page**: Pick a direction from 322 top-graded landing pages (the best of 1,112 graded across 144 niches), then get the full page built in your brand, reviewed to a measured bar, and zipped ready to go live.
+- **Improve my existing page**: Keep your current layout, fonts, and brand feel while applying 6 to 10 surgical conversion upgrades.
+- **Build a new page from scratch**: Launch a dedicated Google Ads landing page for a new campaign or offer even when no landing page exists yet.
+- **A/B test variants**: Fork your finished page into 3 to 5 clean, single-lever split-test variations with a side-by-side comparison board.
 - **Quick CRO consulting**: Ask any fast paid-search CRO question (critique a headline, review a form, sharpen an offer, remove AI slop, plan a vertical page structure) backed by 6 built-in paid-search CRO playbooks.
 - **Many clients at once**: Agency mode audits and builds a list of client landing pages side by side with one summary board.
 
@@ -48,8 +51,9 @@
 - **Ecommerce Shopping & PMax Builder**: Structures Shopping and PMax around SKU margins, product tiers, ROAS targets, and Google Merchant Center feed optimization.
 - **Lead-Gen Quality Fixer**: Stops junk/spam leads by fixing Search/PMax targeting leaks, form qualification friction, and offline conversion import (OCI) feedback loops.
 
-## Google Ads Reports, Changes & Budgets
+## Google Ads Reports, Dashboards, Changes & Budgets
 
+- **Client Report Dashboard & Portal** *(interactive HTML dashboard)*: Builds a self-contained, brand-adaptive HTML client performance dashboard (KPI sparklines, brand vs. non-brand split, budget pacing bar, sortable campaign table, bad-news-first executive narrative) in your own agency colours and 4 selectable themes — plus an optional multi-client static portal hub.
 - **Weekly Client Report** *(Monday client email)*: Lag-adjusted weekly email with bad news first, verified against your CSV numbers by script.
 - **Weekly Pulse** *(internal PPC manager triage)*: Compares this week vs. last week vs. 4-week rolling baseline, flagging >20% swings and tracking open actions.
 - **PPC Report Narrator** *(monthly / QBR summaries)*: Turns monthly or quarterly campaign tables into a plain-English executive narrative.

@@ -9,7 +9,7 @@
 
 ## Choose the path
 - No API setup, or a client account you only see in the UI: CSV.
-- Google's Google Ads MCP server already working in Claude: MCP.
+- Google's Google Ads MCP server already working in your AI tool: MCP.
 - A built skill should support CSV even when MCP exists, so it still works
   when the tools are missing. Google's own diagnostics skill does this: if
   the tools are not there it tells the user, points to setup, and hands over
