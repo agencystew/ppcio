@@ -9,9 +9,13 @@ A great Monday PPC review takes 5 minutes: form a sharp hypothesis about **what 
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - Check if a local `landing-pages/*/context.md` exists first for target CPA/ROAS, monthly budget, and Brand vs. Non-Brand rules.
-- **Zero fabrication:** Never invent missing 4-week baselines, industry benchmarks, or conversion rates; mark missing comparison data plainly and run `python3` math on every CSV so WoW %, vs-4-week-baseline %, Brand vs. Non-Brand totals, and dollar deltas are 100% exact.
-- Ask in one line if data is missing: *"In Google Ads, open Campaigns, compare last 7 days vs. prior 7 days (plus 30-day / 4-week baseline if handy), include Cost, Clicks, Conversions, Conv. value, Cost / conv., and Lost IS, Download .csv and drop it here. Or ask me to connect Google Ads via `connect-data-sources`."*
+- **Zero fabrication:** Never invent missing 4-week baselines, industry benchmarks, or conversion rates; mark missing comparison data plainly and compute exact numbers via the bundled script.
+- Ask in one line if data is missing: *"In Google Ads, open Campaigns segmented by Day (last 35 days, or last 14 days minimum), include Cost, Clicks, Conversions, Conv. value, and Cost / conv., Download .csv and drop it here. Or ask me to connect Google Ads via `connect-data-sources`."*
+- **Run the deterministic triple-window weekly triage engine first:**
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/weekly_triage.py" --daily <daily.csv> --brand "<brand regex>" [--target-cpa <CPA>]`
+  It compares This Week vs. Last Week vs. 4-Week Avg (Non-Brand separated), runs Poisson quiet-day checks, filters `expected_leads < 2` noise, isolates CPC vs. CVR levers, and prints the `PROTECT` list.
 
 ## First-Principles Weekly Triage Order (And Why Fundamentals Come Before Edits)
 

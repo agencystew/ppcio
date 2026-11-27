@@ -1,16 +1,17 @@
 # PPC.io
 
-Ten years of paid-search landing page and Google Ads systems, packaged as one portable plugin for **Claude Code**, **Cursor**, **Codex**, **Antigravity**, **Windsurf**, and **Gemini CLI**.
+Plug a full Google Ads and landing page team straight into **Claude Code**, **Cursor**, **Codex**, **Antigravity**, **Windsurf**, or **Gemini CLI**.
 
-Install it into your AI tool and you get:
-- **Landing Page Studio:** 16 conversion roles, a self-healing step harness (`kit.sh next` with automated review loop, rollback, and local taste memory), 6 paid-search CRO playbooks, instant Quick-CRO answers, and all **4 Postclick build modes** (Full Redesign, Improve Existing Page, Build New Campaign Page From Scratch, and A/B Test Variants) plus Agency Batch Mode and thank-you/funnel pages.
+You never memorize commands or copy-paste prompts. Just talk normally, drop a website URL or a Google Ads CSV, and the right workflow, Python audit engine, or headless browser checker kicks in automatically.
+
+Everything inside:
+- **Landing Page Studio:** Checks your live page from 14 buyer and conversion angles in a real headless browser, compares it against local competitors, and builds a higher-converting version in your own brand across all **4 Postclick build modes** (Full Redesign, Improve Existing Page, New Campaign Page From Scratch, and A/B Test Variants), plus Agency Batch Mode and thank-you/funnel pages.
 - **322-Page Graded Style Library:** The highest-scoring landing pages across 144 niches (picked from 1,112 graded ad pages), with real section breakdowns and strict anti-AI-slop rules.
-- **4 Standalone Quick-CRO Skills:** Plain-English copy rewrites, ad-to-page message match, buyer-objection fixes, and single-variable A/B experiment briefs.
-- **On-the-Fly Data Connections (`connect-data-sources`):** Guided setup (30-second CSV exports or read-only live MCP/API/Script connections) for **Google Ads, GA4, Microsoft Clarity, Meta Ads, and Google Search Console**, fed straight into `audit/brief.md` so landing page audits and dashboards use real search terms, conversion rates, scroll drop-offs, and rage-clicks.
-- **White-Label Client Reporting Suite:** Interactive self-contained HTML client performance dashboards + multi-client static portal hub (`client-report-dashboard`) and 12–15 slide audit sales decks (`google-ads-audit-sales-presentation`) that adapt to **your own agency colours, logo, and typography** across 4 clean themes, never hardcoded to one style.
-- **33 Google Ads & Reporting Skills:** Search term mining with negative impact simulation, RSA character and fact linting, conversion-lag analysis, change detective, PMax and Shopping builders, Quality Score repair, tracking planner, bidding decision tree, weekly client emails, and agency pitch tools.
-- **21 Ready-to-Run Production Google Ads Scripts:** PMax Insight Engine, Make Exact Match Exact, Wasted Spend Forensics, Ad-to-LP Mismatch Detector, Conversion Health Check, Quality Score Tracker, MCC Daily Monitor, and AI-ready account exports.
-- **24 First-Principles PPC Knowledge Playbooks:** Deep paid-search foundations covering unit economics, measurement, Shopping feeds, broad match governance, bidding, scaling, and the 8-layer Paid Media Performance System.
+- **17 Deterministic Python & Browser Engines (Zero Hallucinated Math):** Exact programmatic engines for 90-day causal Google Ads audits (`Brand vs. Non-Brand`, `expected_leads < 2` noise floor), PMax incremental ROAS subtraction, `days_with_spend` budget pacing, spend-weighted Quality Score, P50/P75/P90 CPC forensics, weekly triple-window triage, conversion lag estimation, change detection, search-term negative simulation, 30/90-char RSA linting, white-label HTML client dashboards, and white-label HTML audit pitch decks.
+- **41 Ready-to-Run Paid Search & CRO Workflows:** Covers quick copy rewrites, ad-to-page message match, buyer objections, bidding, tracking, Shopping feeds, lead quality, onboarding, sales pitch prep, and custom workflow building.
+- **On-the-Fly Data Connections:** Guided setup (30-second CSV exports or live read-only connections) for **Google Ads, GA4, Microsoft Clarity, Meta Ads, and Google Search Console**, automatically piped into your landing page audits and reports.
+- **White-Label Client Reporting & Pitch Suite:** Interactive single-file HTML client dashboards, multi-client portals, and keyboard-navigable HTML audit pitch decks that adapt to **your own agency colours, logo, and typography** across 4 clean themes.
+- **21 Production Google Ads Scripts & 24 Deep PPC Playbooks:** Ready-to-paste GAQL scripts (PMax Insight Engine, Make Exact Match Exact, Wasted Spend Forensics, MCC Daily Monitor) plus 3,600+ lines of first-principles paid-search foundations.
 
 ---
 
@@ -50,13 +51,17 @@ Re-run the same command any time to pull updates.
 
 ---
 
-## What You Can Ask Right Away
+## Your First 5 Minutes (5 Prompts That Prove the Value Right Away)
 
-- **Full Landing Page Audit & Build:** *"Audit and redesign https://mybusiness.com for my Google Ads traffic."*
-- **Quick CRO Help (30 seconds):** *"Critique this hero headline"*, *"Why isn't my mobile roofing form converting?"*, *"Check this landing page copy for AI slop"*, *"Compare my Google Ads against my landing page opening."*
-- **Google Ads Data & Scripts:** *"Mine wasted spend from this 90-day search terms CSV"*, *"Give me the PMax Insight Engine script"*, *"My ads aren't showing, help me troubleshoot"*, *"Check if this week's CPA drop is real or conversion lag."*
-- **Agency Mode:** *"Run audits and new pages for these 5 client URLs."*
-- **Thank-you pages and quiz funnels:** *"Build the thank-you page for after someone enquires."*
+You never have to look up a workflow name. Just type any of these in plain English:
+
+1. **2-Minute Live Page Teardown:** *"Audit https://mybusiness.com for my Google Ads traffic and show me the top 3 things costing me leads."*
+2. **Exact Google Ads Waste & Brand Check:** Drop any 90-day Campaigns or Search Terms CSV and say *"Audit this account, separate Brand from Non-Brand, and show me where money is leaking."*
+3. **30-Second Quick CRO Rewrite:** *"Compare my Google Ads against my landing page opening and rewrite the headline without inventing claims."*
+4. **White-Label Client Dashboard or Audit Deck:** *"Turn this campaign export into an interactive HTML client dashboard (or sales pitch deck) in my agency colours."*
+5. **Production Google Ads Script:** *"Give me the PMax Insight Engine script or Wasted Spend Forensics script ready to paste into Google Ads."*
+
+*(Also works for **Agency Batch Mode**: "Run audits and new pages for these 5 client URLs", **Thank-you/quiz funnels**, and **Conversion Lag / Change Detection** when leads dip.)*
 
 ## Every postclick prompt, open
 
@@ -68,12 +73,11 @@ Re-run the same command any time to pull updates.
 
 | Capability | Free | PPC.io Pro |
 |---|---|---|
-| Quick CRO help & all 6 paid-search CRO playbooks | ✓ | ✓ |
-| 4 Quick-CRO skills (`lp-copy-rewrite`, `lp-message-match`, etc.) | ✓ | ✓ |
-| 33 Google Ads & brand-adaptive HTML reporting skills, 21 scripts & 24 playbooks | ✓ | ✓ |
+| Quick CRO workflows & all 6 paid-search CRO playbooks | ✓ | ✓ |
+| All 33 Google Ads & reporting workflows, 17 Python engines, 21 JS scripts & 24 playbooks | ✓ | ✓ |
 | First look at your page (first 3 buyer blockers in ~2 min) | ✓ | ✓ |
-| Full 14-specialist landing page audit | 1 website | Unlimited websites |
-| 9-style board, full custom page build, critic & go-live zip | | ✓ |
+| Full 14-angle landing page audit | 1 website | Unlimited websites |
+| 9-style board, full custom page build, fresh review loop & go-live zip | | ✓ |
 | Agency batch mode (multiple clients in parallel) | | ✓ |
 | Full 322-page graded style library (144 niches) | Best page per niche | All 322 pages |
 

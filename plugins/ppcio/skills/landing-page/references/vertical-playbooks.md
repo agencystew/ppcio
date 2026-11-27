@@ -10,7 +10,7 @@ Paid-search buyers behave completely differently across industries. Use the matc
 - **Buyer mindset:** High urgency, mobile-heavy (often 80%+ phone), stressed, comparing 2–3 local options in 60 seconds. Wants someone trustworthy who can arrive fast without ripping them off.
 - **Hero priority:** Clear service + local area in H1 → arrival speed / fixed upfront pricing → real rating + count → huge `tel:` tap-to-call button + short callback option.
 - **Proof that wins:** Real photos of **their own crew and branded vans** (beats stock 10×), local review count + Google rating, Gas Safe / trade licence numbers, years serving that exact city/postcodes.
-- **Offer & risk-reversal:** No call-out fee, upfront fixed quote before work starts, arrival window (e.g., *"2-hour arrival slot"*), workmanship guarantee — only what they actually offer.
+- **Offer & risk-reversal:** No call-out fee, upfront fixed quote before work starts, arrival window (e.g., *"2-hour arrival slot"*), workmanship guarantee: only what they actually offer.
 - **Visual fit:** Direct, high-contrast, utilitarian trust. Bold phone number in header + slim sticky call bar on mobile. Zero glossy SaaS gradients or poetic copy.
 - **#1 Leaks to watch for:** Phone number not a `tel:` link on mobile; generic stock plumber photo; hiding service area; slow 8-field form instead of instant call/callback.
 
@@ -23,7 +23,7 @@ Paid-search buyers behave completely differently across industries. Use the matc
 - **Hero priority:** Concrete product/durability outcome (e.g., *"Metal roofs built for hail and 120 mph winds"*) + rating/review count + inline **Get Free Estimate** form (or 2–3 step quote widget) + real completed home aerial/exterior photo.
 - **Proof that wins:** Before-and-after project sliders, local completed job photos, named homeowner reviews mentioning cleanliness/crew/timeliness, BBB/manufacturer certifications, total homes served, storm/durability proof.
 - **Offer & risk-reversal:** Written no-obligation estimate, transferable lifetime/workmanship warranty, clear financing framing (*"$0 down for qualified homeowners"* with proper disclosure), in-house certified installers.
-- **Visual fit:** Confident, photographic, substantial. Showcase real materials, styles, and finished homes — not icons in circles.
+- **Visual fit:** Confident, photographic, substantial. Showcase real materials, styles, and finished homes: not icons in circles.
 - **#1 Leaks to watch for:** Sending paid roofing/window ads to a multi-division corporate homepage; buried estimate form (button jumps to another page); stale prior-year promo copy; weak/negative reviews left in homepage carousel; intrusive live-chat banners on phones.
 
 ---
@@ -44,12 +44,12 @@ Paid-search buyers behave completely differently across industries. Use the matc
 ## 4. B2B Services & High-Ticket SaaS
 *(Agencies, consultancies, IT/MSP, commercial contractors, B2B software, enterprise tools)*
 
-- **Buyer mindset:** Buying on behalf of a team or boss — career risk is as big as budget risk. Sceptical of hype. Wants to know: *"Do you understand my exact bottleneck, have you solved it for companies like mine, and will this demo waste 45 minutes of my week?"*
+- **Buyer mindset:** Buying on behalf of a team or boss: career risk is as big as budget risk. Sceptical of hype. Wants to know: *"Do you understand my exact bottleneck, have you solved it for companies like mine, and will this demo waste 45 minutes of my week?"*
 - **Hero priority:** Specific business problem solved or outcome delivered + who it is for → named client logos or quantified customer outcome → low-friction CTA (*"Book 15-Min Walkthrough"*, *"Get Free Audit"*) with "what happens on the call" line + real product UI or real team photo.
 - **Proof that wins:** Named case studies with concrete before/after metrics (strictly sourced), recognizable client logos, testimonials with **full name + job title + company**, real product screenshots or workflow moments (never fake revenue dashboards!).
-- **Offer & risk-reversal:** Clear agenda for the first call (*"15 minutes on your live account — no pitch deck"*), transparent pricing tiers or engagement minimum (when stated), clear onboarding timeline, pilot/trial option.
-- **Visual fit:** Crisp, authoritative, scannable. High contrast, sharp hierarchy, real UI/diagrams where helpful — zero buzzword soup (*"AI-powered end-to-end synergistic platform"*).
-- **#1 Leaks to watch for:** Vague category slogans that hide what the product actually does; generic *"Contact Sales"* with a 10-field interrogation form; anonymous quotes (*"— Marketing Director"*); hiding product UI behind a demo gate.
+- **Offer & risk-reversal:** Clear agenda for the first call (*"15 minutes on your live account: no pitch deck"*), transparent pricing tiers or engagement minimum (when stated), clear onboarding timeline, pilot/trial option.
+- **Visual fit:** Crisp, authoritative, scannable. High contrast, sharp hierarchy, real UI/diagrams where helpful: zero buzzword soup (*"AI-powered end-to-end synergistic platform"*).
+- **#1 Leaks to watch for:** Vague category slogans that hide what the product actually does; generic *"Contact Sales"* with a 10-field interrogation form; anonymous quotes (*" -  Marketing Director"*); hiding product UI behind a demo gate.
 
 ---
 

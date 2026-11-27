@@ -166,6 +166,13 @@ G.page = async W => {
   const nums = new Set([...html.matchAll(/tel:([+\d\s().-]{7,})/g), ...html.replace(/<[^>]+>/g, ' ').matchAll(/\(?\b\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g)].map(m => (m[1] || m[0]).replace(/\D/g, '').slice(-10)).filter(d => d.length === 10));
   for (const d of nums) if (theirs.size && !theirs.has(d) && !extra.includes(d)) f.push(`page.html shows the phone number ${d}, which is not on their site or in facts.md. Use their real number: ${[...theirs].join(' or ')}.`);
   if (theirs.size && !nums.size && /call/i.test(read(W, 'context.md'))) f.push('page.html shows no phone number, but calls are a win for this business. Put their number in the header and the first screen as a tel: link.');
+  // Run 14 (27 Nov): the proof hunt found Google ratings and named awards, the build held them back, and the final
+  // judge scored proof 3 of 10. The page must carry the proof facts.md found: at least 2 of its figures or names.
+  { const pf = (read(W, 'facts.md').split(/^## Proof[ \t]*$/m)[1] || '').split(/^## /m)[0].split('\n').filter(l => /^\s*\d+\.|^\s*[-*]/.test(l));
+    const toks = [...new Set(pf.flatMap(l => (l.replace(/\([^)]*\)/g, '').match(/\b\d\.\d\b|\b\d{2,}(?:,\d{3})*\b|"[^"]{6,40}"/g) || [])))].filter(t => !/^(19|20)\d\d$/.test(t));
+    const v2 = read(W, 'page.html').replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ');
+    const seen = toks.filter(t => v2.includes(t.replace(/"/g, '')));
+    if (toks.length >= 2 && seen.length < 2) f.push(`page.html uses ${seen.length} of the proof facts.md "## Proof" found (${toks.slice(0, 6).join(', ')}). Put the strongest two, with their source, in the first screen or beside the main button.`); }
   let cf = ''; try { cf = execFileSync(process.execPath, [path.join(__dirname, 'checkfacts.cjs'), W, 'page.html'], { encoding: 'utf8' }); } catch (e) { cf = String(e.stdout || ''); }
   const lines = cf.split('\n'); let mode = '';
   for (const l of lines) {

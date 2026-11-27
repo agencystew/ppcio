@@ -2,7 +2,7 @@
 
 ## Landing Page Studio (Audit, Redesign, Improve, New Page & Variants)
 
-- **Audit my landing page**: 14 conversion specialists check your page like real buyers and a CRO team, benchmark your competitors, and produce an interactive studio audit with exact fixes.
+- **Audit my landing page**: Checks your live page from 14 buyer and conversion angles, benchmarks your competitors, and produces an interactive studio audit with exact fixes.
 - **Redesign my page**: Pick a direction from 322 top-graded landing pages (the best of 1,112 graded across 144 niches), then get the full page built in your brand, reviewed to a measured bar, and zipped ready to go live.
 - **Improve my existing page**: Keep your current layout, fonts, and brand feel while applying 6 to 10 surgical conversion upgrades.
 - **Build a new page from scratch**: Launch a dedicated Google Ads landing page for a new campaign or offer even when no landing page exists yet.

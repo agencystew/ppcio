@@ -9,9 +9,13 @@ Answering "are we going to hit monthly budget?" with `MTD spend / calendar days`
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - Check if a local `landing-pages/*/context.md` exists first for monthly budget cap, target CPA/ROAS, and seasonality.
-- **Zero fabrication:** Never invent missing daily spend, Impression Share, or prior-month pacing figures; state missing columns plainly and verify all math via `python3`.
-- Ask in one line if data is missing: *"In Google Ads, open Campaigns (This month + last 7 days), include Budget, Bid strategy type, Cost, Clicks, Conversions, Cost / conv., Search lost IS (budget), and Search lost IS (rank), Download .csv and drop it here (plus your monthly budget and whether it is a hard cap). Or ask me to connect Google Ads via `connect-data-sources`."*
+- **Zero fabrication:** Never invent missing daily spend, Impression Share, or prior-month pacing figures; state missing columns plainly and verify all math via the bundled script.
+- Ask in one line if data is missing: *"In Google Ads, open Campaigns (This month + last 7 days, ideally segmented by Day), include Budget, Bid strategy type, Cost, Clicks, Conversions, Cost / conv., Search lost IS (budget), and Search lost IS (rank), Download .csv and drop it here (plus your monthly budget and whether it is a hard cap). Or ask me to connect Google Ads via `connect-data-sources`."*
+- **Run the deterministic pacing engine first:**
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/pace_check.py" --csv <campaigns.csv> --monthly-budget <BUDGET> --days-elapsed <N> --days-in-month <30|31> [--target-cpa <CPA>]`
+  It computes active `days_with_spend`, flags unspent-budget traps and mid-window launches, and ranks reallocation from dearest to cheapest CPL.
 
 ## First-Principles Pacing Math & Diagnosis (And Why Naive Formulas Lie)
 

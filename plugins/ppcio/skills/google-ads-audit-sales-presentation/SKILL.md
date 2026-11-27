@@ -11,8 +11,10 @@ Turn real Google Ads audit findings into a zero-dependency, single-file HTML sal
 
 - Check if a local `landing-pages/*/context.md`, `audit.md`, or prior Google Ads audit output exists in this folder so you build from verified facts instead of re-asking questions.
 - **Data:** If they only have raw Google Ads exports, run a sharp causal audit (`ppc-strategic-audit` or `ppc-account-health-check`) first, or ask in one line: *"In Google Ads, open Campaigns (last 90 days), include Cost, Clicks, Conversions, Cost / conv., and Search impr. share, Download .csv and drop it here. Or tell me if you want help connecting Google Ads, GA4, or Clarity read-only via `connect-data-sources`."*
-- **Brand & theme (never hardcoded):** Ask once (or extract from their agency website): agency name, logo path/URL, primary accent hex, and light/dark preference (`Executive Light`, `Editorial Warm`, `Modern Dark`, or `Bold High-Contrast`).
-- **Slide templates & JS controller:** Read `templates/slide-templates-and-controller.md` (if `${CLAUDE_SKILL_DIR}` is empty in Codex, Cursor, Windsurf, Antigravity, or Gemini CLI, use the folder containing this `SKILL.md`) before writing the HTML file.
+- **Brand & theme (never hardcoded):** Ask once (or extract from their agency website): agency name, logo path/URL, primary accent hex, and light/dark preference (`executive-clean`, `editorial-warm`, `modern-dark`, or `bold-contrast`).
+- **Deterministic Deck Renderer (preferred - zero broken HTML):** Write verified audit receipts to `deck-data.json` (`brand`, `prospect_name`, `period`, `audit_date`, `executive_headline`, and `slides[]` with `kicker`, `title`, `lead`, `metrics[]`, `bullets[]`, `callout`) and run:
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/render_deck.py" deck-data.json --out decks/<prospect>-audit.html`
+  (If `${CLAUDE_SKILL_DIR}` is empty in Codex, Cursor, Windsurf, Antigravity, or Gemini CLI, replace it with the folder containing this `SKILL.md`; custom HTML layouts are also available in `templates/slide-templates-and-controller.md`.)
 
 ## First-Principles Sales Deck Philosophy (Receipts, Not Hype)
 

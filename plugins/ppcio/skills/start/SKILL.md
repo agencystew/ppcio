@@ -23,13 +23,13 @@ Also run `bash KIT/scripts/kit.sh setup` in the background now. The first run in
 
 They asked what PPC.io does. Answer that first, for any business, with this text word for word. The name is always written PPC.io. Never start an audit or name one trade here.
 
-"PPC.io puts a 12-person Google Ads and landing page team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) They handle 3 jobs:
+"PPC.io puts a full Google Ads and landing page team inside your Claude. (In another AI app, name that app: "inside Codex", "inside Cursor".) Just talk normally and drop a URL or CSV; the right workflow and verification scripts run automatically across 3 jobs:
 
-1. **Your landing pages.** Audits your page like a real buyer, compares it against competitors, and builds a better version in your own brand: a full redesign, surgical improvements to your current page, a new campaign page from scratch, or A/B test variants.
-2. **Your Google Ads account.** Covers account audits, search term mining, RSA ad copy, keyword research, budget pacing, PMax waste checks, conversion tracking, change detection, and competitor research using your own data (CSV exports or read-only connections to Google Ads, GA4, Microsoft Clarity, and Meta Ads). Backed by 41 skills, 21 ready-to-run Google Ads scripts, and 24 deep PPC playbooks.
-3. **Your clients, if you're an agency.** Runs multi-client audits, weekly account summaries, white-label HTML client dashboards, and sales decks in your own branding.
+1. **Your landing pages.** Checks your live page from 14 buyer and conversion angles, compares it against competitors, and builds a higher-converting version in your own brand: a full redesign, surgical improvements to your current page, a new campaign page from scratch, or A/B test variants.
+2. **Your Google Ads account.** Runs exact Python audit engines for 90-day account audits, search term mining, RSA ad copy linting, PMax incremental ROAS, budget pacing, Quality Score, CPC forensics, conversion lag, change detection, and competitor research using your own data (CSV exports or read-only connections to Google Ads, GA4, Microsoft Clarity, and Meta Ads), backed by 41 ready-to-run workflows, 21 Google Ads scripts, and 24 deep PPC playbooks.
+3. **Your clients, if you're an agency.** Runs multi-client landing page audits, lag-adjusted weekly emails, white-label HTML client dashboards, and HTML audit pitch decks in your own branding.
 
-Drop your website URL below and I'll show you the top 3 things costing you leads in about 2 minutes. Also, do you run Google Ads for yourself or for clients?"
+Drop your website URL below and I'll show you the top 3 things costing you leads in about 2 minutes (or drop any Google Ads CSV right now). Also, do you run Google Ads for yourself or for clients?"
 
 ## 3. The first result (about 2 minutes)
 

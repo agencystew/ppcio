@@ -9,9 +9,12 @@ Bidding strategy controls the economic engine of a Google Ads account. Blindly a
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - Check if a local `landing-pages/*/context.md` exists first for business model, break-even CPA/ROAS, and close rate.
 - Ask only for missing campaign metrics: per-campaign 30-day **Spend, Clicks, Avg. CPC, Conversions, Conv. value, Bid strategy, Limited by budget status, and Brand vs. Non-Brand**. Offer `connect-data-sources` if they want live Google Ads data pulled directly.
-- Run `python3` math on any CSV export to verify conversion density (`conversions / 30d`), clicks/day, and CPC percentiles rather than eyeballing averages.
+- **Run the deterministic CPC forensics & maturity engine first:**
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/cpc_forensics.py" --csv <campaigns_or_daily.csv> --days 30 [--target-cpa <CPA>] [--brand "<brand regex>"]`
+  It computes per-campaign conversion density, flags Low-Volume Max Conversions CPC inflation (`<15 conv/30d & <3 clicks/d`), calculates `P50/P75/P80/P90` CPC + Variance Ratio (`P90/P50`), and outputs exact 80th-percentile Max CPC cap targets.
 
 ## First-Principles Bidding Rules (And Why Each Exists)
 

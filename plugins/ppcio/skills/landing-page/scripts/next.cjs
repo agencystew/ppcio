@@ -59,7 +59,21 @@ const plain = t => t.replace(/[*_`#>]/g, '').replace(/\s+/g, ' ').trim().toLower
 const inChat = msg => { const c = chatText(); if (!c) return true; const C = plain(c); const ls = msg.split('\n').map(plain).filter(l => l.length >= 25 && !/^(https?:|\/)/.test(l)); return !ls.length || ls.filter(l => C.includes(l.slice(0, 60))).length * 2 >= ls.length; };
 const sentCheck = (marker, stage, what) => { if (agency || !has(marker)) return; const msg = fs.readFileSync(path.join(W, marker), 'utf8'); if (msg.length < 40 || inChat(msg)) return; const key = `resend:${marker}`; if (streak(key) >= 3) return;
   say(stage, key, `The owner has not seen the ${what} message. It is not in the chat as a message (a progress note or your thinking does not count). Send it now as your next chat message, word for word, then run ${kit} next ${site}:\n----\n${msg}\n----`); };
-const QUIET = `Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat. If your app asks you to say what you are doing, write only this, word for word, once: "Still working on it.${LIVE}"`;
+// The app asks the AI to say what it is doing every few minutes (Claude Desktop does). Run 14 answered with the same
+// "Still working on it." 19 times. Now the line names the real step, so each one tells the owner something new.
+const progress = (key) => {
+  const n = (String(key).match(/:(\d+)/) || [])[1];
+  const line = /^(write:context|agents)/.test(key) ? 'Your audit team is reading your page and your competitors.'
+    : /^(write:audit|send:audit)/.test(key) ? 'I am checking every finding against your page before you see it.'
+    : /^(write:notes|board|look|send:look|write:brief)/.test(key) ? 'I am drawing your new look from your own photos and colours.'
+    : /^(write:plan|write:page|case)/.test(key) ? 'I am writing your new page, section by section.'
+    : /^(shot|fix:page|critic|improve|rollback)/.test(key) && n ? `Version ${n} of your new page is being checked on a laptop and a phone.`
+    : /^judge/.test(key) ? 'Your page is getting a last check with fresh eyes.'
+    : /^(pack|write:ready|send:page)/.test(key) ? 'I am packing your page so you can put it live.'
+    : 'I am working on your page.';
+  return line + LIVE;
+};
+const QUIET = (key) => `Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat. If your app asks you to say what you are doing, write only this one line, word for word, and nothing after it: "${progress(key)}"`;
 const AGAIN = `When it is done, run ${kit} next ${site}.`;
 const say = (stage, key, step, how, opts = {}) => {
   const n = streak(key) + 1;
@@ -69,9 +83,9 @@ const say = (stage, key, step, how, opts = {}) => {
   if (how) out.push(`HOW: ${how}`);
   const o = opts.gate ? often(opts.gate) : []; if (o.length && !(opts.faults || []).length) out.push(`On this computer, this step most often goes wrong on: ${o.join('; ')}. Get these right the first time.`);
   if (n >= 3) out.push(`STUCK: this is try ${n} at this step. Change the approach, not the details: read the HOW part again and rewrite the file from the start${opts.agents ? ', or start any agent whose file is still missing again, on its own' : ''}.`);
-  // Run 13 sent "Still working on it." 4 times: offer the line once per stage, then only silence.
-  const said = path.join(W, '.harness', `said-${stage.split(',')[0].replace(/\W+/g, '-')}`);
-  if (fs.existsSync(said)) out.push('Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat.'); else { try { fs.mkdirSync(path.dirname(said), { recursive: true }); fs.writeFileSync(said, ''); } catch (e) {} out.push(QUIET); }
+  // One update line per step (key), never the same line twice in a row.
+  const said = path.join(W, '.harness', `said-${String(key).replace(/\W+/g, '-')}`);
+  if (fs.existsSync(said)) out.push('Write nothing in chat for this step. Only text a tool prints under MESSAGE TO SEND NOW goes to chat.'); else { try { fs.mkdirSync(path.dirname(said), { recursive: true }); fs.writeFileSync(said, ''); } catch (e) {} out.push(QUIET(key)); }
   out.push(AGAIN); console.log(out.join('\n')); process.exit(0);
 };
 // A check on a step's own file. Soft checks (layout of a file) let the run go on after 4 tries, so a format rule can

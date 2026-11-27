@@ -9,10 +9,13 @@ Quality Score is not a vanity report card; it directly taxes your Cost Per Click
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - Check if a local `landing-pages/*/context.md` exists first for core offers, landing pages, and target CPA.
 - **Zero fabrication:** Never invent CPC-savings guarantees or missing QS ratings; compute exact spend-weighted averages strictly from user-supplied CSV rows, and label any savings projection clearly as an assumption.
 - Ask in one line if data is missing: *"Export your Keywords tab (last 30 to 90 days) with Keyword, Campaign, Ad group, Cost, Clicks, Avg. CPC, Conversions, Quality Score, Exp. CTR, Ad relevance, and Landing page exp. as CSV and drop it here (plus your landing page URL). Or ask me to connect Google Ads via `connect-data-sources`."*
-- Run `python3` math on the CSV to compute **spend-weighted average QS** (`sum(QS * Cost) / sum(Cost)`), total monthly spend sitting at `QS <= 5`, and which single component carries the most `Below Average` dollars!
+- **Run the deterministic spend-weighted QS engine first:**
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/qs_audit.py" --keywords <keywords.csv> [--target-cpa <CPA>]`
+  It calculates exact spend-weighted QS, dollars at `QS <= 5`, dominant failing component by dollar weight, protected high-CVR pre-qualifiers, and pause candidates.
 
 ## Delivery Standard
 

@@ -1,6 +1,6 @@
 # PPC.io for any AI agent
 
-This repo is **PPC.io**: the complete Landing Page Studio (16 specialist agents, 4 build modes, self-healing `kit.sh next` harness, 6 paid-search CRO playbooks, 322-page graded style library), 4 standalone Quick-CRO skills, brand-adaptive HTML client dashboards & audit decks, 33 Google Ads skills, 21 ready-to-run Google Ads Scripts, and 24 deep PPC Knowledge Playbooks. Claude Code installs it as a plugin (see `README.md`). Any other AI coding agent (Codex, Cursor, Antigravity, Windsurf, Gemini CLI) uses it directly via `install.sh` or this folder.
+This repo is **PPC.io**: the complete Landing Page Studio (14-angle buyer audit, 4 Postclick build modes, automated `kit.sh next` build & review loop, 6 paid-search CRO playbooks, 322-page graded style library), 17 deterministic Python & browser engines, 41 ready-to-run paid-search & CRO workflows, brand-adaptive HTML client dashboards & audit pitch decks, 21 ready-to-run Google Ads Scripts, and 24 deep PPC Knowledge Playbooks. Claude Code installs it as a plugin (see `README.md`). Any other AI coding agent (Codex, Cursor, Antigravity, Windsurf, Gemini CLI) uses it directly via `install.sh` or this folder.
 
 When the user asks what PPC.io can do, or asks for help with a landing page or Google Ads:
 

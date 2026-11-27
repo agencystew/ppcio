@@ -9,8 +9,12 @@ Read a Google Ads account as a **causal chain, not a checklist**. Your job is to
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - Check for a local `landing-pages/*/context.md` or `data/` folder first so you already know what they sell, where they work, what counts as a real win, and their target CPA/ROAS.
 - Ask for exports in one plain line if missing: *"In Google Ads, open Campaigns (last 90 days plus last 7 days), add Budget, Bid strategy type, Cost, Clicks, Conversions, Conv. value, Cost / conv., and Search impr. share, Download .csv and drop it here (Search Terms and Change History CSVs make it twice as sharp). Or tell me if you want help connecting Google Ads, GA4, or Clarity read-only via `connect-data-sources`."*
+- **Run the deterministic forensic audit engine first on any Campaigns CSV:**
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/audit_engine.py" --campaigns <campaigns.csv> --brand "<brand regex>" [--target-cpa <CPA>] [--target-roas <ROAS>]`
+  Every Brand vs. Non-Brand split, `expected_leads < 2` noise check, waste ranking, PMax brand-padding alert, and `PROTECT` list comes from exact script math (zero eyeballing).
 - **Small-budget SMB filter (<$2,000/mo or <30 leads/mo):** Skip enterprise TOFU, awareness, and multi-touch attribution lectures. Restrict the audit to the 8 ordered basics: (1) real conversion tracking only, (2) 80%+ spend on core commercial service intent, (3) exact/phrase match discipline, (4) Presence-only geo targeting, (5) fast mobile-first service landing page, (6) right bidding fit, (7) waste negatives, (8) matching ads.
 
 ## The 8-Step Causal-Chain Diagnosis

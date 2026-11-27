@@ -43,7 +43,7 @@ Every field on a lead form must earn its place. Ask only what you genuinely need
 - **Zero horizontal overflow** at 390px viewport width.
 - **Body text ≥17px**, form inputs ≥16px (prevents iOS Safari auto-zoom on focus!).
 - **Tame third-party popups:** Oversized live-chat widgets, cookie bars, and promo modals routinely swallow the bottom 30% of mobile screens and cover CTAs. Keep chat unobtrusive or replace with a clean sticky call/estimate bar.
-- **Keep navigation minimal on dedicated LPs:** Strip multi-level mega-menus, blog links, and social icons out of the header — every outbound link in a paid-search LP header is a paid click escaping without converting.
+- **Keep navigation minimal on dedicated LPs:** Strip multi-level mega-menus, blog links, and social icons out of the header: every outbound link in a paid-search LP header is a paid click escaping without converting.
 
 ## 5. Paid-Search Conversion Tracking & Pre-Traffic QA
 
@@ -51,8 +51,8 @@ Smart Bidding (Target CPA / Target ROAS / Maximize Conversions) is only as good 
 
 ### Reading Tracking Tags Accurately
 - **`google_ads` (`AW-...`) present:** Direct Google Ads conversion tag is in the page code.
-- **No `google_ads`, but `gtm` (`GTM-...`) or `shopify_pixels` present:** Conversion tags likely fire inside that container — always verify inside GTM Preview / Tag Assistant before launching, never claim tracking is "missing".
-- **Neither present:** Google Ads cannot count leads/sales from this page — flag as a Day-1 blocker before sending paid traffic.
+- **No `google_ads`, but `gtm` (`GTM-...`) or `shopify_pixels` present:** Conversion tags likely fire inside that container: always verify inside GTM Preview / Tag Assistant before launching, never claim tracking is "missing".
+- **Neither present:** Google Ads cannot count leads/sales from this page: flag as a Day-1 blocker before sending paid traffic.
 
 ### Pre-Launch 6-Point QA Checklist (Before Turning Ads On)
 1. **Live form delivery test:** Submit a real test lead on a phone and confirm it lands in the client's inbox/CRM AND triggers the thank-you state/event.
@@ -60,4 +60,4 @@ Smart Bidding (Target CPA / Target ROAS / Maximize Conversions) is only as good 
 3. **Call tracking / DNI check:** If the account uses CallRail / WhatConverts / Google Forwarding Numbers, verify the displayed phone number swaps cleanly on `?gclid=test` visits and that `tel:` href updates too.
 4. **Tracking tag isolation:** Never paste live GTM/GA4/Meta tags into local draft previews (renders pollute real analytics). Inject them only in the production live copy (`live/index.html`).
 5. **Speed & LCP check:** Optimize hero photos (WebP/compressed JPEG, explicit width/height, `fetchpriority="high"` on hero image, `loading="lazy"` below the fold) so mobile LCP stays fast (~2.5s or under).
-6. **Clean post-launch measurement:** Allow for conversion lag (use the bundled `conversion-lag-check` skill) before judging a new page in week 1 — compare qualified lead rate and cost per qualified lead, not just raw clicks.
+6. **Clean post-launch measurement:** Allow for conversion lag (use the bundled `conversion-lag-check` skill) before judging a new page in week 1: compare qualified lead rate and cost per qualified lead, not just raw clicks.

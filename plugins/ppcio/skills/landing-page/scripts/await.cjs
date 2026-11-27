@@ -24,6 +24,6 @@ const until = Date.now() + 9 * 60 * 1000;
 (function tick() {
   const left = targets.filter((t) => !ok(t));
   if (!left.length) { console.log(`DONE: all ${targets.length} ready. Go on to the next step. Write nothing in chat about the agents.`); return; }
-  if (Date.now() > until) { console.log(`STILL RUNNING: ${targets.length - left.length} of ${targets.length} ready (waiting for ${left.map(x => x.label).join(', ')}). Run the same command again. Write nothing in chat. If the app asks you for an update, send only this line: Still working on it. The studio link above shows the progress live.`); return; }
+  if (Date.now() > until) { console.log(`STILL RUNNING: ${targets.length - left.length} of ${targets.length} ready (waiting for ${left.map(x => x.label).join(', ')}). Run the same command again. Write nothing in chat. If the app asks you for an update, send only the one line kit.sh next gave for this step, and only if you have not sent it yet.`); return; }
   setTimeout(tick, 4000);
 })();

@@ -60,6 +60,10 @@ if command -v claude > /dev/null 2>&1 || [ -d "$HOME/.claude" ]; then
   echo "  /plugin install ppcio@ppcio"
   echo ""
 fi
-echo "PPC.io is installed. Open your AI tool in any folder and ask:"
-echo "  What can PPC.io do for me?"
-echo "Paste your licence key in the chat when it asks. Update any time: run this line again."
+echo "PPC.io is installed (41 ready-to-run PPC & CRO workflows, 17 audit engines, 21 Google Ads scripts, 24 playbooks)."
+echo "Open your AI tool in any folder and try one of these right away:"
+echo "  1. What can PPC.io do for me?"
+echo "  2. Audit https://mywebsite.com for Google Ads and show me the top 3 things costing me leads."
+echo "  3. Drop any Google Ads CSV and ask: Audit this account and separate Brand from Non-Brand."
+echo ""
+echo "Paste your PPC.io Pro licence key in the chat any time. Update any time by re-running this install line."

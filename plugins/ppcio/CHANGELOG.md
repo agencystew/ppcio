@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.9 (27 Nov 2026)
+
+- Added 7 deterministic Python engines (90-day causal audit, PMax incremental ROAS, active-days budget pacing, spend-weighted QS, P50/P90 CPC forensics, weekly triage, and white-label HTML pitch deck renderer), 7 adversarial behavioral evals, unified plug-and-play workflow wording, and em-dash-free CRO playbooks.
+
 ## 0.8.8 (27 Nov 2026)
 
 - All 41 skills elevated to Karpathy-style first-principles reasoning with closed-loop self-critique, verified by a 95+/100 eval gate (41/41 pass, avg 97.4/100), plus crisper human copy across the kit and tool-neutral Studio text.

@@ -9,8 +9,12 @@ Performance Max reporting is built to look flattering. Your job is to separate *
 
 ## Start here
 
+- Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
 - Check for a local `landing-pages/*/context.md` first for business model (ecommerce vs. lead gen vs. local SMB vs. B2B), margins, and target CPA/ROAS.
 - Ask in one line if data is missing: *"In Google Ads, open Campaigns (last 30 to 90 days, ideally comparing pre-PMax vs. post-PMax), include Campaign type, Cost, Conversions, Conv. value, and Conv. value / cost, Download .csv and drop it here (plus your PMax Search Term Insights if you have them). Or ask me to help pull it via `connect-data-sources`."*
+- **Run the deterministic incremental ROAS calculator first:**
+  `python3 "${CLAUDE_SKILL_DIR}/scripts/pmax_check.py" --campaigns <campaigns.csv> --search-terms <pmax_terms.csv> --brand-pattern "<brand regex>" [--break-even-roas <ROAS>] [--target-cpa <CPA>]`
+  It deterministically subtracts Brand spend and value, flags Paused-Brand illusions, and prints exact True Incremental Non-Brand ROAS/CPA.
 
 ## First-Principles PMax Diagnostic (Challenge Assumptions First)
 

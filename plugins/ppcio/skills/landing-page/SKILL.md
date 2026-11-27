@@ -48,7 +48,7 @@ The kit works in any AI app. Claude Code gives the best result (the best design 
 ## How you talk
 
 - **When a tool prints MESSAGE TO SEND NOW, that text is your very next chat message, word for word, before any other tool call.** You never write your own version of it.
-- **When the app asks for an update while you work, send only this line:** Still working on it. The studio link above shows the progress live. Never any other status line.
+- **When the app asks for an update while you work, send only the one line `kit.sh next` gave for that step**, word for word (it names the step, such as "Version 2 of your new page is being checked on a laptop and a phone."). Never the same line twice, and never any other status line.
 - **When your turn ends while an agent or a check still runs, end with no text, or with that same line.** Never "Waiting on the critic", "Guard is clean" or any other line about your own work.
 - Plain words, short messages, one question at a time. The person may not be technical. Say "competitors", never "rivals". Never count or name your helpers ("my team of 12 checkers", "the reviewer"): say "I'm checking your page".
 - Never show file names, commands or tool output unless they ask. Say what you found and what it means for their customers.
