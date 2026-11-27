@@ -155,7 +155,15 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   if (log.length && log[log.length - 1].key === 'pack' && has(`${site}-page.zip`) && !newer('page.html', `${site}-page.zip`) && has(`r${n}/page.html`)) fs.copyFileSync(path.join(W, 'page.html'), path.join(W, `r${n}/page.html`));
   const fresh = !has(`r${n}/page.html`) || newer('page.html', `r${n}/page.html`); // page.html changed since round n was rendered
   const scored = has(`r${n}/scores.json`);
-  if (scored && fresh) n++; // edits after round n's verdict: they become round n+1
+  // Run 14: after round 5 the AI went on editing page.html by itself, and each edit became a round (8 rounds, 41 min).
+  // Past MAX, an edit only counts when the final judge asked for it or the owner did. Otherwise the best round comes back.
+  const judgeAsked = has('judge-1.json') && newer('page.html', 'judge-1.json');
+  if (scored && fresh && n >= MAX && !has('.page-sent') && !judgeAsked) {
+    let bi = n, ba = -1; for (let i = 1; i <= n; i++) { const s = json(`r${i}/scores.json`); const a = s && s.new ? s.new.reduce((x, y) => x + y, 0) / s.new.length : -1; if (a >= ba && has(`r${i}/page.html`)) { ba = a; bi = i; } }
+    const P = path.join(W, 'page.html'); fs.copyFileSync(path.join(W, `r${bi}/page.html`), P);
+    const t = (fs.statSync(path.join(W, `r${n}/page.html`)).mtimeMs - 1000) / 1000; fs.utimesSync(P, t, t);
+    console.log(`NOTE: the ${MAX} review rounds are over, so the edits after round ${n} are undone and page.html is round ${bi}, the best one. Do not edit page.html until a step asks.`);
+  } else if (scored && fresh) n++; // edits after round n's verdict: they become round n+1
   if (!has(`r${n}/first.png`) || !has(`r${n}-phone/first.png`) || (!has(`r${n}/scores.json`) && newer('page.html', `r${n}/page.html`)))
     say(`review, round ${n}`, `shot:${n}`, `Render round ${n}: ${kit} shot landing-pages/${site}/page.html ${n}, then ${kit} shot landing-pages/${site}/page.html ${n} phone. Open every image, phone first.`, `KIT/steps/4-review.md, part 1.`);
   // Code checks before the critic: the guard (40 checks on the rendered page) and the gate (phone, figures, quotes, promises, every width).

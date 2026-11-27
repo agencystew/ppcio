@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.11 (27 Nov 2026)
+
+- The review loop stops at 5 rounds: edits after that are undone unless the final judge or the owner asked
+
 ## 0.8.10 (27 Nov 2026)
 
 - Run 14 fixes: the AI can no longer switch off the sent-message check; update lines name the step; the page must use its proof
