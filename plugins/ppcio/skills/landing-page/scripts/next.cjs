@@ -205,6 +205,16 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
     say(`review, round ${cur.i + 1}`, `rollback:${cur.i}`, `Round ${cur.i} scored ${cur.a.toFixed(1)}, below round ${best.i} (${best.a.toFixed(1)}), so page.html is back to round ${best.i}. Fix the faults in r${best.i}/verdict.md that round ${cur.i} did not fix, one small edit at a time, keeping everything round ${best.i} did well. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, part 3.`);
   }
   if (goOn) {
+    // Test plan item 4 (28 Nov): edits cannot add facts the research did not find. Run 14's proof stayed at 6 for
+    // 8 rounds. Proof or case under 8, and no higher than the round before (or round 1 with under 4 proof items),
+    // sends the AI back to the proof hunt once per round. A change to facts.md or inputs/proof/ since this
+    // round's scores means the hunt ran.
+    const prev = rounds.length >= 2 ? rounds[rounds.length - 2].s : null; let proofItems = 0;
+    try { const f = fs.readFileSync(path.join(W, 'facts.md'), 'utf8').split(/^## Proof\s*$/m)[1] || ''; proofItems = (f.split(/^## /m)[0].match(/^\s*(?:\d+\.|-)\s+\S/gm) || []).length; } catch (e) {}
+    const stuck = k => { const i = KEYS.indexOf(k); const x = cur.s.new[i] ?? 0; return x < 8 && (prev ? x <= ((prev.new || [])[i] ?? 0) : proofItems < 4); };
+    const hunted = newer('facts.md', `r${n}/scores.json`) || newer('inputs/proof', `r${n}/scores.json`);
+    const thin = ['proof', 'case'].filter(stuck);
+    if (thin.length && !hunted) say(`review, round ${n + 1} of up to ${MAX}`, `research:${n}`, `Round ${n} scores ${thin.map(k => `${cur.s.new[KEYS.indexOf(k)]} on ${k}`).join(' and ')}${prev ? ', no higher than the round before' : ''}. More edits cannot add facts the research did not find, so go back to the proof hunt first. Read their review, testimonial, about, awards and project pages in inputs/pages/. If your tool can search or fetch the web, look the business up on Google (rating and review count), the review site of their trade, their trade bodies and the makers that certify them. Save each outside page you use to inputs/proof/<name>.md, first line "Source: <url>". Add each new item to facts.md "## Proof" with its source, then run ${kit} checkfacts landing-pages/${site}. If you find nothing new, add the line "Searched again in round ${n}: nothing new" under "## Proof". Then put the strongest proof beside the main button and the form, and run ${kit} next ${site} again.`, `KIT/steps/1-audit.md, "The proof hunt".`);
     let low = KEYS.filter((k, i) => !((cur.s.new[i] ?? 0) >= 8 && cur.s.new[i] >= ((cur.s.live || [])[i] || 0)));
     if (!low.length) low = KEYS.filter((k, i) => (cur.s.new[i] ?? 0) < 9); // all at 8, the average under 8.5: raise the weakest
     say(`review, round ${n + 1} of up to ${MAX}`, `improve:${n}`, `The page is not at the bar yet: a fresh critic must score it 8 or more out of 10, and at least their page today, on each of first screen, case, proof, offer, action and craft, and 8.5 or more on average. Round ${n} is below on: ${low.join(', ')}. Fix every fault in r${n}/verdict.md, strongest first, as small edits to page.html. Then run ${kit} next ${site}.`, `KIT/steps/4-review.md, parts 2 and 3. Never start a new layout.`);

@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.19 (28 Nov 2026)
+
+- Quote checks and the proof hunt after a low proof score
+
 ## 0.8.18 (28 Nov 2026)
 
 - Guard checks that the page works: repeated lines, phone numbers, dead links, page weight

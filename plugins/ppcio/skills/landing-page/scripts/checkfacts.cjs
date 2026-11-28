@@ -63,7 +63,13 @@ for (const name of files) {
     total++;
     // Allow "..." for a cut inside a quote: every piece must be on the site.
     const pieces = q.split(/\s*(?:\.\.\.|…)\s*/).map(norm).filter(p => p.length >= 8);
-    if (pieces.length && pieces.every(p => site.includes(p))) continue;
+    // 28 Nov (run 15, the blind judge: "stitched fragments"): the pieces of a cut quote must sit together, in order,
+    // within one passage of their site (700 characters). Pieces from two places are two quotes made into one.
+    const occ = p => { const o = []; let i = site.indexOf(p); while (i !== -1 && o.length < 50) { o.push(i); i = site.indexOf(p, i + 1); } return o; };
+    const together = (k, after) => k === pieces.length || occ(pieces[k]).some(i => (after < 0 || (i >= after && i - after <= 700)) && together(k + 1, i + pieces[k].length));
+    if (pieces.length && pieces.every(p => site.includes(p))) {
+      if (together(0, -1)) continue;
+      bad++; console.log(`STITCHED (${name}): the pieces of this quote are from different places on their site: "${q.slice(0, 160)}". Quote one passage`); continue; }
     bad++; console.log(`NOT ON THEIR SITE (${name}): "${q.slice(0, 160)}"`);
   }
 }

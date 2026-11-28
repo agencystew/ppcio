@@ -92,6 +92,9 @@ const META_LINES = [
       const groups = new Map(); const tw3 = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       while (tw3.nextNode()) { const n = tw3.currentNode; if (!n.textContent.trim()) continue; const el = n.parentElement; if (!el || el.closest('script,style,noscript,a,button,label,select,option,summary,header,nav,footer,svg,[aria-hidden=true]') || !shown(el)) continue; const blk = blockOf(el); groups.set(blk, (groups.get(blk) || '') + ' ' + n.textContent); }
       out.prose = [...groups.values()].map(t => t.replace(/\s+/g, ' ').trim()).filter(t => t.split(' ').length >= 5);
+      // A review quote cut in the middle with "..." reads as stitched (the blind judge, run 15). Innermost quote only.
+      const qEls = [...document.querySelectorAll('blockquote,q,[class*=quote]')].filter(shown); const midCut = /\S+(?:\s+\S+){2,}\s*(?:\.\.\.|…)\s*\S+(?:\s+\S+){2,}/;
+      out.cutQuotes = [...new Set(qEls.filter(e => midCut.test(e.innerText || '') && !qEls.some(x => x !== e && e.contains(x) && midCut.test(x.innerText || ''))).map(e => (e.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 90)))];
       // A thin line (4 px or less) that crosses heading text: the GenConnect
       // hero shipped with a stray vertical rule through its headline.
       const bigHeads = [...document.querySelectorAll('h1,h2')].filter(vis).map(h => { const rg = document.createRange(); rg.selectNodeContents(h); return { t: h.textContent.replace(/\s+/g, ' ').trim().slice(0, 50), rs: [...rg.getClientRects()].filter(x => x.width > 2), h }; });
@@ -249,6 +252,7 @@ const META_LINES = [
       for (const [k, n] of [...Object.entries(sentN).filter(([k, n]) => !hours(k) && n >= (/review|rating|stars?\b|★/.test(k) ? 4 : 3)), ...Object.entries(sixN).filter(([k, n]) => !hours(k) && n >= 4)].sort((a, b) => b[1] - a[1])) {
         if (repeats.some(([s]) => overlaps(s, k))) continue; repeats.push([k, n]); if (repeats.length >= 3) break; }
       const original = k => { for (const t of r.prose) for (const s of sentences(t)) if (norm(s).includes(k)) return s.slice(0, 100); return k; };
+      r.cutQuotes.slice(0, 3).forEach(t => faults.push(`laptop: a review quote is cut in the middle with "...": "${t}". A buyer reads a cut as stitched words. Quote whole sentences that sit together in the review, or a shorter quote`));
       repeats.forEach(([k, n]) => faults.push(`laptop: the same words are on the page ${n} times: "${original(k)}". Say it once, where the buyer decides, and give the other places a new fact`));
       // (2) Phone numbers. Every call link dials their number and shows that number. The live page's numbers
       // are in site-facts.json. A number the owner gave goes in plan.md as "Phone: <number>".
