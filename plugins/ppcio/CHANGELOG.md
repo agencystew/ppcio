@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.16 (28 Nov 2026)
+
+- The review stops after the final judge's one change
+
 ## 0.8.15 (27 Nov 2026)
 
 - The AI keeps working after each message instead of waiting for a reply

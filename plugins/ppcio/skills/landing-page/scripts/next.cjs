@@ -157,7 +157,8 @@ const agents = (names, outs) => `Run ${kit} brief ${site}. Then start ${names.jo
   const scored = has(`r${n}/scores.json`);
   // Run 14: after round 5 the AI went on editing page.html by itself, and each edit became a round (8 rounds, 41 min).
   // Past MAX, an edit only counts when the final judge asked for it or the owner did. Otherwise the best round comes back.
-  const judgeAsked = has('judge-1.json') && newer('page.html', 'judge-1.json');
+  // The judge's change opens ONE round. Run 15: once judge-1 existed, every later edit opened a round (13 rounds).
+  const judgeAsked = has('judge-1.json') && newer('page.html', 'judge-1.json') && !newer(`r${n}/scores.json`, 'judge-1.json');
   if (scored && fresh && n >= MAX && !has('.page-sent') && !judgeAsked) {
     let bi = n, ba = -1; for (let i = 1; i <= n; i++) { const s = json(`r${i}/scores.json`); const a = s && s.new ? s.new.reduce((x, y) => x + y, 0) / s.new.length : -1; if (a >= ba && has(`r${i}/page.html`)) { ba = a; bi = i; } }
     const P = path.join(W, 'page.html'); fs.copyFileSync(path.join(W, `r${bi}/page.html`), P);
