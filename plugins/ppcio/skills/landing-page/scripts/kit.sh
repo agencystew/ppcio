@@ -50,10 +50,11 @@ if ! command -v node > /dev/null 2>&1; then
   fi
 fi
 if [ ! -f "$D/node_modules/playwright/package.json" ]; then
-  echo "First run: installing the page checker (about 1 minute)..."
+  # --only-shell: every check runs headless, so the full browser (324 MB, 28 Nov) is never used.
+  echo "First run: installing the page checker (about 1 minute, 200 MB)..."
   mkdir -p "$D" && cd "$D" && { [ -f package.json ] || echo '{"name":"lpk-runtime","private":true}' > package.json; } \
     && npm install --silent --no-audit --no-fund "playwright@$PW" > "$D/install.log" 2>&1 \
-    && npx --yes "playwright@$PW" install chromium >> "$D/install.log" 2>&1 \
+    && npx --yes "playwright@$PW" install --only-shell chromium >> "$D/install.log" 2>&1 \
     || { echo "The install failed. The log is $D/install.log"; exit 3; }
   cd - > /dev/null
 fi
