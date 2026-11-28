@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.18 (28 Nov 2026)
+
+- Guard checks that the page works: repeated lines, phone numbers, dead links, page weight
+
 ## 0.8.17 (28 Nov 2026)
 
 - Kit commands run in one plain form, so the app asks you far less often. The first answer names every job the kit can do. The first install downloads 320 MB less.

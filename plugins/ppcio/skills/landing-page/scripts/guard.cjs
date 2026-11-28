@@ -27,7 +27,7 @@ const META_LINES = [
   const tagHits = [...new Set((html.match(/googletagmanager\.com\/(?:gtag\/js|gtm\.js)[^"'\s]*|\bgtag\(\s*['"]config['"]\s*,\s*['"][^'"]+|\bfbq\(\s*['"]init['"]\s*,\s*['"][^'"]+|clarity\.ms\/tag\/\w+|GTM-[A-Z0-9]{4,}/g) || []))];
   if (tagHits.length) faults.push(`tracking tags in page.html (${tagHits.slice(0, 3).join(' | ')}): take them out and leave <!-- ppcio:tracking-tags --> in the <head>. pack puts them into the live copy only.`);
   for (const [name, vp] of [['laptop', { width: 1440, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
-    const p = await b.newPage({ viewport: vp, ignoreHTTPSErrors: true }); await p.route(/googletagmanager\.com|google-analytics\.com|googleadservices\.com|doubleclick\.net|connect\.facebook\.net|facebook\.com\/tr|clarity\.ms|hotjar\.com|bat\.bing\.com|analytics\.tiktok\.com|snap\.licdn\.com/i, r => r.abort()).catch(() => {}); await p.goto('file://' + tmp, { waitUntil: 'load', timeout: 60000 }).catch(() => {}); await p.waitForTimeout(1200); await p.evaluate(() => document.fonts.ready).catch(() => {});
+    const p = await b.newPage({ viewport: vp, ignoreHTTPSErrors: true }); const loaded = new Set(); p.on('request', q => { if (q.url().startsWith('file://')) loaded.add(q.url()); }); await p.route(/googletagmanager\.com|google-analytics\.com|googleadservices\.com|doubleclick\.net|connect\.facebook\.net|facebook\.com\/tr|clarity\.ms|hotjar\.com|bat\.bing\.com|analytics\.tiktok\.com|snap\.licdn\.com/i, r => r.abort()).catch(() => {}); await p.goto('file://' + tmp, { waitUntil: 'load', timeout: 60000 }).catch(() => {}); await p.waitForTimeout(1200); await p.evaluate(() => document.fonts.ready).catch(() => {});
     const r = await p.evaluate(() => {
       const out = { small: [], dash: [], buttons: [], fonts: [], strips: [], broken: [], dupes: [], overflow: 0 };
       const vis = el => { const s = getComputedStyle(el); const rc = el.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && +s.opacity > 0.05 && rc.width > 0 && rc.height > 0; };
@@ -85,6 +85,13 @@ const META_LINES = [
       out.formTop = fieldTops.length >= 2 ? Math.round(fieldTops[0]) : null;
       out.faqCount = new Set([...document.querySelectorAll('summary,dt,h2,h3,h4,h5,h6,button,[aria-expanded],p,strong')].map(e => (e.textContent || '').replace(/\s+/g, ' ').trim().replace(/[^\w?)]+$/, '')).filter(t => t.length <= 160 && t.split(' ').length >= 4 && /\?$/.test(t))).size;
       out.bodyText = (document.body.innerText || '').slice(0, 200000);
+      // The page's own words, one string per block, for the repeated-line check. Opacity is not checked:
+      // a block that fades in on scroll is still read. Header, nav, footer, links and buttons are left out.
+      const shown = el => { const s = getComputedStyle(el); const rc = el.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && rc.width > 1 && rc.height > 1; }; // 1 px: screen-reader text
+      const blockOf = el => { let x = el; while (x.parentElement && x !== document.body && /^inline/.test(getComputedStyle(x).display)) x = x.parentElement; return x; };
+      const groups = new Map(); const tw3 = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      while (tw3.nextNode()) { const n = tw3.currentNode; if (!n.textContent.trim()) continue; const el = n.parentElement; if (!el || el.closest('script,style,noscript,a,button,label,select,option,summary,header,nav,footer,svg,[aria-hidden=true]') || !shown(el)) continue; const blk = blockOf(el); groups.set(blk, (groups.get(blk) || '') + ' ' + n.textContent); }
+      out.prose = [...groups.values()].map(t => t.replace(/\s+/g, ' ').trim()).filter(t => t.split(' ').length >= 5);
       // A thin line (4 px or less) that crosses heading text: the GenConnect
       // hero shipped with a stray vertical rule through its headline.
       const bigHeads = [...document.querySelectorAll('h1,h2')].filter(vis).map(h => { const rg = document.createRange(); rg.selectNodeContents(h); return { t: h.textContent.replace(/\s+/g, ' ').trim().slice(0, 50), rs: [...rg.getClientRects()].filter(x => x.width > 2), h }; });
@@ -222,6 +229,67 @@ const META_LINES = [
         if (id && !ids.has(id)) (dead[id] ??= []).push(t || href.slice(0, 40));
       }
       for (const [id, labels] of Object.entries(dead).slice(0, 4)) faults.push(`laptop: ${labels.length} link${labels.length > 1 ? 's go' : ' goes'} to #${id}, which is on no part of this page (once this page replaces theirs, ${labels.length > 1 ? 'they go' : 'it goes'} nowhere): ${[...new Set(labels)].slice(0, 3).join(' | ')}. Build that part here with id="${id}", or point ${labels.length > 1 ? 'them' : 'it'} at a part of this page`);
+
+      // Does the page work? (28 Nov, the test plan, item 3.)
+      let planText = ''; try { planText = fs.readFileSync(path.join(SITE, 'plan.md'), 'utf8'); } catch (e) {}
+      // (1) Repeated lines. Run 15 had "your visit, diagnosis and written estimate are free" all over the page.
+      // A sentence 3 times, or the same 6 words in 4 blocks, reads as filler. A review figure may show 3 times (near each button).
+      const norm = t => t.toLowerCase().replace(/(\d)[.,](?=\d)/g, '$1').replace(/[‘’]/g, "'").replace(/[^a-z0-9$%' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+      const sentences = t => t.split(/(?<=[.!?])(?<!\b(?:Mr|Mrs|Ms|Dr|St|Jr|Sr|No|vs|Inc|Co|Ltd|Ave|Rd|Mt|Ft)\.)\s+/); // "Mr. Rooter" is one sentence
+      const sentN = {}; const sixN = {};
+      for (const blk of r.prose) {
+        for (const s of sentences(blk)) { const n = norm(s); if (n.split(' ').length >= 5) sentN[n] = (sentN[n] || 0) + 1; }
+        const w = norm(blk).split(' '); const once = new Set(); for (let i = 0; i + 6 <= w.length; i++) once.add(w.slice(i, i + 6).join(' '));
+        once.forEach(k => { sixN[k] = (sixN[k] || 0) + 1; });
+      }
+      const threes = s => { const w = s.split(' '); const o = new Set(); for (let i = 0; i + 3 <= w.length; i++) o.add(w.slice(i, i + 3).join(' ')); return o; };
+      const overlaps = (a, b) => { const A = threes(a); return [...threes(b)].some(x => A.has(x)); };
+      const repeats = [];
+      const hours = k => /\b\d{1,2}( \d\d)? ?(am|pm)\b/.test(k); // opening hours on each location card are data (Hiatus, 8 spas)
+      for (const [k, n] of [...Object.entries(sentN).filter(([k, n]) => !hours(k) && n >= (/review|rating|stars?\b|★/.test(k) ? 4 : 3)), ...Object.entries(sixN).filter(([k, n]) => !hours(k) && n >= 4)].sort((a, b) => b[1] - a[1])) {
+        if (repeats.some(([s]) => overlaps(s, k))) continue; repeats.push([k, n]); if (repeats.length >= 3) break; }
+      const original = k => { for (const t of r.prose) for (const s of sentences(t)) if (norm(s).includes(k)) return s.slice(0, 100); return k; };
+      repeats.forEach(([k, n]) => faults.push(`laptop: the same words are on the page ${n} times: "${original(k)}". Say it once, where the buyer decides, and give the other places a new fact`));
+      // (2) Phone numbers. Every call link dials their number and shows that number. The live page's numbers
+      // are in site-facts.json. A number the owner gave goes in plan.md as "Phone: <number>".
+      const dig = x => String(x || '').replace(/\D/g, '');
+      const same = (a, b) => { const n = Math.min(a.length, b.length, 10); return n >= 7 && a.slice(-n) === b.slice(-n); };
+      const known = [...new Set([...(sf.phones || []), ...(sf.phone_numbers || []).map(x => x.digits), ...(planText.match(/^\W*phone:.*$/gim) || [])].map(dig).filter(x => x.length >= 7))];
+      const telLinks = r.hrefs.filter(h => /^tel:/i.test(h.href)); const badTel = new Set();
+      for (const { href, t } of telLinks) { const d = dig(href); const td = dig(t);
+        if (known.length && !known.some(k => same(k, d))) badTel.add(`a call link dials ${href}${t ? ` ("${t}")` : ''}, which is not a number on their live page (${known.join(', ')})`);
+        else if (td.length >= 7 && !same(td, d)) badTel.add(`a call link shows "${t}" but dials ${href}`); }
+      if (known.length) for (const m of r.bodyText.matchAll(/(?<![\d$])(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}(?!\d)/g)) { if (!known.some(k => same(k, dig(m[0])))) badTel.add(`the page shows the number ${m[0].trim()}, which is not on their live page (${known.join(', ')})`); }
+      [...badTel].slice(0, 4).forEach(x => faults.push(`laptop: ${x}. Use their number, or write the number the owner gave you in plan.md as "Phone: <number>"`));
+      if (!known.length && telLinks.length) notes.push(`laptop: the page has call links (${[...new Set(telLinks.map(h => h.href))].slice(0, 2).join(', ')}) but their live page shows no phone number. Check the number with the owner before it goes live`);
+      // (3) Web links. A link to a site their live page never links to may be made up: a note. A link that
+      // answers 404, or a host that does not exist, is a fault. Each address is fetched once a day
+      // (.links-checked.json). No network, or any other answer, passes.
+      const host = u => { try { return new URL(u).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) { return ''; } };
+      const liveLinks = [...(sf.buttons || []), ...((sf.phone && sf.phone.actions && sf.phone.actions.buttons) || [])].map(x => x.href || '').filter(h => /^https?:/i.test(h));
+      const liveHosts = new Set(liveLinks.map(host)); const ownHost = host(sf.final_url || sf.url || '');
+      const web = [...new Set(r.hrefs.map(h => h.href.split('#')[0]).filter(h => /^https?:\/\//i.test(h)))];
+      const newHosts = [...new Set(web.map(host).filter(h => h && h !== ownHost && !liveHosts.has(h) && !/(^|\.)(google|goo\.gl|facebook|instagram|youtube|linkedin|yelp|bbb|twitter|x|tiktok|nextdoor|angi|homeadvisor|trustpilot)\.[a-z.]*$/.test(h)))];
+      if (sf.url && newHosts.length) notes.push(`laptop: links go to ${newHosts.slice(0, 4).join(', ')}, which their live page does not link to. Check each one is their real booking or form page before it goes live`);
+      if (typeof fetch === 'function' && web.length) {
+        const cacheF = path.join(SITE, '.links-checked.json'); let cache = {}; try { cache = JSON.parse(fs.readFileSync(cacheF, 'utf8')); } catch (e) {}
+        const day = 864e5; const todo = web.filter(u => !(cache[u] && Date.now() - cache[u].at < day)).slice(0, 15);
+        let online = Object.values(cache).some(v => typeof v.status === 'number'); const noHost = [];
+        await Promise.all(todo.map(async u => { const ac = new AbortController(); const tm = setTimeout(() => ac.abort(), 6000);
+          try { const res = await fetch(u, { redirect: 'follow', signal: ac.signal, headers: { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131 Safari/537.36' } }); cache[u] = { at: Date.now(), status: res.status }; online = true; }
+          catch (e) { if (((e && e.cause && e.cause.code) || '') === 'ENOTFOUND') noHost.push(u); }
+          finally { clearTimeout(tm); } }));
+        // "No such host" counts only when another address answered: with no network every host fails that way.
+        if (online) noHost.forEach(u => { cache[u] = { at: Date.now(), status: 'no such host' }; });
+        try { fs.writeFileSync(cacheF, JSON.stringify(cache)); } catch (e) {}
+        const deadWeb = web.filter(u => cache[u] && (cache[u].status === 404 || cache[u].status === 410 || cache[u].status === 'no such host'));
+        deadWeb.slice(0, 4).forEach(u => { const t = (r.hrefs.find(h => h.href.split('#')[0] === u) || {}).t; faults.push(`laptop: the link${t ? ` "${t}"` : ''} goes to ${u}, which answers ${cache[u].status === 'no such host' ? '"no such site"' : cache[u].status}. Point it at a real page from their live site`); });
+      }
+      // (4) Page weight: page.html and every file from this folder the browser loaded. Run 15 was 0.9 MB.
+      let weight = fs.statSync(src).size; const files = [];
+      for (const u of loaded) { let f = ''; try { f = decodeURIComponent(new URL(u).pathname); } catch (e) { continue; } if (path.resolve(f) === path.resolve(tmp) || !fs.existsSync(f) || !fs.statSync(f).isFile()) continue; const s = fs.statSync(f).size; weight += s; files.push([s, path.relative(dir, f)]); }
+      const mb = x => (x / 1048576).toFixed(1); files.sort((a, b) => b[0] - a[0]); facts.weight_mb = +mb(weight);
+      if (weight > 4 * 1048576) faults.push(`laptop: the page and its files weigh ${mb(weight)} MB, and over 4 MB loads slowly on a phone signal. The biggest: ${files.slice(0, 3).map(([s, f]) => `${f} (${mb(s)} MB)`).join(', ')}. Save each photo at the width it shows (1600 px or less) as .webp`);
     }
     if (r.overflow > 2) faults.push(`${name}: page is ${r.overflow}px wider than the screen`);
     if (name === 'laptop' && r.body && r.body < 17) faults.push(`laptop: body text median is ${r.body}px (17px or more)`);
