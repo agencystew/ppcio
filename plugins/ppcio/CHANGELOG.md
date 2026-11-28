@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.22 (28 Nov 2026)
+
+- Reporting Studio & Agency OS Studio upgraded to Agent-to-Agent 4-Version Studios with live website brand harvesting, desktop+phone comparison boards, runtime DOM verifier, visual critic loop, and $0/mo bespoke portal packager
+
 ## 0.8.21 (28 Nov 2026)
 
 - Reporting Studio & Agency OS Studio hardened via 4-persona blind ICP tests (17 bugs fixed, multi-account switcher, multi-client portal, CFO PMax P&L, healthy tCPA restraint)

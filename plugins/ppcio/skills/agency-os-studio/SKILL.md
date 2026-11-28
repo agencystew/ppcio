@@ -1,59 +1,59 @@
 ---
 name: agency-os-studio
-description: "Consultative Agency & In-House PPC Operations and Deep Audit OS Studio: interviews you about how you monitor, audit, and manage Google Ads accounts (or critiques your current audit doc / MCC export), immediately generates 3 live clickable HTML Ops & Audit prototypes from one verified ops_state.json (Morning Ops Triage & Dependency-Gated Team Batches, 6-Tab Causal Account Audit Workbench, and Revenue Opportunity Pitch Board), exports Google Ads Editor CSVs, and compiles audits through 6 deterministic quality gates. Use when building an internal PPC audit system, agency management OS, or multi-account workflow. Not for client-facing weekly/monthly reporting portals (use reporting-studio)."
+description: "Agent-to-Agent Agency & In-House PPC Operations and Deep Audit OS Studio: harvests your organization's real website brand (logo, exact colors, webfonts, polarity), runs deterministic multi-account triage and Playbook Dependency Gating via ops_engine.py (quiet-gap tracking break detection + Google Ads Editor CSV exports), unleashes your AI to design 4 genuinely bespoke branded interactive Ops & Audit web apps in parallel, renders a desktop+phone visual comparison board, and enforces all 6 deterministic audit gates (verify_audit.py + verify-dom). Use when building an internal PPC audit system, agency management OS, or multi-account workflow. Not for client-facing weekly/monthly reporting portals (use reporting-studio)."
 ---
 
 # Agency & In-House PPC Operations / Audit OS Studio
 
-Agencies managing 5 to 100+ accounts and in-house teams managing multi-region or high-spend accounts drown in scattered spreadsheets, noisy false alerts, and manual Monday fire drills. Your job is to reason like an ambitious Head of Paid Search Operations: form a sharp hypothesis about the single operational constraint hurting account retention (broken tracking, noisy alerts, or scattered per-account checklists), **generate 3 live clickable interactive Ops & Audit OS prototypes straight off the bat** from their real account data, and customize their permanent internal audit & management system.
+Agencies running 5 to 100+ accounts and in-house teams running multi-region spend drown in noisy false alerts, scattered spreadsheets, and juniors pausing keywords while tracking is broken. Your job is NOT to spit out a generic Python HTML table. Reason from first principles like an ambitious Head of Paid Search Operations: form a sharp hypothesis about the single operational constraint hurting retention (broken tracking, noisy alerts, or inconsistent audits), run an **Agent-to-Agent Studio** where deterministic engines own **Math, Quiet-Gap Tracking Breaks, Dependency Locking, Ads Editor CSVs, Visual Boards, and 6 Hard Audit Gates**, and let your own design craft author and customize 4 genuinely bespoke, brand-true operational web apps until the team gets flagship internal software.
 
 ## Start here
 
 - Script path: if `${CLAUDE_SKILL_DIR}` is empty (Codex, Cursor, Windsurf, Antigravity, Gemini CLI), replace it with the folder containing this `SKILL.md`.
-- Read [references/agency-os-architecture.md](references/agency-os-architecture.md) and [references/false-alert-truth-checks.md](references/false-alert-truth-checks.md) before designing their operations workflow or running deep audits. Why: batching by task type and enforcing tracking-first dependency order (`quiet_days >= 2`, `> 3x` normal gap, `>= 2x` CPL, `< 2` expected leads = noise) eliminates 90% of agency false alarms and wasted keyword edits.
-- Check if local CSVs, audit docs, or `landing-pages/*/context.md` already exist in the folder so you skip redundant questions.
+- Read [TASTE.md](TASTE.md), [steps/4-versions.md](steps/4-versions.md), [references/agency-os-architecture.md](references/agency-os-architecture.md), and [references/false-alert-truth-checks.md](references/false-alert-truth-checks.md) before designing or auditing. Why: batching by task type and enforcing tracking-first dependency order (`quiet_days >= 2`, `> 3x` normal gap, `>= 2x` CPL, `< 2` expected leads = noise) eliminates 90% of agency false alarms and catastrophic keyword cuts.
+- Check for existing local CSVs, audit docs, or `landing-pages/*/context.md` first so you skip redundant questions.
 
 ## Delivery Standard
 
-Deliver clickable full paths to `ops/prototypes/index.html` (all 3 live multi-account HTML prototypes), `ops/ops_state.json`, `ops/audit-summary.md` (verified via `verify_audit.py`), any generated `ops/editor-exports/*.csv`, a plain-English summary of what is `BROKEN` vs. `AT_RISK` vs. `FINE`, and concrete 7-day (tracking) / 14-day (traffic) verification steps.
+Deliver concrete, ready-to-use files with clickable full paths: `ops/versions/board.html` (4 bespoke branded prototypes side by side), `ops/final/page.html` (polished winning Ops OS), `ops/ops_state.json`, verified `ops/audit-summary.md`, and ready-to-import `ops/editor-exports/*.csv`, plus a plain-English summary of `BROKEN` vs. `AT_RISK` vs. `WIN/FINE` accounts and 7-day (tracking) / 14-day (traffic) rollback checks.
 
-## Step 1. Consultative Ops Discovery (Fast, Zero Bloat)
+## Step 1. Fast Consultative Ops Discovery
 
-Ask **at most 3 short plain-English questions** (or skip straight to diagnosis if they dropped an MCC export or current audit doc):
-1. **Team & scale:** Agency or in-house team? Roughly how many Google Ads accounts / brands, and who executes fixes (PPC managers, web/LP team, tracking/dev)?
-2. **Biggest operational headache today:** Drop an existing audit doc or tell me what breaks most often (missed tracking drops, noisy alerts, inconsistent audits across managers, manual Monday triage, or proving opportunity to executives/prospects).
-3. **Brand & data:** Organization name, theme (`editorial-warm`, `executive-clean`, `modern-dark`, `bold-contrast`), and a single-account or multi-account MCC Google Ads CSV (or connect Google Ads / GA4 / Clarity read-only via `connect-data-sources`).
+Ask **at most 3 short plain-English questions** (or jump straight to diagnosis if they already dropped an MCC CSV or audit doc):
+1. **Team & scale:** Agency or in-house? How many Google Ads accounts/brands, and who executes fixes (PPC managers, web/LP team, tracking/dev)?
+2. **Biggest headache today:** Drop an existing audit doc/spreadsheet or name what breaks most (missed tracking drops, noisy alerts, inconsistent audits, or proving opportunity to executives/prospects).
+3. **Real brand & data:** Your agency/company website URL (to harvest real brand colors, logo, and fonts automatically) plus a single-account or MCC Google Ads CSV (or connect Google Ads/GA4/Clarity via `connect-data-sources`).
 
-When they share an existing audit doc or checklist, critique it honestly first: call out missing Brand separation, menu-path teases (*"Open Google Ads > Campaigns"*), lack of tracking-first dependency gating, confected health scores, or noisy low-sample alerts so they immediately see the upgrade.
+When they share an existing audit doc, critique it honestly first: expose missing Brand separation, menu-path teases (*"Open Google Ads > Campaigns"*), missing tracking-first dependency locks, confected `/100` scores, or low-sample noise.
 
-## Step 2. Run Deterministic Ops Engine & Render 3 Live Prototypes Straight Off The Bat
+## Step 2. Harvest Real Brand & Run Deterministic Ops Engine
 
-Never hand-code inconsistent audits or skip dependency gating! Run the 3-step deterministic pipeline:
-1. **Build `ops_state.json` + Batch Action Queue & Google Ads Editor CSV Exports** (portfolio triage `BROKEN -> AT_RISK -> WIN -> FINE`, Statistical Quiet-Gap break check, tracking inflation check, 8-step causal moves, Playbook Dependency Gating holding PPC traffic tasks whenever tracking is broken, and 4 transparent opportunity formulas):
+Never invent generic themes and never hand-wave dependency gating! Run both truth scripts first:
+1. **Harvest real website brand tokens:**
+   `node "${CLAUDE_SKILL_DIR}/scripts/brand_harvest.cjs" --out-dir ops --org "<Org>" [--url "<https://...>"] [--accent "<#hex>"] [--polarity <light|dark>]`
+2. **Build `ops_state.json` + Batch Queue & Google Ads Editor CSV Exports:**
    `python3 "${CLAUDE_SKILL_DIR}/scripts/ops_engine.py" --csv <mcc_or_campaigns.csv> [--account "<Name>"] [--target-cpa <CPA>] [--targets-json <targets.json>] [--currency "$"] [--brand "<brand regex>"] --export-dir ops/editor-exports --out ops/ops_state.json`
-2. **Generate all 3 live clickable HTML Ops & Audit OS prototypes + Picker (`ops/prototypes/index.html`):**
-   `python3 "${CLAUDE_SKILL_DIR}/scripts/render_ops_prototypes.py" --state ops/ops_state.json --out-dir ops/prototypes --org "<Agency or Company>" --theme <editorial-warm|executive-clean|modern-dark|bold-contrast> [--accent "<#hex>"]`
-3. **Compile every written audit or action brief through the 6-Gate Audit Compiler (`verify_audit.py`):**
-   `python3 "${CLAUDE_SKILL_DIR}/scripts/verify_audit.py" --draft <audit_draft.md> --state ops/ops_state.json --type <lead_gen|ecommerce|saas>`
-   Why: catches menu-path teases, `$0` budget bugs, blame language, confected `/100` scores, broken-tracking dependency violations, and ecom/lead-gen vocabulary leaks BEFORE anyone sees the audit.
 
-## Step 3. Customize Into Their Permanent Internal Operating System
+## Step 3. Design 4 Bespoke Branded Ops OS Prototypes & Run Visual + 6-Gate Critic
 
-Share the clickable full file path to `ops/prototypes/index.html` and explain the 3 distinct prototypes cleanly:
-- **Prototype A (Morning Ops Triage & Batch-by-Task Command Center):** Risk-sorted portfolio queue (collapsing healthy accounts to a single count), dependency-gated Team Batches (`Tracking -> Web/LP -> PPC AM`, auto-holding traffic edits when tracking is broken), and ready-to-import Google Ads Editor CSVs.
-- **Prototype B (6-Tab Deep Causal Account Audit Workbench):** Monday Overview with 5-Part Finding Cards, neutral A-D grades, Tracking check, Ads & LP view, interactive checkboxes, persistent `"Not right? Tell us why"` rejection memory, and clean Full Data tab.
-- **Prototype C (Revenue-First Audit & Opportunity Pitch Board):** Transparent waste/CVR/headroom arithmetic, 3-phase 90-day sequence, and mandatory `"What Is Already Working (Protect First)"` restraint block for agency pitches or CFO buy-in.
+Follow [steps/4-versions.md](steps/4-versions.md) and [TASTE.md](TASTE.md) completely:
+1. **Author 4 genuinely distinct interactive Ops & Audit web apps** (`ops/versions/a..d/page.html`) natively inside `ops/inputs/brand.md` powered verbatim by `ops_state.json` (A: Morning Ops Command Cockpit; B: 6-Tab Causal Deep Audit Workbench; C: Revenue Opportunity Pitch Board; D: Bold Unified Agency OS). Never fall back to `scripts/render_ops_prototypes.py` unless running in a zero-browser emergency environment.
+2. **Build the desktop + phone visual comparison board & name your pick:**
+   `node "${CLAUDE_SKILL_DIR}/scripts/studio_board.cjs" board ops --title "<Org>: 4 PPC Operations & Audit OS Prototypes"`
+3. **Promote the pick and run up to 3 Visual + Mechanical Critic rounds:**
+   - `node "${CLAUDE_SKILL_DIR}/scripts/studio_board.cjs" pick ops <a|b|c|d>`
+   - `node "${CLAUDE_SKILL_DIR}/scripts/studio_board.cjs" shot ops/final/page.html ops/final/shots`
+   - `node "${CLAUDE_SKILL_DIR}/scripts/studio_board.cjs" verify-dom ops/final/page.html --state ops/ops_state.json`
+   - `python3 "${CLAUDE_SKILL_DIR}/scripts/verify_audit.py" --draft ops/final/page.html --state ops/ops_state.json --type <lead_gen|ecommerce|saas>`
+   Open `ops/final/shots/desktop.png` and `phone.png`, score every `TASTE.md` dimension, and iterate until every score clears 9/10. Also compile `ops/audit-summary.md` through `verify_audit.py`.
 
-Then ask what they want to customize or wire up next (scheduled nightly `$0` break monitor via Google Ads Scripts / MCP, Cloudflare Pages + KV team workspace with persistent checkboxes, ClickUp/Asana/Slack morning batch alerts, or pairing with `reporting-studio` for automated client reports).
+### Weak 5/10 vs. 10/10 Agent-to-Agent Ops OS Delivery
 
-### Weak 5/10 vs. 10/10 Ops & Audit System
-
-- **Amateur:** Writes a 4-page generic checklist telling the manager to *"Open Google Ads > Campaigns to check CPA"*, recommends raising budget while waste leaks, cuts keywords on a broken-tracking account, and prints 40 green "all clear" cards.
-- **10/10 Senior:** Runs `ops_engine.py` across the portfolio (catching a 3-day quiet-gap tracking break and automatically locking PPC traffic tweaks in `Waiting on tracking`), generates 3 live branded HTML Ops & Audit workbenches + Google Ads Editor CSV exports in 2 seconds, enforces the 6-gate compiler, and gives the team a quiet, noise-free Monday operating system.
+- **Amateur:** Runs a static Python template with invented colors, never opens a screenshot, prints 40 noisy green cards, cuts keywords on a broken-tracking account, and drops a menu-path checklist.
+- **10/10 Senior:** Harvests the agency's real brand, catches a quiet-gap tracking break and physically locks PPC traffic tweaks in `Waiting on tracking`, exports valid Google Ads Editor CSVs, authors 4 bespoke brand-true Ops web apps in parallel, verifies 0 JS errors + all 6 audit gates + 9+/10 visual polish in Chromium, and gives the team flagship internal software.
 
 ## Closed-Loop Self-Critique (Run Before Answering)
 
-Before delivering prototypes or a custom Ops OS:
-1. **Dependency & math check:** Did `ops_engine.py` and `verify_audit.py` pass with 0 failures? Are traffic edits strictly held whenever tracking is broken, with zero fabricated metrics, zero `$0` budget instructions, and every move grounded in a 5-Part Finding Contract?
-2. **Noise & restraint check:** Are healthy accounts collapsed cleanly (`FINE` count) and winning campaigns explicitly listed under **Protect First**, with clear 7-day (tracking) and 14-day (bid/keyword) verification & rollback guardrails?
-3. **Human voice & handoff:** Crisp, blame-free English with zero em dashes or staff-micromanagement metrics. Share clickable full file paths to `ops/prototypes/index.html` and `editor-exports/`, and offer `reporting-studio` (client reporting) or `landing-page` (fixing post-click leaks flagged in Batch 2).
+1. **Dependency & compiler gate check:** Did `ops_engine.py`, `verify_audit.py` (all 6 gates), AND `studio_board.cjs verify-dom` pass with `0` failures, `0` JS errors, and working live multi-account switching? Are traffic edits strictly locked whenever tracking is broken?
+2. **Brand fidelity, noise & restraint check:** Did you open `ops/final/shots/desktop.png` and `phone.png` to confirm genuine brand alignment, collapsed `FINE` noise, explicit **Protect First** winners, and clear 7-day (tracking) / 14-day (bid/keyword) verification & rollback guardrails?
+3. **Human voice & handoff:** Crisp, blame-free English with zero em dashes. Share clickable full paths to `ops/versions/board.html`, `ops/final/page.html`, and `ops/editor-exports/`, and offer to switch versions (`A/B/C/D`), pair with `reporting-studio` (client reporting), or fix Batch 2 post-click leaks via `landing-page`.

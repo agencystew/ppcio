@@ -26,7 +26,16 @@ BANNED_PATTERNS = [
 ]
 
 
+def strip_markup(text):
+    if "<html" in text.lower() or "<body" in text.lower() or "<div" in text.lower():
+        text = re.sub(r"<style[^>]*>.*?</style>", " ", text, flags=re.S | re.I)
+        text = re.sub(r"<script[^>]*>.*?</script>", " ", text, flags=re.S | re.I)
+        text = re.sub(r"<[^>]+>", " ", text)
+    return text
+
+
 def verify_audit(text, account_type="lead_gen", tracking_broken=False):
+    text = strip_markup(text)
     errors = []
     for pat, msg in BANNED_PATTERNS:
         if re.search(pat, text, re.I if pat != "—" else 0):
