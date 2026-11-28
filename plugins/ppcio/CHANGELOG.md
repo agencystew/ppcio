@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.21 (28 Nov 2026)
+
+- Reporting Studio & Agency OS Studio hardened via 4-persona blind ICP tests (17 bugs fixed, multi-account switcher, multi-client portal, CFO PMax P&L, healthy tCPA restraint)
+
 ## 0.8.20 (28 Nov 2026)
 
 - The first screen names where they work; review quotes stay whole

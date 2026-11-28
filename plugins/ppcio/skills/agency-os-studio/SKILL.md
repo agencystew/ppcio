@@ -15,7 +15,7 @@ Agencies managing 5 to 100+ accounts and in-house teams managing multi-region or
 
 ## Delivery Standard
 
-Deliver clickable full paths to `ops/prototypes/index.html` (all 3 live HTML prototypes), `ops/ops_state.json`, any generated `ops/editor-exports/*.csv`, a plain-English summary of what is `BROKEN` vs. `AT_RISK` vs. `FINE`, and concrete 7-day (tracking) / 14-day (traffic) verification steps.
+Deliver clickable full paths to `ops/prototypes/index.html` (all 3 live multi-account HTML prototypes), `ops/ops_state.json`, `ops/audit-summary.md` (verified via `verify_audit.py`), any generated `ops/editor-exports/*.csv`, a plain-English summary of what is `BROKEN` vs. `AT_RISK` vs. `FINE`, and concrete 7-day (tracking) / 14-day (traffic) verification steps.
 
 ## Step 1. Consultative Ops Discovery (Fast, Zero Bloat)
 
@@ -29,8 +29,8 @@ When they share an existing audit doc or checklist, critique it honestly first: 
 ## Step 2. Run Deterministic Ops Engine & Render 3 Live Prototypes Straight Off The Bat
 
 Never hand-code inconsistent audits or skip dependency gating! Run the 3-step deterministic pipeline:
-1. **Build `ops_state.json` + Google Ads Editor CSV Batch Exports** (portfolio triage `BROKEN -> AT_RISK -> WIN -> FINE`, Statistical Quiet-Gap break check, tracking inflation check, 8-step causal moves, Playbook Dependency Gating holding PPC traffic tasks whenever tracking is broken, and 4 transparent opportunity formulas):
-   `python3 "${CLAUDE_SKILL_DIR}/scripts/ops_engine.py" --csv <mcc_or_campaigns.csv> [--account "<Name>"] [--target-cpa <CPA>] [--brand "<brand regex>"] --export-dir ops/editor-exports --out ops/ops_state.json`
+1. **Build `ops_state.json` + Batch Action Queue & Google Ads Editor CSV Exports** (portfolio triage `BROKEN -> AT_RISK -> WIN -> FINE`, Statistical Quiet-Gap break check, tracking inflation check, 8-step causal moves, Playbook Dependency Gating holding PPC traffic tasks whenever tracking is broken, and 4 transparent opportunity formulas):
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/ops_engine.py" --csv <mcc_or_campaigns.csv> [--account "<Name>"] [--target-cpa <CPA>] [--targets-json <targets.json>] [--currency "$"] [--brand "<brand regex>"] --export-dir ops/editor-exports --out ops/ops_state.json`
 2. **Generate all 3 live clickable HTML Ops & Audit OS prototypes + Picker (`ops/prototypes/index.html`):**
    `python3 "${CLAUDE_SKILL_DIR}/scripts/render_ops_prototypes.py" --state ops/ops_state.json --out-dir ops/prototypes --org "<Agency or Company>" --theme <editorial-warm|executive-clean|modern-dark|bold-contrast> [--accent "<#hex>"]`
 3. **Compile every written audit or action brief through the 6-Gate Audit Compiler (`verify_audit.py`):**

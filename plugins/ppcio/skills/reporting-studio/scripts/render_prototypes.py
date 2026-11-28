@@ -54,6 +54,16 @@ def esc(v):
     return html.escape("" if v is None else str(v), quote=True)
 
 
+def singularize(word):
+    w = (word or "conversion").strip()
+    low = w.lower()
+    if low.endswith("ies") and len(w) > 3:
+        return w[:-3] + ("Y" if w[-1].isupper() else "y")
+    if low.endswith("s") and not low.endswith("ss") and len(w) > 2:
+        return w[:-1]
+    return w
+
+
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", (s or "client").lower()).strip("-") or "client"
 
@@ -105,7 +115,7 @@ def base_css(t):
   .tab-pane {{ display:none; }}
   .tab-pane.active {{ display:block; }}
   .hold-banner {{ background:var(--bad-bg); border:1px solid var(--bad); color:var(--bad); border-radius:12px; padding:14px 18px; margin-bottom:18px; font-weight:600; }}
-  .bar-row {{ display:flex; align-items:flex-end; gap:8px; height:90px; padding-top:14px; }}
+  .bar-row {{ display:flex; align-items:flex-end; gap:8px; height:108px; padding-top:20px; }}
   .bar-col {{ flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }}
   .bar {{ width:100%; max-width:34px; background:var(--accent); border-radius:6px 6px 0 0; opacity:.85; }}
   @media print {{ .topbar .no-print, .tab-btn {{ display:none; }} }}
@@ -131,7 +141,7 @@ def render_prototype_a(facts, brand, t, story=None):
     d = facts["deltas"]
     sp = facts["sparklines"]
 
-    kpi3_lbl = "Return on Ad Spend" if is_ecom else f"Cost per {cw[:-1] if cw.endswith('s') else cw}"
+    kpi3_lbl = "Return on Ad Spend" if is_ecom else f"Cost per {singularize(cw)}"
     kpi3_val = f"{cur['roas']:.2f}x" if (is_ecom and cur["roas"]) else (f"{c}{cur['cpa']:,.2f}" if cur["cpa"] else "N/A")
     kpi3_delta = d["roas"] if is_ecom else d["cpa"]
 
@@ -158,9 +168,10 @@ def render_prototype_a(facts, brand, t, story=None):
     st_win = "".join(f"<tr><td>{esc(x['term'])}</td><td>{c}{x['cost']:,.2f}</td><td>{x['conversions']}</td><td>{c}{x['cpa']:,.2f}</td></tr>" for x in facts["search_terms"]["converting_non_brand"]) or "<tr><td colspan='4' class='muted'>Attach a Search Terms CSV to populate top converting non-brand queries.</td></tr>"
     st_wst = "".join(f"<tr><td>{esc(x['term'])}</td><td>{c}{x['cost']:,.2f}</td><td>{x['clicks']}</td><td>Review / Negative</td></tr>" for x in facts["search_terms"]["waste_non_brand"]) or "<tr><td colspan='4' class='muted'>No high-spend zero-conversion non-brand terms flagged.</td></tr>"
 
+    nb_eff = (f"ROAS {nb['roas']:.2f}x") if (is_ecom and nb["roas"]) else (f"{c}{nb['cpa']:,.2f} each" if nb["cpa"] is not None else "N/A")
     summary_text = (story or {}).get("executive_summary") or (
         f"Non-brand campaigns delivered {nb['conversions']:.0f} {cw} on {c}{nb['cost']:,.0f} spend "
-        f"({('ROAS ' + str(nb['roas']) + 'x') if is_ecom and nb['roas'] else (c + str(nb['cpa']) + ' each')}). "
+        f"({nb_eff}). "
         f"Brand search stayed isolated ({c}{br['cost']:,.0f} spend, {br['conversions']:.0f} {cw}) so acquisition performance stays transparent."
     )
 
@@ -219,7 +230,7 @@ def render_prototype_a(facts, brand, t, story=None):
 
   <div class="card">
     <h2>Campaign Breakdown (Brand Isolated)</h2>
-    <table><thead><tr><th>Campaign</th><th>Spend</th><th>Clicks</th><th>{esc(cw.title())}</th><th>{'ROAS' if is_ecom else 'Cost / ' + esc(cw[:-1] if cw.endswith('s') else cw)}</th></tr></thead>
+    <table><thead><tr><th>Campaign</th><th>Spend</th><th>Clicks</th><th>{esc(cw.title())}</th><th>{'ROAS' if is_ecom else 'Cost / ' + esc(singularize(cw))}</th></tr></thead>
     <tbody>{''.join(camp_rows)}</tbody></table>
   </div>
 
@@ -274,13 +285,13 @@ def render_prototype_b(facts, brand, t):
   <div class="card">
     <div style="display:grid;gap:16px;">
       <div><div class="muted">{esc(cw.title())}</div><div class="kpi-val">{cur['conversions']:,.0f}</div><div class="muted">Usually about {norm['weekly_conversions']:.0f} per week</div></div>
-      <div style="border-top:1px solid var(--border);padding-top:14px;"><div class="muted">Cost per {esc(cw[:-1] if cw.endswith('s') else cw)}</div><div class="kpi-val">{c}{cur['cpa']:,.2f}</div><div class="muted">Usually about {c}{norm['weekly_cpa'] or 0:,.2f}</div></div>
+      <div style="border-top:1px solid var(--border);padding-top:14px;"><div class="muted">Cost per {esc(singularize(cw))}</div><div class="kpi-val">{c}{cur['cpa']:,.2f}</div><div class="muted">Usually about {c}{norm['weekly_cpa'] or 0:,.2f}</div></div>
       <div style="border-top:1px solid var(--border);padding-top:14px;"><div class="muted">Amount spent</div><div class="kpi-val">{c}{cur['cost']:,.0f}</div><div class="muted">{esc(facts['pacing']['status'])} for the month</div></div>
     </div>
   </div>
 
   <div class="card">
-    <h3 style="margin-bottom:4px;">{esc(cw.title())} by month</h3>
+    <h3 style="margin-bottom:14px;">{esc(cw.title())} by month</h3>
     <div class="bar-row">{bars}</div>
   </div>
 
@@ -302,8 +313,14 @@ def render_prototype_c(facts, brand, t, story=None):
         f"Monthly pacing is {facts['pacing']['status']} ({facts['pacing']['pacing_pct']:.0f}% projected).",
         facts["scale_elasticity"],
     ]
-    below_normal = [x for x in facts["campaigns"] if x["vs_own_normal"] == "below_own_normal"]
-    bn_html = "".join(f"<li><strong>{esc(x['campaign'])}:</strong> {c}{x['cpa'] or 0:,.2f} vs own 12-week normal {c}{x['own_normal_cpa'] or 0:,.2f}.</li>" for x in below_normal) or "<li>No campaigns drifted materially below their own 12-week normal.</li>"
+    below_normal = [x for x in facts["campaigns"] if x["vs_own_normal"] in ("below_own_normal", "zero_conv_bleeder")]
+    bn_items = []
+    for x in below_normal:
+        if x["vs_own_normal"] == "zero_conv_bleeder":
+            bn_items.append(f"<li><strong>{esc(x['campaign'])}:</strong> {c}{x['cost']:,.0f} spend, 0 {esc(cw)} ({x['clicks']} clicks - zero-conversion bleeder).</li>")
+        else:
+            bn_items.append(f"<li><strong>{esc(x['campaign'])}:</strong> {c}{x['cpa'] or 0:,.2f} vs own 12-week normal {c}{x['own_normal_cpa'] or 0:,.2f}.</li>")
+    bn_html = "".join(bn_items) or "<li>No campaigns drifted materially below their own 12-week normal.</li>"
     email_draft = (
         f"Subject: {facts['client_name']} update ({facts['period']}): {cur['conversions']:.0f} {cw}\n\n"
         f"Hi team,\n\n"
@@ -391,24 +408,68 @@ def write_portal(portal_dir, facts, brand, t, dash_html):
     client_root = portal_dir / "r" / f"{slug}-{tok}"
     snap_dir = client_root / wk
     snap_dir.mkdir(parents=True, exist_ok=True)
-    (snap_dir / "index.html").write_text(dash_html, encoding="utf-8")
-    (client_root / "latest.html").write_text(dash_html, encoding="utf-8")
+
+    # Replace prototype-picker link cleanly for live portal context
+    latest_html = dash_html.replace('<a class="pill no-print" href="index.html">All Prototypes</a>', '<a class="pill no-print" href="index.html">Report Archive</a>')
+    snap_html = dash_html.replace('<a class="pill no-print" href="index.html">All Prototypes</a>', '<a class="pill no-print" href="../index.html">Report Archive</a>')
+    (snap_dir / "index.html").write_text(snap_html, encoding="utf-8")
+    (client_root / "latest.html").write_text(latest_html, encoding="utf-8")
+
+    # Update persistent manifest so multi-client & multi-week runs NEVER overwrite prior entries
+    manifest_path = portal_dir / "portal-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {"clients": {}}
+    c_entry = manifest["clients"].get(slug, {"name": facts["client_name"], "slug": slug, "token": tok, "weeks": {}})
+    c_entry["name"] = facts["client_name"]
+    c_entry["latest_week"] = wk
+    c_entry["latest_period"] = facts["period"]
+    c_entry["pacing_status"] = facts["pacing"]["status"]
+    c_entry["conversions"] = facts["totals"]["current"]["conversions"]
+    c_entry["conversion_label"] = facts["conversion_label"]
+    c_entry["weeks"][wk] = {
+        "period": facts["period"],
+        "conversions": facts["totals"]["current"]["conversions"],
+        "cost": facts["totals"]["current"]["cost"],
+        "currency": facts["currency"],
+        "label": facts["conversion_label"],
+    }
+    manifest["clients"][slug] = c_entry
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    # Render aggregated per-client historical archive
+    wk_cards = []
+    for w_key in sorted(c_entry["weeks"].keys(), reverse=True):
+        w_info = c_entry["weeks"][w_key]
+        badge = '<span class="pill pill-good">Latest</span> ' if w_key == c_entry["latest_week"] else ""
+        wk_cards.append(
+            f"<div class='card'>{badge}<a href='{esc(w_key)}/index.html'><strong>{esc(w_info['period'])}</strong></a>"
+            f" &middot; {w_info['conversions']:.0f} {esc(w_info['label'])} &middot; {esc(w_info['currency'])}{w_info['cost']:,.0f} spend</div>"
+        )
     (client_root / "index.html").write_text(
         f"<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='robots' content='noindex,nofollow'>"
-        f"<title>{esc(facts['client_name'])} Reports</title><style>{base_css(t)}</style></head><body>"
-        f"<main class='wrap'><h1>{esc(facts['client_name'])} Report Archive</h1>"
-        f"<div class='card'><a href='{esc(wk)}/index.html'><strong>Latest ({esc(facts['period'])})</strong></a>"
-        f" &middot; {facts['totals']['current']['conversions']:.0f} {esc(facts['conversion_label'])}</div></main></body></html>",
+        f"<title>{esc(facts['client_name'])} Report Archive</title><style>{base_css(t)}</style></head><body>"
+        f"<header class='topbar'><div class='brand'>{brand_badge(brand)}</div><a class='pill' href='latest.html'>Latest Report</a></header>"
+        f"<main class='wrap'><h1>{esc(facts['client_name'])} Report Archive</h1>{''.join(wk_cards)}</main></body></html>",
         encoding="utf-8",
     )
+
+    # Render aggregated private agency admin hub across ALL clients in manifest
     admin_dir = portal_dir / "admin" / admin_tok
     admin_dir.mkdir(parents=True, exist_ok=True)
+    client_cards = []
+    for cl in sorted(manifest["clients"].values(), key=lambda x: x["name"].lower()):
+        p_cls = "pill-good" if cl["pacing_status"] == "On Track" else ("pill-bad" if cl["pacing_status"] == "Over Pacing" else "pill-warn")
+        client_cards.append(
+            f"<div class='card' style='display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;'>"
+            f"<div><a href='../../r/{esc(cl['slug'])}-{esc(cl['token'])}/latest.html'><strong>{esc(cl['name'])}</strong></a>"
+            f" <span class='muted'>&middot; {esc(cl['latest_period'])} &middot; {cl['conversions']:.0f} {esc(cl['conversion_label'])}</span></div>"
+            f"<div><span class='pill {p_cls}'>{esc(cl['pacing_status'])}</span> "
+            f"<a class='pill' href='../../r/{esc(cl['slug'])}-{esc(cl['token'])}/index.html'>Archive ({len(cl['weeks'])})</a></div></div>"
+        )
     (admin_dir / "index.html").write_text(
         f"<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='robots' content='noindex,nofollow'>"
         f"<title>{esc(brand.get('agency_name','Agency'))} Reporting Hub</title><style>{base_css(t)}</style></head><body>"
-        f"<main class='wrap'><h1>{esc(brand.get('agency_name','Agency'))} Client Reporting Hub</h1>"
-        f"<div class='card'><a href='../../r/{slug}-{tok}/latest.html'><strong>{esc(facts['client_name'])}</strong></a>"
-        f" &middot; {esc(facts['period'])} &middot; Pacing: {esc(facts['pacing']['status'])}</div></main></body></html>",
+        f"<header class='topbar'><div class='brand'>{brand_badge(brand)}</div><span class='pill'>{len(manifest['clients'])} Active Client{'s' if len(manifest['clients'])!=1 else ''}</span></header>"
+        f"<main class='wrap'><h1>{esc(brand.get('agency_name','Agency'))} Client Reporting Hub</h1>{''.join(client_cards)}</main></body></html>",
         encoding="utf-8",
     )
     return client_root / "latest.html", admin_dir / "index.html"

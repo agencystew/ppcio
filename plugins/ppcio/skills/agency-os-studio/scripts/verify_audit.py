@@ -31,8 +31,14 @@ def verify_audit(text, account_type="lead_gen", tracking_broken=False):
     for pat, msg in BANNED_PATTERNS:
         if re.search(pat, text, re.I if pat != "—" else 0):
             errors.append(msg)
-    if tracking_broken and re.search(r"(?:priority\s*#?1|move\s*#?1|step\s*1).{0,80}(?:negative|cut keyword|pause keyword)", text, re.I | re.S):
-        errors.append("DEPENDENCY_VIOLATION: Tracking is BROKEN; fix conversion tracking BEFORE cutting keywords or adding negatives.")
+    if tracking_broken:
+        for m in re.finditer(r"(?:priority\s*#?1|move\s*#?1|step\s*1)\s*[:\-]\s*([^\n.]{0,120})", text, re.I):
+            clause = m.group(1).lower()
+            if any(w in clause for w in ("negative", "cut keyword", "pause keyword")) and not any(
+                t in clause for t in ("tracking", "conversion", "tag", "before")
+            ):
+                errors.append("DEPENDENCY_VIOLATION: Tracking is BROKEN; fix conversion tracking BEFORE cutting keywords or adding negatives.")
+                break
     if account_type == "ecommerce" and re.search(r"\b(cost per lead|cpl)\b", text, re.I):
         errors.append("VOCAB_LEAK: Ecommerce audit uses lead-gen terminology (CPL).")
     if account_type == "lead_gen" and re.search(r"\b(target roas|average order value)\b", text, re.I):

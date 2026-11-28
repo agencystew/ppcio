@@ -97,6 +97,16 @@ def is_brand_match(text, brand_terms):
     return False
 
 
+def singularize(word):
+    w = (word or "conversion").strip()
+    low = w.lower()
+    if low.endswith("ies") and len(w) > 3:
+        return w[:-3] + ("Y" if w[-1].isupper() else "y")
+    if low.endswith("s") and not low.endswith("ss") and len(w) > 2:
+        return w[:-1]
+    return w
+
+
 def safe_pct_str(cur, prev):
     if prev is None or cur is None or prev == 0:
         return None, "new"
@@ -251,7 +261,7 @@ def build_facts(
     prior_week_cpas = [agg_rows(by_week[w])["cpa"] for w in prior_weeks if agg_rows(by_week[w])["cpa"]]
     normal_weekly_cpa = round(statistics.median(prior_week_cpas), 2) if prior_week_cpas else tot_cur["cpa"]
 
-    # Safety Hold Gate (Vooba rule: hold client send if conversions collapsed <25% of normal!)
+    # Safety Hold Gate (hold client send if conversions collapsed <25% of normal)
     safety_hold = False
     safety_hold_reason = ""
     if normal_weekly_conv >= 4 and tot_cur["conversions"] < normal_weekly_conv * 0.25:
@@ -283,9 +293,9 @@ def build_facts(
                 lo_c = sum(x["cost"] for x in low_sp) / max(0.01, sum(x["conversions"] for x in low_sp))
                 hi_c = sum(x["cost"] for x in high_sp) / max(0.01, sum(x["conversions"] for x in high_sp))
                 scale_elasticity = (
-                    f"Cost per {conv_word[:-1] if conv_word.endswith('s') else conv_word} held steady as spend scaled ({currency}{hi_c:.2f} vs {currency}{lo_c:.2f})."
+                    f"Cost per {singularize(conv_word)} held steady as spend scaled ({currency}{hi_c:.2f} vs {currency}{lo_c:.2f})."
                     if hi_c <= lo_c * 1.15 else
-                    f"Cost per {conv_word[:-1] if conv_word.endswith('s') else conv_word} rose as spend scaled ({currency}{hi_c:.2f} vs {currency}{lo_c:.2f})."
+                    f"Cost per {singularize(conv_word)} rose as spend scaled ({currency}{hi_c:.2f} vs {currency}{lo_c:.2f})."
                 )
 
     # Per-campaign breakdown + 12-week own-normal
@@ -321,6 +331,8 @@ def build_facts(
                     status_note = "above_own_normal"
                 elif c_cur["cpa"] > own_normal_cpa * 1.25:
                     status_note = "below_own_normal"
+            elif c_cur["conversions"] == 0 and c_cur["cost"] >= (target_cpa or 150):
+                status_note = "zero_conv_bleeder"
 
         row_obj = {
             "campaign": cn,
@@ -380,9 +392,10 @@ def build_facts(
 
     if eff_budget <= 0:
         pace_status, pace_verdict = "No monthly cap set", "Paced against daily campaign budgets (no fixed monthly cap agreed yet)."
-    elif pacing_pct > 108:
+    elif pacing_pct > 105:
         pace_status = "Over Pacing"
-        pace_verdict = f"Projected {currency}{projected_mtd:,.0f} vs {currency}{eff_budget:,.0f} budget ({pacing_pct:.0f}%). Trim higher-cost campaigns before month-end."
+        nb_over = f" with Non-Brand CPL ({currency}{nb_cur['cpa']:.2f}) above your {currency}{target_cpa:.0f} goal" if (target_cpa and nb_cur["cpa"] and nb_cur["cpa"] > target_cpa) else ""
+        pace_verdict = f"Projected {currency}{projected_mtd:,.0f} vs {currency}{eff_budget:,.0f} budget ({pacing_pct:.0f}%{nb_over}). Trim higher-cost campaigns before month-end."
     elif pacing_pct < 90:
         pace_status = "Under Pacing"
         below_goal = (target_cpa and nb_cur["cpa"] and nb_cur["cpa"] > target_cpa) or (target_roas and nb_cur["roas"] and nb_cur["roas"] < target_roas)
@@ -478,7 +491,7 @@ def main():
     daily = load_gads_csv(args.daily)
     st = load_gads_csv(args.search_terms) if args.search_terms else []
     ch = load_gads_csv(args.changes) if args.changes else []
-    brand_terms = [b.strip() for b in args.brand.split(",") if b.strip()]
+    brand_terms = [b.strip() for b in re.split(r"[,|]+", args.brand) if b.strip()]
 
     facts = build_facts(
         daily, st, ch,

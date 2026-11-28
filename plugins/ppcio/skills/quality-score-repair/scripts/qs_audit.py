@@ -58,11 +58,11 @@ def analyze_qs(rows, target_cpa=None):
     total_cost = 0.0
     weighted_qs_num = 0.0
     low_qs_cost = 0.0
-    comp_spend = {"ad_relevance": 0.0, "expected_ctr": 0.0, "landing_page": 0.0}
+    actionable_comp_spend = {"ad_relevance": 0.0, "expected_ctr": 0.0, "landing_page": 0.0}
     fix_queue = []
     protected_prequalifiers = []
     pause_candidates = []
-    ignored_low_spend = 0
+    ignored_low_vol = []
 
     all_clicks = sum(parse_num(col(r, ["Clicks"])) for r in rows)
     all_conv = sum(parse_num(col(r, ["Conversions", "Conv."])) for r in rows)
@@ -85,32 +85,29 @@ def analyze_qs(rows, target_cpa=None):
 
         if qs <= 0 or cost <= 0:
             continue
-        total_cost += cost
-        weighted_qs_num += qs * cost
 
-        if impr < 100 and clicks < 20:
-            ignored_low_spend += 1
+        # Align strictly with SKILL.md: ignore <100 impr OR <20 clicks (insufficient auction history)
+        if impr < 100 or clicks < 20:
+            ignored_low_vol.append({"keyword": kw, "qs": int(qs), "cost": round(cost, 2), "clicks": int(clicks), "impressions": int(impr)})
             continue
 
+        total_cost += cost
+        weighted_qs_num += qs * cost
         cvr = (conv / clicks) if clicks > 0 else 0.0
         cpa = (cost / conv) if conv > 0 else None
 
         if qs <= 5:
             low_qs_cost += cost
-            if is_below(ad_rel):
-                comp_spend["ad_relevance"] += cost
-            if is_below(exp_ctr):
-                comp_spend["expected_ctr"] += cost
-            if is_below(lp_exp):
-                comp_spend["landing_page"] += cost
 
-            # Protect high-CVR pre-qualifying ads even when Exp. CTR is Below Average!
+            # Protect high-CVR pre-qualifying ads even when Exp. CTR is Below Average
             if is_below(exp_ctr) and conv >= 3 and ((target_cpa and cpa and cpa <= target_cpa) or (acct_cvr > 0 and cvr >= acct_cvr * 1.25)):
                 protected_prequalifiers.append({
                     "keyword": kw,
                     "ad_group": ag,
                     "cost": round(cost, 2),
                     "qs": int(qs),
+                    "clicks": int(clicks),
+                    "conversions": round(conv, 1),
                     "cvr_pct": round(cvr * 100, 1),
                     "cpa": round(cpa, 2) if cpa else None,
                     "note": "PROTECT PRE-QUALIFIER: Below Avg Exp. CTR but strong CVR/CPA. Do NOT strip price/buyer qualifiers just to chase CTR!",
@@ -130,6 +127,14 @@ def analyze_qs(rows, target_cpa=None):
                 })
                 continue
 
+            # Accumulate actionable bottleneck spend ONLY on repairable fix-queue keywords
+            if is_below(ad_rel):
+                actionable_comp_spend["ad_relevance"] += cost
+            if is_below(exp_ctr):
+                actionable_comp_spend["expected_ctr"] += cost
+            if is_below(lp_exp):
+                actionable_comp_spend["landing_page"] += cost
+
             fix_queue.append({
                 "keyword": kw,
                 "campaign": camp,
@@ -138,6 +143,8 @@ def analyze_qs(rows, target_cpa=None):
                 "cost": round(cost, 2),
                 "clicks": int(clicks),
                 "conversions": round(conv, 1),
+                "cvr_pct": round(cvr * 100, 1),
+                "cpa": round(cpa, 2) if cpa else None,
                 "below_components": [
                     name for name, flag in [
                         ("Ad Relevance", is_below(ad_rel)),
@@ -148,7 +155,8 @@ def analyze_qs(rows, target_cpa=None):
             })
 
     fix_queue.sort(key=lambda x: x["cost"], reverse=True)
-    dominant = max(comp_spend.items(), key=lambda kv: kv[1])
+    max_val = max(actionable_comp_spend.values()) if actionable_comp_spend else 0.0
+    dominant_list = [k for k, v in actionable_comp_spend.items() if v == max_val and v > 0]
     wqs = (weighted_qs_num / total_cost) if total_cost > 0 else 0.0
 
     return {
@@ -156,12 +164,13 @@ def analyze_qs(rows, target_cpa=None):
         "spend_weighted_qs": round(wqs, 2),
         "low_qs_spend": round(low_qs_cost, 2),
         "low_qs_spend_share_pct": round((low_qs_cost / total_cost * 100), 1) if total_cost > 0 else 0.0,
-        "dominant_failing_component": dominant[0] if dominant[1] > 0 else "none",
-        "component_spend_at_risk": {k: round(v, 2) for k, v in comp_spend.items()},
+        "dominant_failing_component": " + ".join(dominant_list) if dominant_list else "none",
+        "actionable_component_spend": {k: round(v, 2) for k, v in actionable_comp_spend.items()},
         "top_fix_queue": fix_queue[:15],
         "protected_prequalifiers": protected_prequalifiers,
         "pause_candidates": pause_candidates,
-        "ignored_low_volume_keywords": ignored_low_spend,
+        "ignored_low_volume_keywords": len(ignored_low_vol),
+        "ignored_low_volume_list": ignored_low_vol,
     }
 
 
@@ -183,19 +192,22 @@ def main():
         return
 
     print("=== SPEND-WEIGHTED QUALITY SCORE SUMMARY ===")
-    print(f"Spend-Weighted Avg QS : {res['spend_weighted_qs']} / 10 (across ${res['total_rated_spend']:,.2f} spend)")
-    print(f"Spend at QS <= 5      : ${res['low_qs_spend']:,.2f} ({res['low_qs_spend_share_pct']}% of rated spend)")
-    print(f"Dominant Bottleneck   : {res['dominant_failing_component']} ({res['component_spend_at_risk']})")
-    print(f"Ignored Low-Vol KWs   : {res['ignored_low_volume_keywords']} (under 100 impr & 20 clicks)")
+    print(f"Spend-Weighted Avg QS : {res['spend_weighted_qs']} / 10 (across ${res['total_rated_spend']:,.2f} qualified spend)")
+    print(f"Spend at QS <= 5      : ${res['low_qs_spend']:,.2f} ({res['low_qs_spend_share_pct']}% of qualified spend)")
+    print(f"Actionable Bottleneck : {res['dominant_failing_component']} ({res['actionable_component_spend']})")
+    if res["ignored_low_volume_list"]:
+        names = ", ".join(f"[{x['keyword']}] (${x['cost']:.0f}, {x['clicks']} clicks)" for x in res["ignored_low_volume_list"][:5])
+        print(f"Ignored Low-Vol KWs   : {res['ignored_low_volume_keywords']} (<100 impr or <20 clicks): {names}")
 
     if res["protected_prequalifiers"]:
         print("\n=== PROTECTED PRE-QUALIFYING KEYWORDS (DO NOT REWRITE FOR VANITY CTR!) ===")
         for p in res["protected_prequalifiers"]:
-            print(f"  - [{p['keyword']}] QS {p['qs']} | ${p['cost']:,.2f} | CVR {p['cvr_pct']}% | CPA ${p['cpa']} | {p['note']}")
+            print(f"  - [{p['keyword']}] QS {p['qs']} | ${p['cost']:,.2f} | CVR {p['cvr_pct']}% | CPA ${p['cpa']:,.2f} | {p['note']}")
 
     print("\n=== TOP SPEND-CARRYING FIX QUEUE (BY MONTHLY SPEND) ===")
     for k in res["top_fix_queue"][:10]:
-        print(f"  - [{k['keyword']}] ({k['ad_group']}) | QS {k['qs']} | ${k['cost']:,.2f} | Below: {', '.join(k['below_components']) or 'Average'}")
+        cpa_s = f"${k['cpa']:,.2f}" if k["cpa"] is not None else "N/A"
+        print(f"  - [{k['keyword']}] ({k['ad_group']}) | QS {k['qs']} | ${k['cost']:,.2f} | {k['clicks']} clicks | {k['conversions']} conv | CVR {k['cvr_pct']}% | CPA {cpa_s} | Below: {', '.join(k['below_components']) or 'Average'}")
 
     if res["pause_candidates"]:
         print("\n=== PAUSE CANDIDATES (QS 1-3, ALL BELOW AVG, 0 CONV) ===")

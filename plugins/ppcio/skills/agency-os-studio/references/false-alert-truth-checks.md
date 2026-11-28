@@ -28,4 +28,4 @@ Before firing, also verify:
 
 ## 3. Regression-Locking Discipline
 
-Every single false alert spotted by a human goes straight into a permanent regression test (`eval_behavioral.py`) and the deterministic engine, NEVER patched manually in an HTML file. Keep every new alert rule in shadow mode until it runs cleanly across 5 consecutive accounts.
+Every single false alert spotted by a human goes straight into a permanent regression test and the deterministic engine, NEVER patched manually in an HTML file. Keep every new alert rule in shadow mode until it runs cleanly across 5 consecutive accounts.

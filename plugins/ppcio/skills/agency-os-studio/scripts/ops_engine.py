@@ -72,7 +72,8 @@ def is_brand(name, brand_pattern=""):
     return bool(re.search(r"\bbrand(ed)?\b", name, re.I))
 
 
-def build_ops_state(rows, default_account="Primary Account", target_cpa=None, brand_pattern="", currency="$", export_dir=None):
+def build_ops_state(rows, default_account="Primary Account", target_cpa=None, brand_pattern="", currency="$", export_dir=None, account_targets=None):
+    account_targets = account_targets or {}
     by_acct = defaultdict(list)
     for r in rows:
         acct = col(r, ["Account", "Account name", "Customer name"]) or default_account
@@ -114,6 +115,7 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
         "ppc_waiting_on_tracking": [],
     }
     editor_rows = []
+    editor_pause_rows = []
 
     for acct, items in sorted(by_acct.items()):
         nb_items = [x for x in items if not x["is_brand"]]
@@ -126,7 +128,8 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
         nb_cvr = (nb_conv / nb_clicks) if nb_clicks > 0 else 0.0
         nb_cpa = (nb_cost / nb_conv) if nb_conv > 0 else None
         tot_cpa = (tot_cost / tot_conv) if tot_conv > 0 else None
-        eff_target = target_cpa or nb_cpa or tot_cpa or 75.0
+        acct_goal = account_targets.get(acct) or account_targets.get(acct.lower()) or target_cpa
+        eff_target = acct_goal or nb_cpa or tot_cpa or 75.0
 
         # Per-campaign rollup inside account
         by_camp = defaultdict(lambda: {"cost": 0.0, "clicks": 0.0, "impr": 0.0, "conv": 0.0, "val": 0.0, "lost_b": 0.0, "lost_r": 0.0, "bid": "", "status": "Enabled", "is_brand": False})
@@ -148,7 +151,7 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
                 by_day[x["day"]]["cost"] += x["cost"]
                 by_day[x["day"]]["conv"] += x["conv"]
 
-        # Statistical Quiet-Gap Break Detector (Vooba breaks.py law)
+        # Statistical Quiet-Gap Break Detector (3x normal inter-lead gap + >=2x CPL spend)
         tracking_broken = False
         break_reasons = []
         days_sorted = sorted(by_day.keys())
@@ -180,9 +183,11 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
         # Moves & 5-Part Findings (with Playbook dependency gating!)
         moves = []
         protect = []
+        lp_leak_campaigns = []
         waste_dollars = 0.0
         headroom_dollars = 0.0
         lp_weak_spend = 0.0
+        lp_weak_clicks = 0.0
 
         if tracking_broken:
             for br in break_reasons:
@@ -216,6 +221,15 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
             # High CTR + Low CVR -> Web / LP Team batch
             if ctr >= 0.05 and cvr < 0.015 and c["clicks"] >= 40:
                 lp_weak_spend += c["cost"]
+                lp_weak_clicks += c["clicks"]
+                lp_leak_campaigns.append({
+                    "campaign": cname,
+                    "spend": round(c["cost"], 2),
+                    "clicks": int(c["clicks"]),
+                    "ctr_pct": round(ctr * 100, 1),
+                    "cvr_pct": round(cvr * 100, 2),
+                    "conversions": round(c["conv"], 1),
+                })
                 moves.append({
                     "owner": "Web / LP Team",
                     "priority": 2,
@@ -225,9 +239,9 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
                     "reading": "Strong CTR shows search intent and ad copy work; buyers are bouncing after the click.",
                     "verdict": "fix",
                     "fix": "Match screen-one headline to ad promise, place verified proof & clear offer above the fold (run landing-page studio); recheck in 14d.",
-                    "est_monthly_gain": f"+{max(1, round((c['clicks']*0.03 - c['conv'])))} leads/mo at 3% CVR",
+                    "est_monthly_gain": f"+{max(1, round(c['clicks'] * 0.015))} extra conversions/mo (+1.5 pt CVR lift)",
                 })
-                batches["web_lp"].append({"account": acct, "campaign": cname, "task": f"CTR {ctr*100:.1f}% / CVR {cvr*100:.1f}% post-click leak", "spend": round(c["cost"], 2)})
+                batches["web_lp"].append({"account": acct, "campaign": cname, "task": f"Post-click LP leak on {cname} (CTR {ctr*100:.1f}% / CVR {cvr*100:.1f}%)", "spend": round(c["cost"], 2)})
 
             # Waste / Over-target campaign -> PPC Batch (HELD if tracking is broken!)
             if (c["conv"] == 0 and (c["cost"] >= eff_target or exp_leads >= 2.0)) or (cpa and cpa > eff_target * 1.35 and c["conv"] >= 3):
@@ -251,11 +265,15 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
                 else:
                     batches["ppc_ready"].append(batch_item)
                     editor_rows.append({"Account": acct, "Campaign": cname, "Action": "Review Search Terms & Cap Bleed", "Current Spend": round(c["cost"], 2), "Status": "Ready for AM"})
+                    if c["conv"] == 0:
+                        editor_pause_rows.append({"Account": acct, "Campaign": cname, "Campaign Status": "Paused"})
 
             elif cpa and cpa <= eff_target and c["conv"] >= 3:
                 if c["lost_b"] >= 15:
                     headroom_dollars += c["cost"] * (c["lost_b"] / max(10.0, 100.0 - c["lost_b"]))
                 protect.append({"campaign": cname, "reason": f"Healthy winner ({currency}{c['cost']:,.0f}, {c['conv']:.0f} conv, CPA {currency}{cpa:.2f})"})
+            elif cpa and cpa <= eff_target * 1.15 and c["conv"] >= 10:
+                protect.append({"campaign": cname, "reason": f"Core workhorse within 15% of goal ({currency}{c['cost']:,.0f}, {c['conv']:.0f} conv, CPA {currency}{cpa:.2f} - monitor, do not disrupt)"})
 
         # Account health state
         if tracking_broken:
@@ -277,9 +295,9 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
             {"topic": "Post-click landing page conversion", "grade": "C" if lp_weak_spend > 0 else "A", "note": f"{currency}{lp_weak_spend:,.0f} spend on high-CTR / low-CVR campaigns" if lp_weak_spend > 0 else "No severe CTR-vs-CVR post-click mismatch detected."},
         ]
 
-        # 4 Transparent Revenue Opportunity Formulas (Lemonade-style receipts)
+        # 4 Transparent Revenue Opportunity Formulas (consistent click-based math)
         opp_waste = round(waste_dollars * 0.40, 2)
-        opp_cvr_leads = round((lp_weak_spend / max(1.0, nb_cost / max(1.0, nb_clicks))) * 0.015, 1) if lp_weak_spend > 0 else 0.0
+        opp_cvr_leads = round(lp_weak_clicks * 0.015, 1) if lp_weak_clicks > 0 else 0.0
         opp_headroom = round(min(headroom_dollars, nb_cost * 0.5), 2)
 
         accounts.append({
@@ -292,6 +310,7 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
             "target_cpa": round(eff_target, 2),
             "top_moves": moves[:5],
             "protect_healthy": protect,
+            "lp_leak_campaigns": lp_leak_campaigns,
             "health_grades": grades,
             "campaigns": [{"campaign": k, **{kk: round(vv, 2) if isinstance(vv, float) else vv for kk, vv in v.items()}} for k, v in sorted(by_camp.items(), key=lambda kv: -kv[1]["cost"])],
             "opportunities": {
@@ -306,15 +325,23 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
     accounts.sort(key=lambda a: (order.get(a["state"], 9), -a["totals"]["cost"]))
 
     editor_csv_path = ""
+    editor_pause_csv_path = ""
     if export_dir and editor_rows:
         ed = Path(export_dir)
         ed.mkdir(parents=True, exist_ok=True)
-        ecsv = ed / "ads-editor-batch-actions.csv"
+        ecsv = ed / "ppc-batch-action-queue.csv"
         with ecsv.open("w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=["Account", "Campaign", "Action", "Current Spend", "Status"])
             w.writeheader()
             w.writerows(editor_rows)
         editor_csv_path = str(ecsv.resolve())
+        if editor_pause_rows:
+            pcsv = ed / "google-ads-editor-pause-bleeders.csv"
+            with pcsv.open("w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=["Account", "Campaign", "Campaign Status"])
+                w.writeheader()
+                w.writerows(editor_pause_rows)
+            editor_pause_csv_path = str(pcsv.resolve())
 
     counts = {k: sum(1 for a in accounts if a["state"] == k) for k in ("BROKEN", "AT_RISK", "FEW_DATA", "WIN", "FINE")}
     return {
@@ -323,6 +350,7 @@ def build_ops_state(rows, default_account="Primary Account", target_cpa=None, br
         "accounts": accounts,
         "batches": batches,
         "editor_csv": editor_csv_path,
+        "editor_pause_csv": editor_pause_csv_path,
     }
 
 
@@ -331,9 +359,10 @@ def main():
     ap.add_argument("--csv", required=True, help="Single-account or multi-account MCC CSV")
     ap.add_argument("--account", default="Primary Account")
     ap.add_argument("--target-cpa", type=float, default=None)
+    ap.add_argument("--targets-json", default="", help="Optional JSON file mapping Account Name -> Target CPA")
     ap.add_argument("--brand", default="")
     ap.add_argument("--currency", default="$")
-    ap.add_argument("--export-dir", default="", help="Optional directory for Ads Editor CSV batch export")
+    ap.add_argument("--export-dir", default="", help="Optional directory for PPC batch queue & Ads Editor CSV exports")
     ap.add_argument("--out", required=True, help="Output ops_state.json path")
     args = ap.parse_args()
 
@@ -342,7 +371,8 @@ def main():
         print("ERROR: No rows parsed from CSV.", file=sys.stderr)
         sys.exit(1)
 
-    state = build_ops_state(rows, args.account, args.target_cpa, args.brand, args.currency, args.export_dir or None)
+    acct_targets = json.loads(Path(args.targets_json).read_text(encoding="utf-8")) if (args.targets_json and Path(args.targets_json).exists()) else {}
+    state = build_ops_state(rows, args.account, args.target_cpa, args.brand, args.currency, args.export_dir or None, acct_targets)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(state, indent=2), encoding="utf-8")

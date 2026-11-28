@@ -19,24 +19,31 @@ CLIENT_JARGON = [
     (r"\bimpression share\b", "Translate 'Impression Share' into plain English (how often ads showed)"),
     (r"\bquality score\b", "Translate 'Quality Score' into plain English for clients"),
     (r"\btCPA\b|\btROAS\b", "Avoid raw bid acronyms (tCPA/tROAS) in client copy"),
-    (r"\b[+-]?\d{3,4}(?:,\d{3})*%", "Avoid absurd tiny-base percentages like +3,000%; use 'up sharply' or '3x'"),
+    (r"(?:[+-]\s*(?:[5-9]\d{2}|\d{4,})(?:,\d{3})*%|\b\d{1,3},\d{3}%)", "Avoid absurd tiny-base percentages like +3,000%; use 'up sharply' or '3x'"),
     (r"—", "Remove em dashes for clean human prose"),
 ]
 
 
+def strip_html(raw):
+    s = re.sub(r"<(style|script)\b[^>]*>.*?</\1>", " ", raw, flags=re.I | re.S)
+    s = re.sub(r"<[^>]+>", " ", s)
+    return s
+
+
 def verify(facts, text, story_week=None, allow_hold=False):
+    clean = strip_html(text) if ("<html" in text.lower() or "</" in text) else text
     errors = []
     if story_week and story_week != facts.get("_week"):
         errors.append(f"WEEK_LOCK_MISMATCH: story _week={story_week} does not match facts _week={facts.get('_week')}")
     if facts.get("safety_hold") and not allow_hold:
         errors.append(f"SAFETY_HOLD_ACTIVE: {facts.get('safety_hold_reason')}")
     for pat, msg in CLIENT_JARGON:
-        if re.search(pat, text, re.I if pat != "—" else 0):
+        if re.search(pat, clean, re.I if pat != "—" else 0):
             errors.append(f"CLIENT_COPY_FAIL: {msg}")
     atype = facts.get("account_type", "lead_gen")
-    if atype == "ecommerce" and re.search(r"\b(leads|cpl|cost per lead)\b", text, re.I):
+    if atype == "ecommerce" and re.search(r"\b(leads|cpl|cost per lead)\b", clean, re.I):
         errors.append("VOCAB_LEAK: Ecommerce client copy uses lead-gen words (leads/CPL).")
-    if atype == "lead_gen" and re.search(r"\b(roas|return on ad spend|aov)\b", text, re.I):
+    if atype == "lead_gen" and re.search(r"\b(roas|return on ad spend|aov)\b", clean, re.I):
         errors.append("VOCAB_LEAK: Lead-gen client copy uses ecommerce words (ROAS/AOV).")
     return errors
 

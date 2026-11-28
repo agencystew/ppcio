@@ -27,8 +27,8 @@ When they share an existing report or PDF, critique it sharply first: pinpoint B
 Never hand-code inconsistent numbers across HTML views! Run the deterministic pipeline first:
 1. **Build `_week`-locked `facts.json`** (fuzzy Brand stripping, 12-week campaign own-normal, scale elasticity, MTD pacing + verdict, consolidated lowlights, plain-English change translation, Safety Hold check):
    `python3 "${CLAUDE_SKILL_DIR}/scripts/build_facts.py" --daily <daily.csv> [--search-terms <st.csv>] [--changes <changes.csv>] --client "<Name>" --type <lead_gen|ecommerce|saas> --brand "<brand,terms>" --budget <monthly> [--target-cpa <CPA> | --target-roas <ROAS>] --out reports/<slug>/facts.json`
-2. **Generate all 3 live clickable HTML prototypes + Prototype Picker (`index.html`)** (add `--portal reports/portal-dist` whenever they manage multiple clients or want shareable token URLs):
-   `python3 "${CLAUDE_SKILL_DIR}/scripts/render_prototypes.py" --facts reports/<slug>/facts.json --out-dir reports/<slug>/prototypes --agency "<Brand>" --theme <editorial-warm|executive-clean|modern-dark|bold-contrast> [--accent "<#hex>"] [--logo "<url>"] [--portal reports/portal-dist]`
+2. **Generate all 3 live clickable HTML prototypes + Prototype Picker (`index.html`)** (optional `--story story.json` accepts `{"_week", "executive_summary", "one_ask", "talking_points"}`; add `--portal reports/portal-dist` to build/append to a multi-client token-gated static portal):
+   `python3 "${CLAUDE_SKILL_DIR}/scripts/render_prototypes.py" --facts reports/<slug>/facts.json --out-dir reports/<slug>/prototypes --agency "<Brand>" --theme <editorial-warm|executive-clean|modern-dark|bold-contrast> [--accent "<#hex>"] [--logo "<url>"] [--story reports/<slug>/story.json] [--portal reports/portal-dist]`
 3. **Run the Zero-Drift Compiler Gate (`verify_report.py`)** on any custom narrative/email draft BEFORE showing it:
    `python3 "${CLAUDE_SKILL_DIR}/scripts/verify_report.py" --facts reports/<slug>/facts.json --draft <story_or_draft>`
    Why: one stale week's text, one leaked "learning phase" excuse, or one ecommerce/lead-gen vocabulary slip destroys trust immediately.
