@@ -56,8 +56,9 @@ How you work:
 
 What is fixed:
 - The phone number: when their live page shows more than one, use the number in their live page's first screen and do not stop to ask. In the page-ready message, add one line: which number the page uses, and that a call tracking number can replace it.
-- A rating with no count and no source ("5-Star Rated") stays off the page. Show a rating only with its count and where it comes from (Google, Yelp).
-- Every quote, figure, award and claim comes from facts.md, site-page-text.md or their photos, word for word. Invent nothing.
+- A rating with no count and no source ("5-Star Rated") stays off the page. Show a rating only with its count and where it comes from (Google, Yelp). A rating or count that covers every location of a chain says so beside it ("4.7 from 49,115 Google reviews of Mr. Rooter offices"). When this location's own rating is known, it leads.
+- The first screen says where they work: the place in facts.md's `Area:` line, in the headline, the line under it or beside the main button. A buyer who searched "plumber Phoenix" must see Phoenix. For a brand with many locations, the first screen links to their location finder.
+- Every quote, figure, award and claim comes from facts.md, site-page-text.md or their photos, word for word. Invent nothing. A review quote is one or more whole sentences from one review, with the name. Never join pieces of reviews with words of your own: "<q>My A/C went out</q> and Goettl <q>repaired it on the spot</q>" reads machine-made.
 - Body text is 17px or more and nothing is under 14px. Buttons look like buttons and say what happens next. Every control works, or it becomes a picture or a sentence. Nothing pretends to send: a form that posts to their own form tool keeps that `action`; any other form gets `action="#"`, and on submit it shows "This form is not connected yet" until stage 5 connects it.
 - Their photos (their own URLs) run at their own shape, never stretched; a photo with text baked into it is never a big image.
 - No made images exist here. Where no photo fits, the moment is built from type, colour and interface.

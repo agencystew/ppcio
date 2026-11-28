@@ -2,6 +2,10 @@
 
 Newest first. Update: in Claude Code, /plugin then Marketplaces then ppcio then Update. Elsewhere, run the install line again.
 
+## 0.8.20 (28 Nov 2026)
+
+- The first screen names where they work; review quotes stay whole
+
 ## 0.8.19 (28 Nov 2026)
 
 - Quote checks and the proof hunt after a low proof score

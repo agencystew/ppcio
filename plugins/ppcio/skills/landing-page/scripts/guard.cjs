@@ -22,6 +22,11 @@ const META_LINES = [
   /[^.\n]*\bour [a-z ]{0,25}\b(?:reads|says) ["\u201c][^.\n]*/i,
 ];
   const b = await chromium.launch(); const faults = []; const notes = []; const facts = {};
+  // Where they work, from facts.md's "Area:" line (1-audit.md). "everywhere" skips the check; "finder <url>" asks for a link to it.
+  let area = null; try { const m = fs.readFileSync(path.join(SITE, 'facts.md'), 'utf8').match(/^[\s*>-]*(?:\*\*)?(?:service )?area(?:\*\*)?\s*:\s*(.+)$/im); if (m) area = m[1].replace(/\*\*/g, '').trim(); } catch (e) {}
+  const GENERIC = /^(?:the|all|and|or|our|we|they|area|areas|greater|most|within|across|serving|serves|including|plus|find|zip|code|locations?|offices?|miles?|radius|of|in|around|near|nearby|surrounding|metro|region|state|county|finder|everywhere)$/i;
+  const places = area && !/^(?:everywhere|online|nationwide|worldwide|anywhere)\b/i.test(area) && !/^finder\b/i.test(area) ? [...new Set((area.match(/[A-Z][\w'.-]*(?:\s+(?:[A-Z][\w'.-]*|of|on|upon|de|la))*/g) || []).map(x => x.split(/\s+/)).map(w => { while (w.length && GENERIC.test(w[0])) w.shift(); return w.join(' ').replace(/[.,]+$/, ''); }).filter(x => x.length >= 2))] : [];
+  const finder = area && /^finder\b/i.test(area) ? (area.match(/https?:\/\/\S+/) || [''])[0].replace(/[).,]+$/, '') : null;
   // Their tracking tags belong only in the live copy that pack writes. In page.html every render and every
   // preview sends a visit to their real analytics and ads (johnnyrooter.com GA4, GTM and Meta, 26 Nov).
   const tagHits = [...new Set((html.match(/googletagmanager\.com\/(?:gtag\/js|gtm\.js)[^"'\s]*|\bgtag\(\s*['"]config['"]\s*,\s*['"][^'"]+|\bfbq\(\s*['"]init['"]\s*,\s*['"][^'"]+|clarity\.ms\/tag\/\w+|GTM-[A-Z0-9]{4,}/g) || []))];
@@ -77,6 +82,12 @@ const META_LINES = [
       const alltext = [...document.querySelectorAll('p,li,h1,h2,h3')].filter(e => vis(e) && !chrome(e)).map(e => e.innerText).join(' ');
       const sents = alltext.split(/[.!?]+\s/).map(wc).filter(n => n > 2); out.sentWords = sents.length ? +(sents.reduce((x, y) => x + y, 0) / sents.length).toFixed(1) : 0;
       let fw = 0; const tw2 = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); while (tw2.nextNode()) { const n = tw2.currentNode; const el = n.parentElement; if (!el || !vis(el) || chrome(el) || el.closest('script,style')) continue; if (el.getBoundingClientRect().top + scrollY < window.innerHeight) fw += wc(n.textContent); } out.firstWords = fw;
+      // 28 Nov (judge, run 11): the first screen must say where they work. Text, links and inputs in the first screen.
+      { let ft = ''; const tw3 = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); while (tw3.nextNode()) { const n = tw3.currentNode; const el = n.parentElement; if (!el || !vis(el) || el.closest('script,style')) continue; if (el.getBoundingClientRect().top + scrollY < window.innerHeight) ft += ' ' + n.textContent; }
+        const top = el => el.getBoundingClientRect().top + scrollY < window.innerHeight;
+        out.firstText = ft.replace(/\s+/g, ' ').trim();
+        out.firstLinks = [...document.querySelectorAll('a[href]')].filter(a => vis(a) && top(a)).map(a => ({ href: a.href, t: (a.innerText || '').trim().slice(0, 60) }));
+        out.zipBox = [...document.querySelectorAll('input')].some(i => vis(i) && top(i) && /zip|post ?code|postal|location|suburb|town|city/i.test([i.name, i.id, i.placeholder, i.autocomplete, i.getAttribute('aria-label')].join(' '))); }
       out.headTexts = [...document.querySelectorAll('h1,h2,h3')].map(e => e.textContent.replace(/\s+/g, ' ').trim().toLowerCase()).filter(Boolean);
       out.btnTexts = [...document.querySelectorAll('a,button,input[type=submit]')].map(e => (e.textContent || e.value || '').replace(/\s+/g, ' ').trim().toLowerCase()).filter(t => t && t.length < 40);
       out.leadForms = [...document.querySelectorAll('form')].filter(f => [...f.querySelectorAll('input,select,textarea')].filter(i => !/^(hidden|submit|button|search|image|reset)$/i.test(i.type || '')).length >= 2).length;
@@ -95,6 +106,12 @@ const META_LINES = [
       // A review quote cut in the middle with "..." reads as stitched (the blind judge, run 15). Innermost quote only.
       const qEls = [...document.querySelectorAll('blockquote,q,[class*=quote]')].filter(shown); const midCut = /\S+(?:\s+\S+){2,}\s*(?:\.\.\.|…)\s*\S+(?:\s+\S+){2,}/;
       out.cutQuotes = [...new Set(qEls.filter(e => midCut.test(e.innerText || '') && !qEls.some(x => x !== e && e.contains(x) && midCut.test(x.innerText || ''))).map(e => (e.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 90)))];
+      // 28 Nov (judge, run 15): one sentence that joins 2 review pieces with words of our own reads machine-made:
+      // <q>My A/C went out while I was out of town</q> and Goettl <q>quickly diagnosed and repaired my A/C unit</q>.
+      { const sent = t => t.split(/(?<=[.!?][”"’']?)\s+(?=[A-Z“"‘'])/); const seen = new Set(); out.woven = [];
+        for (const e of document.querySelectorAll('p,li,figcaption,dd,td,blockquote,h2,h3')) { if (!shown(e)) continue; const t = (e.innerText || '').replace(/\s+/g, ' ').trim(); if (t.length < 20 || seen.has(t)) continue;
+          const qs = [...e.querySelectorAll('q')].map(q => (q.innerText || '').replace(/\s+/g, ' ').trim()).filter(x => x.length > 3);
+          if (sent(t).some(sn => qs.filter(q => sn.includes(q.slice(0, 25))).length + (sn.match(/[“"][^”"]{4,}[”"]/g) || []).length >= 2)) { seen.add(t); out.woven.push(t.slice(0, 110)); } } }
       // A thin line (4 px or less) that crosses heading text: the GenConnect
       // hero shipped with a stray vertical rule through its headline.
       const bigHeads = [...document.querySelectorAll('h1,h2')].filter(vis).map(h => { const rg = document.createRange(); rg.selectNodeContents(h); return { t: h.textContent.replace(/\s+/g, ' ').trim().slice(0, 50), rs: [...rg.getClientRects()].filter(x => x.width > 2), h }; });
@@ -173,6 +190,14 @@ const META_LINES = [
       if (r.fakeSend) faults.push('laptop: a form handler stops the submit and sends nothing; it must post somewhere real, hand off, or not pretend to send'); }
     if (r.mono.length) faults.push(`${name}: monospace type on the page (the owner's standing rule: none): ${r.mono.join(', ')}`);
     if (name === 'laptop' && r.caseHeads.length) faults.push(`laptop: headings forced into lowercase, or long uppercase sentences (set headlines in sentence case): ${r.caseHeads.slice(0, 4).join(' | ')}`);
+    if (area === null && name === 'laptop' && fs.existsSync(path.join(SITE, 'facts.md'))) notes.push('laptop: facts.md has no "Area:" line, so the guard cannot check that the first screen says where they work (KIT/steps/1-audit.md, facts.md)');
+    if (places.length || finder !== null) {
+      const said = places.some(pl => new RegExp(`(?<![\\w])${pl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w])`, pl.length >= 4 ? 'i' : '').test(r.firstText));
+      const findLink = r.firstLinks.some(l => (finder && l.href.replace(/\/+$/, '') === finder.replace(/\/+$/, '')) || /\b(?:find|locat|near you|nearest|your local|zip|post ?code)/i.test(l.t));
+      if (!said && !r.zipBox && !(finder !== null && findLink)) faults.push(finder !== null
+        ? `${name}: the first screen has no link to their location finder (facts.md: "Area: ${area}"). A buyer must find their local office in one tap: add a link such as "Find your local office" to ${finder || 'their finder page'}`
+        : `${name}: the first screen does not say where they work (facts.md: "Area: ${area.slice(0, 80)}"). Put the place a buyer searched for (${places.slice(0, 3).join(', ')}) in the headline, the line under it or beside the main button`);
+    }
     if (name === 'phone' && !r.ctaFirst) faults.push('phone: no filled main button on the first screen (390x844); the buyer must see how to act without scrolling');
     if (name === 'laptop') notes.push(`laptop: copy shape: headings ${r.headWords} words on average (aim for 6 to 10, with an outcome, a fact or the buyer's problem in each), sentences ${r.sentWords} (Flock 13), paragraphs ${r.paraWords} (Flock 11), first screen ${r.firstWords} words (Flock 66; keep it under about 80)`);
     if (name === 'laptop') {
@@ -252,6 +277,7 @@ const META_LINES = [
       for (const [k, n] of [...Object.entries(sentN).filter(([k, n]) => !hours(k) && n >= (/review|rating|stars?\b|★/.test(k) ? 4 : 3)), ...Object.entries(sixN).filter(([k, n]) => !hours(k) && n >= 4)].sort((a, b) => b[1] - a[1])) {
         if (repeats.some(([s]) => overlaps(s, k))) continue; repeats.push([k, n]); if (repeats.length >= 3) break; }
       const original = k => { for (const t of r.prose) for (const s of sentences(t)) if (norm(s).includes(k)) return s.slice(0, 100); return k; };
+      (r.woven || []).slice(0, 3).forEach(t => faults.push(`laptop: one sentence joins pieces of reviews with words of your own: "${t}". It reads machine-made. Quote one whole sentence from one review, with the name, or say it in your own words without quote marks`));
       r.cutQuotes.slice(0, 3).forEach(t => faults.push(`laptop: a review quote is cut in the middle with "...": "${t}". A buyer reads a cut as stitched words. Quote whole sentences that sit together in the review, or a shorter quote`));
       repeats.forEach(([k, n]) => faults.push(`laptop: the same words are on the page ${n} times: "${original(k)}". Say it once, where the buyer decides, and give the other places a new fact`));
       // (2) Phone numbers. Every call link dials their number and shows that number. The live page's numbers
